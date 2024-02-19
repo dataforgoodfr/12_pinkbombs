@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pb-interface"
+version = "0.1.0"
+description = "Création interface utilisateur (frontend) avec streamlit"
+authors = ["maxsch38"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.31.1"
+ipykernel = "^5.3.4"
+matplotlib = "^3.8.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
