@@ -101,13 +101,13 @@ def generate_figures_tab() -> dbc.Container:
                     children=[
                         dbc.Card(
                             children=[
-                                html.H4("En un coup d'oeil"),
+                                html.H4("En un coup d'oeil", className="m-2"),
                                 dbc.Row(
                                     children=[
                                         dbc.Col(
                                             dbc.CardBody(
                                                 children=[
-                                                    html.P("1500"),
+                                                    html.P("1500", className="fs-3"),
                                                     html.P(
                                                         "Saumons consommés depuis"
                                                         " que vous êtes sur le site internet"
@@ -118,7 +118,9 @@ def generate_figures_tab() -> dbc.Container:
                                         dbc.Col(
                                             dbc.CardBody(
                                                 children=[
-                                                    html.P("13 000 000"),
+                                                    html.P(
+                                                        "13 000 000", className="fs-3"
+                                                    ),
                                                     html.P(
                                                         "Saumons consommés en France"
                                                         " cette année"
@@ -129,7 +131,7 @@ def generate_figures_tab() -> dbc.Container:
                                         dbc.Col(
                                             dbc.CardBody(
                                                 children=[
-                                                    html.P("11.1%"),
+                                                    html.P("11.1%", className="fs-3"),
                                                     html.P(
                                                         "Croissance de la consommation en France"
                                                         " depuis 10 ans"
@@ -140,7 +142,9 @@ def generate_figures_tab() -> dbc.Container:
                                         dbc.Col(
                                             dbc.CardBody(
                                                 children=[
-                                                    html.P("120 Gt eCO2"),
+                                                    html.P(
+                                                        "120 Gt eCO2", className="fs-3"
+                                                    ),
                                                     html.P(
                                                         "Impact carbone de l'industrie du"
                                                         " saumon l'année passée"
@@ -150,18 +154,56 @@ def generate_figures_tab() -> dbc.Container:
                                         ),
                                     ]
                                 ),
-                            ]
+                            ],
+                            class_name="p-3",
                         )
                     ],
                     width=12,
-                )
+                ),
+                class_name="my-2",
             ),
             dbc.Row(
                 children=[
-                    dbc.Col(dbc.Card(dbc.CardBody("gnagnagna"))),
-                    dbc.Col(dbc.Card(dbc.CardBody("gnégnégné"))),
+                    dbc.Col(
+                        dbc.Card(
+                            [
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            html.H4("État des populations de poisson"),
+                                        ),
+                                        dbc.Col(dbc.DropdownMenu(label="Plus"), class_name="text-right", width="auto"),
+                                    ]
+                                ),
+                                dbc.CardBody([
+                                    html.P("Le texte de description blablabla"),
+                                    html.Img(src="./assets/graph_01.png")
+                                ]),
+                            ],
+                        class_name="p-3"
+                        ),
+                    ),
+                    dbc.Col(
+                        dbc.Card(
+                            [
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            html.H4("État des populations de poisson"),
+                                        ),
+                                        dbc.Col(dbc.DropdownMenu(label="Plus"), class_name="text-right", width="auto"),
+                                    ]
+                                ),
+                                dbc.CardBody([
+                                    html.P("Le texte de description blablabla"),
+                                    html.Img(src="./assets/graph_01.png")
+                                ]),
+                            ],
+                        class_name="p-3"
+                        ),
+                    )
                 ]
             ),
-        ]
+        ],
     )
     return figures_tab
