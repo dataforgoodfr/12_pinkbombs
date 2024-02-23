@@ -16,7 +16,7 @@ st.markdown("# Pinkbombs")
 alt.themes.enable("dark")
 
 df_reshaped = pd.read_excel(
-    "data/atlantic_salmon-aquaculture_tonnes_live_weight_by_country_by_year.xlsx"
+    "data/atlantic_salmon-aquaculture_tonnes_live_weight_by_country_by_year.xlsx",
 )
 
 button_col = st.columns((0.15, 0.15, 1, 0.2))
@@ -30,7 +30,8 @@ with button_col[0]:
     selected_year = st.selectbox("Select a year", year_list, index=len(year_list) - 1)
     df_selected_year = df_reshaped[df_reshaped.Year == selected_year]
     df_selected_year_sorted = df_selected_year.sort_values(
-        by="Tonnes - live weight", ascending=False
+        by="Tonnes - live weight",
+        ascending=False,
     )
 with button_col[1]:
     color_theme_list = [
@@ -53,15 +54,16 @@ with col[0]:
     st.markdown("#### Max/Min Increase in Tonnage")
 
     df_tonnage_difference_sorted = pb.calculate_tonnage_difference(
-        df_reshaped, selected_year
+        df_reshaped,
+        selected_year,
     )
 
     first_country_name = df_tonnage_difference_sorted["Country Name En"].iloc[0]
     first_country_population = pb.format_number(
-        df_tonnage_difference_sorted["Tonnes - live weight"].iloc[0]
+        df_tonnage_difference_sorted["Tonnes - live weight"].iloc[0],
     )
     first_country_delta = pb.format_number(
-        df_tonnage_difference_sorted.tonnage_difference.iloc[0]
+        df_tonnage_difference_sorted.tonnage_difference.iloc[0],
     )
 
     st.metric(
@@ -72,14 +74,16 @@ with col[0]:
 
     last_country_name = df_tonnage_difference_sorted["Country Name En"].iloc[-1]
     last_country_population = pb.format_number(
-        df_tonnage_difference_sorted["Tonnes - live weight"].iloc[-1]
+        df_tonnage_difference_sorted["Tonnes - live weight"].iloc[-1],
     )
     last_country_delta = pb.format_number(
-        df_tonnage_difference_sorted.tonnage_difference.iloc[-1]
+        df_tonnage_difference_sorted.tonnage_difference.iloc[-1],
     )
 
     st.metric(
-        label=last_country_name, value=last_country_population, delta=last_country_delta
+        label=last_country_name,
+        value=last_country_population,
+        delta=last_country_delta,
     )
 
     st.markdown("#### Tonnage Difference > 1000")
@@ -98,18 +102,24 @@ with col[0]:
             len(df_greater_1000)
             / df_tonnage_difference_sorted["Country Name En"].nunique()
         )
-        * 100
+        * 100,
     )
     countries_difference_less = round(
         (len(df_less_1000) / df_tonnage_difference_sorted["Country Name En"].nunique())
-        * 100
+        * 100,
     )
 
     donut_chart_greater = pb.make_donut(
-        len(df_greater_1000), countries_difference_greater, "Max Increase", "red"
+        len(df_greater_1000),
+        countries_difference_greater,
+        "Max Increase",
+        "red",
     )
     donut_chart_less = pb.make_donut(
-        len(df_less_1000), countries_difference_less, "Min Increase", "blue"
+        len(df_less_1000),
+        countries_difference_less,
+        "Min Increase",
+        "blue",
     )
 
     differences_col = st.columns((0.2, 1, 0.2))
@@ -132,7 +142,10 @@ with col[1]:
     st.plotly_chart(choropleth, use_container_width=True)
     st.markdown("##### Top 5 Countries")
     area_chart = pb.make_area_chart(
-        df_reshaped, "Country Name En", "Tonnes - live weight", selected_color_theme
+        df_reshaped,
+        "Country Name En",
+        "Tonnes - live weight",
+        selected_color_theme,
     )
     st.plotly_chart(area_chart, use_container_width=True)
 
@@ -164,5 +177,5 @@ with col[2]:
             - Data: FAO
             - :orange[**Max/Min Increase in Tonnage**]: Country with the highest/lowest increase in tonnage.
             - :orange[**Tonnage Difference > 1000**]: Number of countries with tonnage difference greater than 1000.
-            """
+            """,
         )
