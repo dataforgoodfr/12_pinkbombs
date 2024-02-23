@@ -26,10 +26,10 @@ header_col = st.columns((0.1, 0.3, 1, 0.1, 0.1))
 with header_col[1]:
     st.markdown("# Pinkbombs")
 with header_col[3]:
-    if st.button("Story"):
+    if st.button("Data"):
         st.switch_page("pages/1_story.py")
 with header_col[4]:
-    if st.button("Data"):
+    if st.button("Story"):
         st.switch_page("main.py")
     
 
