@@ -74,11 +74,11 @@ header_col = st.columns((0.1, 0.3, 1, 0.1, 0.1))
 with header_col[0]:
     st.title("Pinkbombs")
 with header_col[3]:
-    if st.button("Data"):
-        st.switch_page("pages/1_story.py")
-with header_col[4]:
     if st.button("Story"):
         st.switch_page("main.py")
+with header_col[4]:
+    if st.button("Data"):
+        st.switch_page("pages/1_data.py")
 # # Create a container to hold the images
 # image_container = st.container()
 
