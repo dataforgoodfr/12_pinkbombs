@@ -5,13 +5,33 @@ import streamlit as st
 import pinkbombs as pb
 
 st.set_page_config(
-    page_title="Pinkbombs",
+    page_title="Data - Pinkbombs",
     page_icon="🍣",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed"
 )
 
-st.markdown("# Pinkbombs")
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+header_col = st.columns((0.1, 0.3, 1, 0.1, 0.1))
+with header_col[1]:
+    st.markdown("# Pinkbombs")
+with header_col[3]:
+    if st.button("Story"):
+        st.switch_page("pages/1_story.py")
+with header_col[4]:
+    if st.button("Data"):
+        st.switch_page("main.py")
+    
 
 alt.themes.enable("dark")
 
