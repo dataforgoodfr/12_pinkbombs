@@ -3,9 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "python_template"
+name = "12_pinkbombs"
 version = "0.1.0"
-description = "Template"
+description = "The Python project for Pinkbombs in the season 12 of DataForGood"
 authors = ["DataForGood"]
 license = " MIT"
 readme = "README.md"
