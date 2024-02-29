@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "12_pinkbombs"
+name = "pinkbombs"
 version = "0.1.0"
 description = "The Python project for Pinkbombs in the season 12 of DataForGood"
 authors = ["DataForGood"]
