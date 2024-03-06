@@ -1,6 +1,7 @@
 import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import html, dcc
+from loguru import logger
 
 from pinkbombs.viz import make_area_chart
 from pinkbombs.database.connect import engine
@@ -146,7 +147,9 @@ def generate_figures_layout(df: pd.DataFrame) -> dbc.Container:
 
 
 def get_data():
+    logger.info("Fetching data...")
     df = pd.read_sql(sql="aquaculture_weight_by_country", con=engine)
+    logger.info("Success.")
 
     return df
 
