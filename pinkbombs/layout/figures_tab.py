@@ -1,93 +1,12 @@
 import dash_bootstrap_components as dbc
-from dash import dcc, html
+import pandas as pd
+from dash import html, dcc
+
+from pinkbombs.viz import make_area_chart
+from pinkbombs.database.connect import engine
 
 
-def create_layout() -> dbc.Container:
-    """Create main layout container with callbacks
-
-    Returns:
-        dbc.Container: Layout container
-    """
-
-    layout = dbc.Container(
-        children=[
-            dbc.Tabs(
-                [
-                    dbc.Tab(
-                        label="L'histoire",
-                        children=generate_history_tab(),
-                        tab_style={"marginLeft": "auto"},
-                    ),
-                    dbc.Tab(label="Les chiffres", children=generate_figures_tab()),
-                ]
-            )
-        ],
-        style={"margin-top": "20px"},
-    )
-
-    return layout
-
-
-def generate_history_tab() -> dbc.Container:
-    """Generate the History tab with images and text."""
-
-    history_tab = dbc.Container(
-        children=[
-            dbc.Container(
-                dbc.Row(
-                    id="landing_frame",
-                    children=[html.Img(src="assets/salmon_01.png")],
-                    class_name="flex-grow-1",
-                ),
-                style={"height": "100vh"},
-            ),
-            dbc.Container(
-                dbc.Row(
-                    id="intro_frame",
-                    children=[
-                        dbc.Row(html.Img(src="assets/salmon_02.png")),
-                        dbc.Row(
-                            html.P(
-                                """Son nom est Salmo Salar. Il y a moins de 100 ans,
-                                il était le poisson sauvage le plus répandu de
-                                l’hémisphère nord et constituait
-                                l’une de nos principales sources sauvages de nourriture
-                                pendant des milliers d’années.
-                                """
-                            )
-                        ),
-                    ],
-                    class_name="flex-grow-1",
-                ),
-                style={"height": "100vh"},
-            ),
-            dbc.Row(
-                id="planet_frame",
-                children=[
-                    dbc.Col(
-                        html.P(
-                            """En moins de 50 ans, il est devenu le poisson
-                            d’élevage le plus consommé de notre planète. 
-                            En 2021, 80 milliards de portions individuelles
-                            ont été produites, et ce chiffre augmente chaque année.
-                            """
-                        ),
-                        class_name="col-6",
-                    )
-                ],
-                class_name="bg-image flex-grow-1 text-light",
-                style={
-                    "background-image": "url(/assets/salmon_03.png)",
-                    "height": "683px",
-                },
-            ),
-        ]
-    )
-
-    return history_tab
-
-
-def generate_figures_tab() -> dbc.Container:
+def generate_figures_layout(df: pd.DataFrame) -> dbc.Container:
     """Generate Figures tab with graphs and figures
 
     Returns:
@@ -172,15 +91,26 @@ def generate_figures_tab() -> dbc.Container:
                                         dbc.Col(
                                             html.H4("État des populations de poisson"),
                                         ),
-                                        dbc.Col(dbc.DropdownMenu(label="Plus"), class_name="text-right", width="auto"),
+                                        dbc.Col(
+                                            dbc.DropdownMenu(label="Plus"),
+                                            class_name="text-right",
+                                            width="auto",
+                                        ),
                                     ]
                                 ),
-                                dbc.CardBody([
-                                    html.P("Le texte de description blablabla"),
-                                    html.Img(src="./assets/graph_01.png")
-                                ]),
+                                dbc.CardBody(
+                                    [
+                                        html.P("Le texte de description blablabla"),
+                                        dcc.Graph(
+                                            id="population_stock",
+                                            figure=make_area_chart(
+                                                df, "iso2", "tonnes"
+                                            ),
+                                        ),
+                                    ]
+                                ),
                             ],
-                        class_name="p-3"
+                            class_name="p-3",
                         ),
                     ),
                     dbc.Col(
@@ -191,19 +121,39 @@ def generate_figures_tab() -> dbc.Container:
                                         dbc.Col(
                                             html.H4("État des populations de poisson"),
                                         ),
-                                        dbc.Col(dbc.DropdownMenu(label="Plus"), class_name="text-right", width="auto"),
+                                        dbc.Col(
+                                            dbc.DropdownMenu(label="Plus"),
+                                            class_name="text-right",
+                                            width="auto",
+                                        ),
                                     ]
                                 ),
-                                dbc.CardBody([
-                                    html.P("Le texte de description blablabla"),
-                                    html.Img(src="./assets/graph_01.png")
-                                ]),
+                                dbc.CardBody(
+                                    [
+                                        html.P("Le texte de description blablabla"),
+                                        html.Img(src="./assets/graph_01.png"),
+                                    ]
+                                ),
                             ],
-                        class_name="p-3"
+                            class_name="p-3",
                         ),
-                    )
+                    ),
                 ]
             ),
         ],
     )
     return figures_tab
+
+
+def get_data():
+    df = pd.read_sql(sql="aquaculture_weight_by_country", con=engine)
+
+    return df
+
+
+def generate_figures_tab():
+
+    df = get_data()
+    layout = generate_figures_layout(df)
+
+    return layout
