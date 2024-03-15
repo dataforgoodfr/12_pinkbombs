@@ -114,55 +114,28 @@ with headline_columns[11]:
 
 st.markdown("<h2>Disparition des saumons sauvages</h2>", unsafe_allow_html=True)
 
-graph_columns1 = st.columns((0.1, 0.5, 0.1, 0.5, 0.1), gap="medium")
-with graph_columns1[1]:
-    st.markdown("<h4 style='text-align: center;'>Etat de stock de saumon sauvage</h4>", unsafe_allow_html=True)
-    area_chart = pb.make_area_chart(
+pb.make_double_pannel(
+    chart_obj=pb.make_area_chart(
         df_reshaped,
-        "Country Name En",
+        "ISO2 Code",
         "Tonnes - live weight"
-    )
-    st.plotly_chart(area_chart, use_container_width=True)
-with graph_columns1[3]:    
-    st.markdown(
-        """
-    <style>
-        [data-testid="column"] {
-            display: flex;
-            # flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-        }
-    </style>""" + f"<p style='text-align: center;'>{lorem}</p>",
-        unsafe_allow_html=True,
-    )
+    ),
+    text=lorem,
+    switch=True,
+    chart_title="Etat de stock de saumon sauvage"
+)
 
 st.markdown("<h2>Hyper-croissance de l'evelage de saumons</h2>", unsafe_allow_html=True)
-
-graph_columns2 = st.columns((0.1, 0.5, 0.1, 0.6, 0.1), gap="medium")
-with graph_columns2[3]:
-    st.markdown("<h4 style='text-align: center;'>Production de saumon d'élevage</h4>", unsafe_allow_html=True)
-    area_chart = pb.make_area_chart(
+pb.make_double_pannel(
+    chart_obj=pb.make_area_chart(
         df_reshaped,
-        "Country Name En",
+        "ISO2 Code",
         "Tonnes - live weight"
-    )
-    st.plotly_chart(area_chart, use_container_width=True)
-with graph_columns2[1]:    
-    st.markdown(
-        """
-    <style>
-        [data-testid="column"] {
-            display: flex;
-            # flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-        }
-    </style>""" + f"<p style='text-align: center;'>{lorem}</p>",
-        unsafe_allow_html=True,
-    )
+    ),
+    text=lorem,
+    switch=False,
+    chart_title="Production de saumon d'élevage"
+)
 
 st.markdown("<h2>Super-concentration des zones de production</h2>", unsafe_allow_html=True)
 _col = st.columns((0.2, 1, 0.2), gap="medium")
@@ -181,34 +154,36 @@ with _col[1]:
         unsafe_allow_html=True,
     )
 
-button_col = st.columns((0.15, 0.15, 1, 0.2))
 
 year_list = df_reshaped.Year.unique()
 year_list.sort()
 year_list = year_list.tolist()
 
-with button_col[0]:
+expander = st.expander(label='Settings', expanded=False)
+with expander:
+    button_col = st.columns((0.15, 0.15, 1, 0.2))
+    with button_col[0]:
 
-    selected_year = st.selectbox("Select a year", year_list, index=len(year_list) - 1)
-    df_selected_year = df_reshaped[df_reshaped.Year == selected_year]
-    df_selected_year_sorted = df_selected_year.sort_values(
-        by="Tonnes - live weight",
-        ascending=False,
-    )
-with button_col[1]:
-    color_theme_list = [
-        "blues",
-        "cividis",
-        "greens",
-        "inferno",
-        "magma",
-        "plasma",
-        "reds",
-        "rainbow",
-        "turbo",
-        "viridis",
-    ]
-    selected_color_theme = st.selectbox("Select a color theme", color_theme_list)
+        selected_year = st.selectbox("Select a year", year_list, index=len(year_list) - 1)
+        df_selected_year = df_reshaped[df_reshaped.Year == selected_year]
+        df_selected_year_sorted = df_selected_year.sort_values(
+            by="Tonnes - live weight",
+            ascending=False,
+        )
+    with button_col[1]:
+        color_theme_list = [
+            "reds",
+            "magma",
+            "cividis",
+            "greens",
+            "inferno",
+            "plasma",
+            "rainbow",
+            "blues",
+            "turbo",
+            "viridis",
+        ]
+        selected_color_theme = st.selectbox("Select a color theme", color_theme_list)
 
 choropleth = pb.make_geo(
     df_selected_year,
@@ -219,107 +194,91 @@ choropleth = pb.make_geo(
 st.plotly_chart(choropleth, use_container_width=True)
 
 
-col = st.columns((2, 2), gap="medium")
+df_reshaped_bar = df_reshaped.groupby("Country Name En").sum().reset_index().sort_values(by="Tonnes - live weight", ascending=False)
 
-with col[0]:
-    st.markdown("#### Max/Min Increase in Tonnage")
+st.markdown("<h2>Entreprises Productrices</h2>", unsafe_allow_html=True)
 
-    df_tonnage_difference_sorted = pb.calculate_tonnage_difference(
-        df_reshaped,
-        selected_year,
-    )
+pb.make_double_pannel(
+    chart_obj=pb.make_bar_chart(
+        df_reshaped_bar[:10],
+        "Country Name En",
+        "Tonnes - live weight"
+    ),
+    text=lorem,
+    switch=True
+)
 
-    first_country_name = df_tonnage_difference_sorted["Country Name En"].iloc[0]
-    first_country_population = pb.format_number(
-        df_tonnage_difference_sorted["Tonnes - live weight"].iloc[0],
-    )
-    first_country_delta = pb.format_number(
-        df_tonnage_difference_sorted.tonnage_difference.iloc[0],
-    )
+st.markdown("<h2>Nouvelle menace, les usines à terre</h2>", unsafe_allow_html=True)
 
-    st.metric(
-        label=first_country_name,
-        value=first_country_population,
-        delta=first_country_delta,
-    )
+pb.make_double_pannel(
+    chart_obj=pb.make_bar_chart(
+        df_reshaped_bar[:10],
+        "Country Name En",
+        "Tonnes - live weight"
+    ),
+    text=lorem,
+    switch=False
+)
 
-    last_country_name = df_tonnage_difference_sorted["Country Name En"].iloc[-1]
-    last_country_population = pb.format_number(
-        df_tonnage_difference_sorted["Tonnes - live weight"].iloc[-1],
-    )
-    last_country_delta = pb.format_number(
-        df_tonnage_difference_sorted.tonnage_difference.iloc[-1],
-    )
 
-    st.metric(
-        label=last_country_name,
-        value=last_country_population,
-        delta=last_country_delta,
-    )
+# col = st.columns((2, 2), gap="medium")
 
-    # st.markdown("#### Tonnage Difference > 1000")
+# with col[0]:
+#     st.markdown("#### Max/Min Increase in Tonnage")
 
-    # # Filter countries with population difference > 1000
-    # df_greater_1000 = df_tonnage_difference_sorted[
-    #     df_tonnage_difference_sorted.tonnage_difference > 1000
-    # ]
-    # df_less_1000 = df_tonnage_difference_sorted[
-    #     df_tonnage_difference_sorted.tonnage_difference < -1000
-    # ]
+#     df_tonnage_difference_sorted = pb.calculate_tonnage_difference(
+#         df_reshaped,
+#         selected_year,
+#     )
 
-    # # % of countries with population difference > 1000
-    # countries_difference_greater = round(
-    #     (
-    #         len(df_greater_1000)
-    #         / df_tonnage_difference_sorted["Country Name En"].nunique()
-    #     )
-    #     * 100,
-    # )
-    # countries_difference_less = round(
-    #     (len(df_less_1000) / df_tonnage_difference_sorted["Country Name En"].nunique())
-    #     * 100,
-    # )
+#     first_country_name = df_tonnage_difference_sorted["Country Name En"].iloc[0]
+#     first_country_population = pb.format_number(
+#         df_tonnage_difference_sorted["Tonnes - live weight"].iloc[0],
+#     )
+#     first_country_delta = pb.format_number(
+#         df_tonnage_difference_sorted.tonnage_difference.iloc[0],
+#     )
 
-    # donut_chart_greater = pb.make_donut(
-    #     len(df_greater_1000),
-    #     countries_difference_greater,
-    #     "Max Increase",
-    #     "red",
-    # )
-    # donut_chart_less = pb.make_donut(
-    #     len(df_less_1000),
-    #     countries_difference_less,
-    #     "Min Increase",
-    #     "blue",
-    # )
+#     st.metric(
+#         label=first_country_name,
+#         value=first_country_population,
+#         delta=first_country_delta,
+#     )
 
-    # differences_col = st.columns((0.2, 1, 0.2))
-    # with differences_col[1]:
-    #     st.write("Increase")
-    #     st.altair_chart(donut_chart_greater)
-    #     st.write("Decrease")
-    #     st.altair_chart(donut_chart_less)
+#     last_country_name = df_tonnage_difference_sorted["Country Name En"].iloc[-1]
+#     last_country_population = pb.format_number(
+#         df_tonnage_difference_sorted["Tonnes - live weight"].iloc[-1],
+#     )
+#     last_country_delta = pb.format_number(
+#         df_tonnage_difference_sorted.tonnage_difference.iloc[-1],
+#     )
 
-with col[1]:
-    st.markdown("#### Top Countries")
+#     st.metric(
+#         label=last_country_name,
+#         value=last_country_population,
+#         delta=last_country_delta,
+#     )
 
-    st.dataframe(
-        df_selected_year_sorted,
-        column_order=("Country Name En", "Tonnes - live weight"),
-        hide_index=True,
-        width=None,
-        column_config={
-            "Country Name En": st.column_config.TextColumn(
-                "Country",
-            ),
-            "Tonnes - live weight": st.column_config.ProgressColumn(
-                "Acquaculture Tonnage",
-                format="%f.2",
-                min_value=0,
-                max_value=max(df_selected_year_sorted["Tonnes - live weight"]),
-            ),
-        },
-    )
+# with col[1]:
+#     st.markdown("#### Top Countries")
+
+#     st.dataframe(
+#         df_selected_year_sorted,
+#         column_order=("Country Name En", "Tonnes - live weight"),
+#         hide_index=True,
+#         width=None,
+#         column_config={
+#             "Country Name En": st.column_config.TextColumn(
+#                 "Country",
+#             ),
+#             "Tonnes - live weight": st.column_config.ProgressColumn(
+#                 "Acquaculture Tonnage",
+#                 format="%f.2",
+#                 min_value=0,
+#                 max_value=max(df_selected_year_sorted["Tonnes - live weight"]),
+#             ),
+#         },
+#     )
 
 with st.expander("About", expanded=True):
     st.write(

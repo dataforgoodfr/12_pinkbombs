@@ -5,14 +5,19 @@ from plotly.graph_objects import Figure
 
 
 def make_geo(
-    input_df: pd.DataFrame, input_id: str, input_column: str, input_color_theme: str,
+    input_df: pd.DataFrame,
+    input_id: str,
+    input_column: str,
+    input_color_theme: str,
 ) -> Figure:
     geo = px.scatter_geo(
         input_df,
         locations=input_id,
         color=input_column,
         locationmode="country names",
-        size=input_df[input_column], #pd.Series([100]*input_df.shape[0]), #input_df[input_column],
+        size=input_df[
+            input_column
+        ],  # pd.Series([100]*input_df.shape[0]), #input_df[input_column],
         color_continuous_scale=input_color_theme,
         range_color=(0, max(input_df["Tonnes - live weight"])),
         projection="natural earth",
@@ -32,15 +37,31 @@ def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figur
     area = px.area(
         input_df,
         x="Year",
-        y="Tonnes - live weight",
-        color="Country Name En",
-        line_group="Country Name En",
+        y=input_y,
+        color=input_x,
+        line_group=input_x,
     )
     return area
 
 
+def make_bar_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figure:
+    bar = px.bar(
+        input_df,
+        x=input_x,
+        y=input_y,
+        color=input_y,
+        barmode="group",
+        labels={input_x: "Country", input_y: "Tonnes"},
+        color_continuous_scale="reds"
+    )
+    return bar
+
+
 def make_donut(
-    input_response: str, input_response_perc: float, input_text: str, input_color: str,
+    input_response: str,
+    input_response_perc: float,
+    input_text: str,
+    input_color: str,
 ) -> alt.Chart:
     if input_color == "blue":
         chart_color = ["#29b5e8", "#155F7A"]
