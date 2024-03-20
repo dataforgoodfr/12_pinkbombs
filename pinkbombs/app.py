@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 import flask
 from dash import Dash
 
-from pinkbombs.layout import create_layout
+from pinkbombs.layout.layout import create_layout
 
 server = flask.Flask(__name__)
 app = Dash(
