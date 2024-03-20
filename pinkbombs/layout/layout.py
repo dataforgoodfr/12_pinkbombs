@@ -1,7 +1,6 @@
 import dash_bootstrap_components as dbc
 
-from pinkbombs.layout.story_tab import generate_story_tab
-from pinkbombs.layout.figures_tab import generate_figures_tab
+# from pinkbombs.layout.figures_tab import generate_figures_tab
 
 
 def create_layout() -> dbc.Container:
@@ -14,19 +13,19 @@ def create_layout() -> dbc.Container:
     layout = dbc.Container(
         children=[
             dbc.Tabs(
-                active_tab="figures",
+                active_tab="story",
                 children=[
                     dbc.Tab(
                         label="L'histoire",
-                        children=generate_story_tab(),
+                        children=dbc.Row("Hello world!"),
                         tab_style={"marginLeft": "auto"},
                         tab_id="story",
                     ),
-                    dbc.Tab(
-                        label="Les chiffres",
-                        children=generate_figures_tab(),
-                        tab_id="figures",
-                    ),
+                    # dbc.Tab(
+                    #     label="Les chiffres",
+                    #     children=dbc.Row("Hello World!"),
+                    #     tab_id="figures",
+                    # ),
                 ],
             )
         ],

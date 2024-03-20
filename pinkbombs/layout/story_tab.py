@@ -2,38 +2,33 @@ import dash_bootstrap_components as dbc
 from dash import html
 
 
-def generate_story_tab() -> dbc.Container:
+def generate_story_tab() -> dbc.Col:
     """Generate the History tab with images and text."""
 
-    history_tab = dbc.Container(
+    story_tab = dbc.Col(
         children=[
-            dbc.Container(
-                dbc.Row(
-                    id="landing_frame",
-                    children=[html.Img(src="assets/salmon_01.png")],
-                    class_name="flex-grow-1",
-                ),
+            dbc.Row(
+                id="landing_frame",
+                children=[html.Img(src="assets/salmon_01.png")],
+                class_name="flex-grow-1",
                 style={"height": "100vh"},
             ),
-            dbc.Container(
-                dbc.Row(
-                    id="intro_frame",
-                    children=[
-                        dbc.Row(html.Img(src="assets/salmon_02.png")),
-                        dbc.Row(
-                            html.P(
-                                """Son nom est Salmo Salar. Il y a moins de 100 ans,
+            dbc.Row(
+                id="intro_frame",
+                children=[
+                    dbc.Row(html.Img(src="assets/salmon_02.png")),
+                    dbc.Row(
+                        html.P(
+                            """Son nom est Salmo Salar. Il y a moins de 100 ans,
                                 il était le poisson sauvage le plus répandu de
                                 l’hémisphère nord et constituait
                                 l’une de nos principales sources sauvages de nourriture
                                 pendant des milliers d’années.
                                 """
-                            )
-                        ),
-                    ],
-                    class_name="flex-grow-1",
-                ),
-                style={"height": "100vh"},
+                        )
+                    ),
+                ],
+                class_name="flex-grow-1",
             ),
             dbc.Row(
                 id="planet_frame",
@@ -58,4 +53,4 @@ def generate_story_tab() -> dbc.Container:
         ]
     )
 
-    return history_tab
+    return story_tab

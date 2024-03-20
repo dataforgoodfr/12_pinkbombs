@@ -14,4 +14,5 @@ engine = create_engine(
         f"postgresql+psycopg2://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}?"
         f"sslmode=require&options=databaseid{DATABASEID}"
     ),
+    connect_args={"connect_timeout": 30},
 )
