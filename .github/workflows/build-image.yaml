@@ -18,6 +18,6 @@ jobs:
         password: ${{ secrets.SCALEWAY_SECRET_KEY }}
         registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}
     - name: Build the Docker image
-      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/app:latest
+      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dash:latest
     - name: Push the Docker Image
-      run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/app:latest
+      run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dash:latest
