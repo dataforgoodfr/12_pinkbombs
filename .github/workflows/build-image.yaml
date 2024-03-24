@@ -25,6 +25,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy on Scaleway Containers
+    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,6 +36,6 @@ jobs:
             type: deploy
             scw_access_key:  ${{ secrets.SCALEWAY_ACCESS_KEY }}
             scw_secret_key: ${{ secrets.SCALEWAY_SECRET_KEY }}
-            scw_containers_namespace_id: "pinkbombs"
+            scw_containers_namespace_id: "fr-par/0880f1d0-2756-4b18-8950-08141edc5e6e"
             scw_registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
     
