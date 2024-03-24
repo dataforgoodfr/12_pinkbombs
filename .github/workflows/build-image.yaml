@@ -21,3 +21,20 @@ jobs:
       run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
     - name: Push the Docker Image
       run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy on Scaleway Containers
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Scaleway Container Deploy action
+        id: deploy
+        uses:  philibea/scaleway-containers-deploy@v1.0.5
+        with:
+            type: deploy
+            scw_access_key:  ${{ secrets.SCALEWAY_ACCESS_KEY }}
+            scw_secret_key: ${{ secrets.SCALEWAY_SECRET_KEY }}
+            scw_containers_namespace_id: "pinkbombs"
+            scw_registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+    
