@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - add-image-build
+    - feat/add-image-build
 
 jobs:
   build:
