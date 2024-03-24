@@ -29,13 +29,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Scaleway Container Deploy action
-        id: deploy
-        uses:  philibea/scaleway-containers-deploy@v1.0.5
-        with:
-            type: deploy
-            scw_access_key:  ${{ secrets.SCALEWAY_ACCESS_KEY }}
-            scw_secret_key: ${{ secrets.SCALEWAY_SECRET_KEY }}
-            scw_containers_namespace_id: "fr-par/0880f1d0-2756-4b18-8950-08141edc5e6e"
-            scw_registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
-    
+      - name: Get Scaleway CLI image
+        id: pull
+        run: docker pull scaleway/cli:2.28
+      - name: Update Container
+        id: update
+        run: |
+          docker run -i --rm \
+          -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
+          -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
+          scaleway/cli:latest container container update fr-par/b6e27533-37ec-49ef-93c2-fb7ec22f51ad \
+          --registry-image ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
