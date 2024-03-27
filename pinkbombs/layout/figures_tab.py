@@ -1,11 +1,12 @@
 import dash_bootstrap_components as dbc
 import pandas as pd
-from dash import html
+from dash import html, dcc
 from loguru import logger
 
+from pinkbombs.viz import make_area_chart
 
-# def generate_figures_layout(df: pd.DataFrame) -> dbc.Container:
-def generate_figures_layout() -> dbc.Container:
+
+def generate_figures_layout(df: pd.DataFrame) -> dbc.Container:
 
     """Generate Figures tab with graphs and figures
 
@@ -101,20 +102,14 @@ def generate_figures_layout() -> dbc.Container:
                                 dbc.CardBody(
                                     [
                                         html.P("Le texte de description blablabla"),
-                                        html.Img(src="./assets/graph_01.png"),
+                                        dcc.Graph(
+                                            id="population_stock",
+                                            figure=make_area_chart(
+                                                df, "iso2", "tonnes"
+                                            ),
+                                        ),
                                     ]
                                 ),
-                                # dbc.CardBody(
-                                #     [
-                                #         html.P("Le texte de description blablabla"),
-                                #         dcc.Graph(
-                                #             id="population_stock",
-                                #             figure=make_area_chart(
-                                #                 df, "iso2", "tonnes"
-                                #             ),
-                                #         ),
-                                #     ]
-                                # ),
                             ],
                             class_name="p-3",
                         ),
@@ -153,23 +148,24 @@ def generate_figures_layout() -> dbc.Container:
 
 def get_data():
     logger.info("Fetching data...")
-    # try:
-    #     from pinkbombs.database.connect import engine
-    #     connect = True
-    # except Exception as e:
-    #     logger.info(f"Could not connect to database: {e}")
-    #     connect = False
-    # if connect:
-    #     try:
-    #         return pd.read_sql(sql="aquaculture_weight_by_country", con=engine)
-    #     except Exception as e:
-    #         logger.info(f"Couldn't load data: {e}")
+    try:
+        from pinkbombs.database.connect import engine
+
+        connect = True
+    except Exception as e:
+        logger.info(f"Could not connect to database: {e}")
+        connect = False
+    if connect:
+        try:
+            return pd.read_sql(sql="aquaculture_weight_by_country", con=engine)
+        except Exception as e:
+            logger.info(f"Couldn't load data: {e}")
     return pd.DataFrame(columns=["year", "tonnes", "iso2"])
 
 
 def generate_figures_tab():
 
-    # df = get_data()
-    layout = generate_figures_layout()
+    df = get_data()
+    layout = generate_figures_layout(df)
 
     return layout

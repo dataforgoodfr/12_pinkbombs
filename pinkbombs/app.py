@@ -4,6 +4,7 @@ from dash import Dash
 
 from pinkbombs.layout.layout import create_layout
 
+
 server = flask.Flask(__name__)
 app = Dash(
     __name__,
@@ -20,4 +21,4 @@ def index():
 
 
 if __name__ == "__main__":
-    server.run()
+    server.run(host="0.0.0.0", port=8080)

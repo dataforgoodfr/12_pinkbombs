@@ -23,4 +23,4 @@ RUN python -m venv ${VIRTUAL_ENV}
 RUN poetry install
 EXPOSE 8080
 
-ENTRYPOINT [ "poetry", "run", "gunicorn", "-b", "0.0.0.0:8080", "pinkbombs.app:server" ]
+ENTRYPOINT [ "poetry", "run", "python", "-m", "pinkbombs.app" ]
