@@ -6,6 +6,9 @@ on:
     branches:
     - feat/add-image-build
 
+env:
+    CONTAINER_ID: b6e27533-37ec-49ef-93c2-fb7ec22f51ad
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,5 +41,6 @@ jobs:
           docker run -i --rm \
           -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
           -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
-          scaleway/cli:latest container container update fr-par/b6e27533-37ec-49ef-93c2-fb7ec22f51ad \
-          --registry-image ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+          -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
+          scaleway/cli:latest container container update ${CONTAINER_ID} \
+          registry-image=${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
