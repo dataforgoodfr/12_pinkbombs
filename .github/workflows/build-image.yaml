@@ -1,0 +1,46 @@
+name: Build & Deploy to Scaleway
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+env:
+    CONTAINER_ID: b6e27533-37ec-49ef-93c2-fb7ec22f51ad
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Login to Scaleway Container Registry
+      uses: docker/login-action@v3
+      with:
+        username: nologin
+        password: ${{ secrets.SCALEWAY_SECRET_KEY }}
+        registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}
+    - name: Build the Docker image
+      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+    - name: Push the Docker Image
+      run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy on Scaleway Containers
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get Scaleway CLI image
+        id: pull
+        run: docker pull scaleway/cli:2.28
+      - name: Update Container
+        id: update
+        run: |
+          docker run -i --rm \
+          -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
+          -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
+          -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
+          scaleway/cli:latest container container update ${CONTAINER_ID} \
+          registry-image=${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
