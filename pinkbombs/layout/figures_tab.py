@@ -3,7 +3,7 @@ import pandas as pd
 from dash import html, dcc
 from loguru import logger
 
-from pinkbombs.viz import make_area_chart
+from pinkbombs.graphs.viz import make_area_chart
 
 
 def generate_figures_layout(df: pd.DataFrame) -> dbc.Container:
