@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - feat/add-image-build
+    - main
 
 env:
     CONTAINER_ID: b6e27533-37ec-49ef-93c2-fb7ec22f51ad
