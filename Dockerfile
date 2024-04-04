@@ -13,14 +13,15 @@ ENV PATH="${PATH}:${POETRY_HOME}/bin"
 WORKDIR /app
 
 # COPY ./d4g-utils /app/d4g-utils
-COPY ./pinkbombs /app/pinkbombs
-COPY poetry.lock /app/poetry.lock
-COPY pyproject.toml /app/pyproject.toml
+COPY ./pinkbombs /./pinkbombs
+COPY main.py ./main.py
+COPY poetry.lock ./poetry.lock
+COPY pyproject.toml ./pyproject.toml
 
 RUN python -m venv ${VIRTUAL_ENV}
 
 # Install dependencies
 RUN poetry install
-EXPOSE 8080
 
-ENTRYPOINT [ "poetry", "run", "python", "-m", "pinkbombs.app" ]
+EXPOSE 8000
+ENTRYPOINT [ "poetry", "run", "uvicorn", "main:app" ]

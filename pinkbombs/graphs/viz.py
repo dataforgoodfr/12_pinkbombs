@@ -8,9 +8,9 @@ def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figur
     group_df = group_df.sort_values(by=input_y, ascending=False).iloc[:5]
     area = px.area(
         input_df,
-        x="year",
-        y="tonnes",
-        color="iso2",
-        line_group="iso2",
+        x="Year",
+        y=input_y,
+        color=input_x,
+        line_group=input_x,
     )
     return area
