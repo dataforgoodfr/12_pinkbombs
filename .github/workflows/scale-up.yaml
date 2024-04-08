@@ -1,0 +1,37 @@
+name: Stop Scaleway
+
+on:
+  workflow_dispatch: # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
+
+  schedule: # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: "47 07 * * *"
+
+jobs:
+  down:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get Scaleway CLI image
+        id: pull
+        run: docker pull scaleway/cli:2.28
+      - name: Get Container ID
+        id: list
+        run: |
+          docker run -i --rm \
+          -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
+          -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
+          -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
+          scaleway/cli:latest container container list name=${{ secrets.CONTAINER_NAME }} --output json
+
+      - name: Get CONTAINER_ID env var
+        run: echo "CONTAINER_ID=$(cat "${GITHUB_WORKSPACE}/scw.output" | jq -r '.[0].id')"  >> $GITHUB_ENV
+      
+      - name: start 1 instances
+        id: scale-down
+        run: |
+          docker run -i --rm \
+          -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
+          -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
+          -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
+          scaleway/cli:latest container container update min-scale=1 ${{ env.CONTAINER_ID }}
