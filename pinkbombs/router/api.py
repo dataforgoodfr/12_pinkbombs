@@ -24,4 +24,7 @@ async def generate(graph_name, connection: bool = Depends(verify_token)):
         "ISO2 Code",
         "Tonnes - live weight"
     )
-    return {"graph_name": graph_name, "graph": chart_obj.to_json(), "path": "data/atlantic_salmon-aquaculture_tonnes_live_weight_by_country_by_year.xlsx"}
+    return {
+        "graph_name": graph_name, "graph": chart_obj.to_json(), 
+        "path": "data/atlantic_salmon-aquaculture_tonnes_live_weight_by_country_by_year.xlsx",
+    }
