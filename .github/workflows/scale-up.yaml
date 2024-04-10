@@ -1,4 +1,4 @@
-name: Stop Scaleway
+name: Start Scaleway
 
 on:
   workflow_dispatch: # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
@@ -34,4 +34,4 @@ jobs:
           -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
           -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
           -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
-          scaleway/cli:latest container container update min-scale=1 ${{ env.CONTAINER_ID }}
+          scaleway/cli:latest container container update ${{ env.CONTAINER_ID }} min-scale=1 

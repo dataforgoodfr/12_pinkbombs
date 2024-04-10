@@ -34,4 +34,4 @@ jobs:
           -e SCW_ACCESS_KEY=${{ secrets.SCALEWAY_ACCESS_KEY }} \
           -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
           -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
-          scaleway/cli:latest container container update min-scale=0 ${{ env.CONTAINER_ID }}
+          scaleway/cli:latest container container update ${{ env.CONTAINER_ID }} min-scale=0 
