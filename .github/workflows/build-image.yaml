@@ -40,6 +40,8 @@ jobs:
           -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
           -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
           scaleway/cli:latest container container list name=${{ secrets.CONTAINER_NAME }} --output json
+      - name: Get CONTAINER_ID env var
+        run: echo "CONTAINER_ID=$(cat "${GITHUB_WORKSPACE}/scw.output" | jq -r '.[0].id')"  >> $GITHUB_ENV
       - name: Update Container
         id: update
         run: |
