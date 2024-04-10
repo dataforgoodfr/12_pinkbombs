@@ -77,3 +77,47 @@ def make_area_order_chart(input_df, input_x, input_y, input_col, title, reorder=
     area.update_layout(template=theme, title=title)
     area.update_yaxes(exponentformat="none")
     return area
+
+
+# Function for chart 1.3
+def make_bar_chart(input_df, input_x, input_y, input_hover, title, xtitle,  
+                   palette=px.colors.qualitative.Pastel1,
+                   theme='simple_white') -> Figure:
+    """Returns plotly express object as bar chart 
+            Parameters:
+                    input_df (pd.DataFrame): dataframe with data to be visualised 
+                    input_x (str): name of the field for the x axis
+                    input_y (str): name of the field for the y axis
+                    input_hover (str): name of the field to display in hover
+                    title (str): chart title
+                    xtitle (str): x-axis title
+                    palette (px.object): plotly discrete palette, default is Pastel
+                    theme (str): plotly chart theme, default is 'simple_white'
+            Returns:
+                    bar (plotly object): output chart object
+    """ 
+    # Sort out number format
+    input_df[input_x] = input_df[input_x].str.replace(',', '.')
+    input_df[input_x] = input_df[input_x].astype(float)
+
+    # Recalculate %
+    input_df[input_hover] = input_df[input_x]/input_df[input_x].sum()
+
+    bar = px.bar(
+        input_df,
+        y=input_y,
+        x=input_x,
+        orientation='h',
+        category_orders={input_y: input_df[input_y].to_list()},
+        text_auto=',.0f',
+        title=title,
+        color_discrete_sequence=px.colors.qualitative.Pastel1,
+        hover_name=input_y,
+        hover_data={input_x:':,.0f', input_y:False, input_hover:':.1%'}
+        )
+    bar.update_traces(textfont_size=12, textangle=0, 
+                      textposition="outside", cliponaxis=False,)
+    bar.update_layout(template='simple_white', xaxis_title=xtitle)
+    bar.update_xaxes(exponentformat="none")
+
+    return bar
