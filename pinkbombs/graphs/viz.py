@@ -80,7 +80,7 @@ def make_area_order_chart(input_df, input_x, input_y, input_col, title, reorder=
 
 
 # Function for chart 1.3
-def make_bar_chart(input_df, input_x, input_y, input_hover, title, xtitle,  
+def make_bar_chart(input_df, input_x, input_y, input_col, title, xtitle,  
                    palette=px.colors.qualitative.Pastel1,
                    theme='simple_white') -> Figure:
     """Returns plotly express object as bar chart 
@@ -88,7 +88,7 @@ def make_bar_chart(input_df, input_x, input_y, input_hover, title, xtitle,
                     input_df (pd.DataFrame): dataframe with data to be visualised 
                     input_x (str): name of the field for the x axis
                     input_y (str): name of the field for the y axis
-                    input_hover (str): name of the field to display in hover
+                    input_col (str): name of the field to display in color
                     title (str): chart title
                     xtitle (str): x-axis title
                     palette (px.object): plotly discrete palette, default is Pastel
@@ -101,23 +101,25 @@ def make_bar_chart(input_df, input_x, input_y, input_hover, title, xtitle,
     input_df[input_x] = input_df[input_x].astype(float)
 
     # Recalculate %
-    input_df[input_hover] = input_df[input_x]/input_df[input_x].sum()
+    input_df[input_col] = input_df[input_x]/input_df[input_x].sum()
 
     bar = px.bar(
         input_df,
         y=input_y,
         x=input_x,
+        color=input_col,
         orientation='h',
         category_orders={input_y: input_df[input_y].to_list()},
         text_auto=',.0f',
         title=title,
-        color_discrete_sequence=px.colors.qualitative.Pastel1,
+        color_continuous_scale=px.colors.sequential.Burg,
         hover_name=input_y,
-        hover_data={input_x:':,.0f', input_y:False, input_hover:':.1%'}
+        hover_data={input_x:':,.0f', input_y:False, input_col:':.1%'}
         )
     bar.update_traces(textfont_size=12, textangle=0, 
                       textposition="outside", cliponaxis=False,)
     bar.update_layout(template='simple_white', xaxis_title=xtitle)
-    bar.update_xaxes(exponentformat="none")
+    bar.update_xaxes(exponentformat="none", range=[0, 2000000])
+    bar.update_coloraxes(colorbar_tickformat='0%')
 
     return bar
