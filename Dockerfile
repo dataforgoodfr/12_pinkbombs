@@ -14,6 +14,7 @@ WORKDIR /app
 
 # COPY ./d4g-utils /app/d4g-utils
 COPY ./pinkbombs ./pinkbombs
+COPY ./data ./data
 COPY main.py ./main.py
 COPY poetry.lock ./poetry.lock
 COPY pyproject.toml ./pyproject.toml
