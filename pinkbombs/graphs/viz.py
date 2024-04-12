@@ -162,3 +162,35 @@ def make_bar_chart(input_df, input_x, input_y, input_other,
     bar.update_coloraxes(colorbar_tickformat='0%')
 
     return bar
+
+
+def make_animated_bubble_map(input_df, input_loc, input_hover, input_time, input_size,
+                             title, size_max=50, palette=px.colors.qualitative.Pastel1,
+                             theme='simple_white') -> Figure:
+    """Returns plotly express object as Bubbles map with animation
+            Parameters:
+                    input_df (pd.DataFrame): dataframe with data to be visualised
+                    input_loc (str): name of the field with the iso alpha3 codes
+                    input_hover (str): name of the field to show on hover
+                    input_time (str): name of the time field for the animation
+                    input_size (str): name of the field for the size of the bubbles
+                    size_max (int): size of the maximum bubble radius, default=50
+                    title (str): chart title
+                    theme (str): plotly chart theme, default is 'simple_white'
+            Returns:
+                    area (plotly object): output chart object
+    """    
+    map = px.scatter_geo(input_df, 
+                         locations=input_loc,
+                         size=input_size,
+                         animation_frame=input_time,
+                         projection="natural earth",
+                         size_max=size_max,
+                         hover_name=input_hover,
+                         hover_data={input_size:':,.0f',
+                                     input_time:True,
+                                     input_hover:False, 
+                                     input_loc:False},
+                        color_discrete_sequence=palette,
+                        title=title)
+    return map

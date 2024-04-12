@@ -46,6 +46,23 @@ g1_3 = pb.make_color_bar_chart(
 
 g1_3.write_html("pinkbombs/graphs/test_html/"+data1_3_name+".html")
 
+# Graph 1.4 -  Evolution of salmon farming by country
+data1_4_name = 'evolution_salmon_farming_country_iso_1.4'
+data1_4_file = "data/"+data1_4_name+".csv"
+df_data1_4 = pd.read_csv(data1_4_file)
+
+g1_4 = pb.make_animated_bubble_map(
+    df_data1_4, 
+    input_loc='alpha-3', 
+    input_hover='Country', 
+    input_time='Year', 
+    input_size="Tonnes - live weight",
+    title='Evolution of salmon farming by country', 
+    size_max=50, 
+    palette=px.colors.qualitative.Prism
+    )
+
+g1_4.write_html("pinkbombs/graphs/test_html/"+data1_4_name+".html")
 
 # Graph 2.1 -  Top 10 companies producing salmon
 data2_1_name = 'top_10_companies_producing_2.1'
