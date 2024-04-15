@@ -41,22 +41,22 @@ def make_area_single_chart(input_df, input_x, input_y, title,
     return area
 
 
-def make_area_order_chart(input_df, input_x, input_y, input_col, title, reorder=False, 
-                          palette=px.colors.qualitative.Pastel,
+def make_area_order_chart(input_df, input_x, input_y, input_col, title, reorder=False,
+                          palette=px.colors.qualitative.Dark24,
                           theme='simple_white') -> Figure:
     """Returns plotly express object as area chart with multiple lines
             Parameters:
-                    input_df (pd.DataFrame): dataframe with data to be visualised 
+                    input_df (pd.DataFrame): dataframe with data to be visualised
                     input_x (str): name of the field for the x axis
                     input_y (str): name of the field for the y axis
                     input_col (str): name of the field for the colors
                     title (str): chart title
-                    reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False 
-                    palette (px.object): plotly discrete palette, default is Pastel
+                    reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False
+                    palette (px.object): plotly discrete palette, default is Dark24
                     theme (str): plotly chart theme, default is 'simple_white'
             Returns:
                     area (plotly object): output chart object
-    """ 
+    """
     # Data cleaning - TO REMOVE
     input_df[input_y] = input_df[input_y].str.replace(',', '.')
     input_df[input_y] = input_df[input_y].astype(float)
@@ -76,6 +76,34 @@ def make_area_order_chart(input_df, input_x, input_y, input_col, title, reorder=
         )
     area.update_layout(template=theme, title=title)
     area.update_yaxes(exponentformat="none")
+
+    # Ability to select/deselect all
+    area.update_layout(dict(updatemenus=[
+                            dict(
+                                type = "buttons",
+                                direction = "left",
+                                buttons=list([
+                                    dict(
+                                        args=["visible", "legendonly"],
+                                        label="Deselect All",
+                                        method="restyle"
+                                    ),
+                                    dict(
+                                        args=["visible", True],
+                                        label="Select All",
+                                        method="restyle"
+                                    )
+                                ]),
+                                pad={"r": 10, "t": 10},
+                                showactive=False,
+                                x=1,
+                                xanchor="right",
+                                y=1.1,
+                                yanchor="top"
+                            ),
+                        ]
+                  ))
+
     return area
 
 
