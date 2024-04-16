@@ -285,7 +285,7 @@ def make_bar_chart(input_df, input_x, input_y, input_other,
 
 
 def make_animated_bubble_map(input_df, input_loc, input_hover, input_time, input_size,
-                             title, size_max=50, palette=px.colors.qualitative.Pastel1,
+                             title, size_max=50, palette=px.colors.qualitative.Prism,
                              theme='simple_white') -> Figure:
     """Returns plotly express object as Bubbles map with animation
             Parameters:
@@ -294,8 +294,9 @@ def make_animated_bubble_map(input_df, input_loc, input_hover, input_time, input
                     input_hover (str): name of the field to show on hover
                     input_time (str): name of the time field for the animation
                     input_size (str): name of the field for the size of the bubbles
-                    size_max (int): size of the maximum bubble radius, default=50
                     title (str): chart title
+                    size_max (int): size of the maximum bubble radius, default=50
+                    palette (px.object): plotly discrete palette, default is Prism
                     theme (str): plotly chart theme, default is 'simple_white'
             Returns:
                     area (plotly object): output chart object
