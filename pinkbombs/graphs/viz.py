@@ -107,46 +107,56 @@ def make_area_order_chart(input_df, input_x, input_y, input_col, title, reorder=
     return area
 
 
-def make_color_bar_chart(input_df, input_x, input_y, input_col, title, xtitle,  
-                   palette=px.colors.qualitative.Pastel1,
+def make_color_bar_chart(input_df, input_x, input_y1, input_y2, input_col, title, 
+                   xtitle, ytitle, palette=px.colors.sequential.Burg,
                    theme='simple_white') -> Figure:
-    """Returns plotly express object as bar chart 
+    """Returns plotly express object as bar chart
             Parameters:
-                    input_df (pd.DataFrame): dataframe with data to be visualised 
+                    input_df (pd.DataFrame): dataframe with data to be visualised
                     input_x (str): name of the field for the x axis
-                    input_y (str): name of the field for the y axis
+                    input_y1 (str): name of the first part of the field for the y axis
+                    input_y2 (str): name of the second part of the field for the y axis
                     input_col (str): name of the field to display in color
                     title (str): chart title
                     xtitle (str): x-axis title
-                    palette (px.object): plotly discrete palette, default is Pastel
+                    ytitle (str): y-axis title
+                    palette (px.object): plotly discrete palette, default is Burg
                     theme (str): plotly chart theme, default is 'simple_white'
             Returns:
                     bar (plotly object): output chart object
-    """ 
+    """
     # Sort out number format
     input_df[input_x] = input_df[input_x].str.replace(',', '.')
     input_df[input_x] = input_df[input_x].astype(float)
 
     # Recalculate %
-    input_df[input_col] = input_df[input_x]/input_df[input_x].sum()
+    input_df[input_col] = input_df[input_x] / input_df[input_x].sum()
+
+    # Concatenate input_y1 and input_y2 to form input_y
+    input_y = input_y1 + '_' + input_y2
+    input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
     bar = px.bar(
         input_df,
-        y=input_y,
+        y=input_y,  
         x=input_x,
         color=input_col,
         orientation='h',
-        category_orders={input_y: input_df[input_y].to_list()},
+        category_orders={input_y: input_df[input_y].tolist()}, 
         text_auto=',.0f',
         title=title,
-        color_continuous_scale=px.colors.sequential.Burg,
-        hover_name=input_y,
-        hover_data={input_x:':,.0f', input_y:False, input_col:':.1%'}
-        )
-    bar.update_traces(textfont_size=12, textangle=0, 
+        color_continuous_scale=palette,
+        hover_name=input_y,  
+        hover_data={input_x: ':,.0f', input_y: False, input_col: ':.1%'} 
+    )
+
+    bar.update_traces(textfont_size=12, textangle=0,
                       textposition="outside", cliponaxis=False,)
-    bar.update_layout(template='simple_white', xaxis_title=xtitle)
+    bar.update_layout(template='simple_white', xaxis_title=xtitle, 
+                      yaxis_title=ytitle, 
+                      yaxis = dict(tickfont = dict(size=13)))
     bar.update_xaxes(exponentformat="none", range=[0, 2000000])
+    bar.update_yaxes(ticks='')
     bar.update_coloraxes(colorbar_tickformat='0%')
 
     return bar

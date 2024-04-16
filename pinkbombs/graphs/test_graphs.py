@@ -37,11 +37,12 @@ data1_3_file = "data/"+data1_3_name+".csv"
 df_data1_3 = pd.read_csv(data1_3_file)
 
 g1_3 = pb.make_color_bar_chart(
-    df_data1_3, 
-    input_x='Tons', input_y='Country', 
-    input_col='% of total', 
+    df_data1_3,
+    input_x='Tons', input_y1='Country', input_y2='Flag',
+    input_col='% of total',
     title='Top 10 countries producing salmon (2021)',
-    xtitle='Tonnes of farmed salmon produced',
+    xtitle='Tonnes of farmed salmon produced', 
+    ytitle='Country',
     )
 
 g1_3.write_html("pinkbombs/graphs/test_html/"+data1_3_name+".html")
