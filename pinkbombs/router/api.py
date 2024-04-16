@@ -7,7 +7,7 @@ import pandas as pd
 router = APIRouter()
 
 @router.get("/")
-async def ping(connection: bool = Depends(verify_token)):
+async def ping():
     return {"status": "ok", "time": datetime.now().strftime("%Y-%m-%dT%H:%M:%S:%f")}
 
 @router.get("/graphs/{graph_name}")
