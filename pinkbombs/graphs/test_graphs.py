@@ -98,20 +98,27 @@ g2_1 = pb.make_simple_bar_chart(
 
 g2_1.write_html("pinkbombs/graphs/test_html/" + data2_1_name + ".html")
 
-# Graph 2.3 -  Top 10 land-based companies producing salmon
-data2_3_name = "top_10_land_based_companies_2.3"
+# Graph 2.3 -  Top 10 RAS companies producing salmon
+data2_3_name = "top_10_ras_companies_2.3"
 data2_3_file = "data/" + data2_3_name + ".csv"
 df_data2_3 = pd.read_csv(data2_3_file)
 
-g2_3 = pb.make_bar_chart(
+g2_3 = pb.make_simple_bar_chart(
     df_data2_3,
-    input_x="Production Capacity in tons",
-    input_y="Company",
-    input_other="Countries",
-    title="Top 10 companies producing salmon on land",
-    xtitle="Planned production capacity per year in tonnes",
-    palette=px.colors.qualitative.Prism,
-)
+    input_x='Production in tonnes',
+    input_y1='Parent company',
+    input_y2='Flag',
+    input_n1='Revenues 2022 dollars',
+    input_n2='Employees 2022',
+    input_other=['Commercial name', 'Creation date', 'Headquarters', 'Website',
+                 'Revenues 2022 dollars', 'Employees 2022', 'Number of projects', 
+                 'Countries of projects', 'Note'],
+    title="Top 10 RAS companies producing salmon",
+    xtitle='Company ambition for salmon production in tonnes',
+    ytitle='Company',
+    mycolor='#151c97', 
+    fix_approx=False
+    )
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + ".html")
 
