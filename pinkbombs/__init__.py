@@ -4,5 +4,5 @@ from .graphs.viz import make_color_bar_chart, make_color_bar_chart2, make_simple
 from .graphs.viz import make_animated_bubble_map
 from .graphs.maps_viz import make_ras_bubble_map
 
-#from .router import api
-#from .auth.authenicate import verify_token
+from .router import api
+from .auth.authenicate import verify_token
