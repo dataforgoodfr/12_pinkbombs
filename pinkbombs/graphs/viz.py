@@ -127,7 +127,7 @@ def make_color_bar_chart(
     palette=px.colors.sequential.Burg,
     theme="simple_white",
 ) -> Figure:
-    """Returns plotly express object as bar chart
+    """Returns plotly express object as bar chart - specific to graph 1.3 ATM!!!
     Parameters:
             input_df (pd.DataFrame): dataframe with data to be visualised
             input_x (str): name of the field for the x axis
@@ -182,6 +182,49 @@ def make_color_bar_chart(
     bar.update_xaxes(exponentformat="none", range=[0, 2000000])
     bar.update_yaxes(ticks="")
     bar.update_coloraxes(colorbar_tickformat="0%")
+
+    return bar
+
+
+def make_color_bar_chart2(input_df, input_x, input_y, input_col, col_rename, 
+                          title, ytitle, palette=px.colors.sequential.Burg,
+                          theme='simple_white') -> Figure:
+    """Returns plotly express object as bar chart with gradient color - speficif to graph 4.2 ATM!!!
+            Parameters:
+                    input_df (pd.DataFrame): dataframe with data to be visualised
+                    input_x (str): name of the field for the x axis
+                    input_y (str): name of the field for the y axis
+                    input_col (str): name of the field to display in color
+                    col_rename (dict): dictionary with the column rename of input_df
+                    title (str): chart title
+                    ytitle (str): y-axis title
+                    palette (px.object): plotly discrete palette, default is Burg
+                    theme (str): plotly chart theme, default is 'simple_white'
+            Returns:
+                    bar (plotly object): output chart object
+    """
+    # Sort out number format
+    input_df[input_y] = input_df[input_y].str.replace(',', '.')
+    input_df[input_y] = input_df[input_y].astype(float)
+
+    # Rename columns
+    input_df = input_df.rename(columns=col_rename)
+
+    bar = px.bar(
+        input_df,
+        y=col_rename[input_y],
+        x=input_x,
+        color=col_rename[input_col],
+        title=title,
+        color_continuous_scale=palette,
+        hover_name=input_x,
+        hover_data={col_rename[input_y]:':,.0f', input_x:False, 
+                    col_rename[input_col]:':,.0f'}
+        )
+    bar.update_traces(textfont_size=12, textangle=0,
+                      textposition="outside", cliponaxis=False,)
+    bar.update_layout(template='simple_white', yaxis_title=ytitle)
+    bar.update_xaxes(exponentformat="none")
 
     return bar
 

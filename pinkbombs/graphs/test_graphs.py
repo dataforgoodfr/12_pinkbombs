@@ -114,3 +114,21 @@ g2_3 = pb.make_bar_chart(
 )
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + ".html")
+
+# Graph 4.2 - Antibiotics consumption
+data4_2_name = "antibiotic_consumption_chile_4.2"
+data4_2_file = "data/" + data4_2_name + ".csv"
+df_data4_2 = pd.read_csv(data4_2_file)
+
+g4_2 = pb.make_color_bar_chart2(
+    df_data4_2,
+    input_x='year',
+    input_y='consom_atb_ton',
+    input_col='biomass_harvested_ton', 
+    col_rename={'consom_atb_ton': 'Antibiotics usage (tonnes)',
+                'biomass_harvested_ton': 'Harvested biomass (tonnes)'},
+    title="Antibiotic usage in Chile (2007-2021)",
+    ytitle='Antibiotics usage (tonnes)')
+
+g4_2.write_html("pinkbombs/graphs/test_html/" + data4_2_name + ".html")
+
