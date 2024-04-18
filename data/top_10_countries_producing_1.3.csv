@@ -1,11 +1,11 @@
-Country,Tons,% of total
-Norway,"1562415,01",54%
-Chile,725280,25%
-United Kingdom,205000,7%
-Canada,120186,4%
-Faroe Islands,115650,4%
-Australia,"84045,234",3%
-Iceland,46458,2%
-United States of America,"16490,52",1%
-Russian Federation,14959,1%
-Ireland,12844,"0,4%"
+Flag,Country,Tons,% of total
+🇳🇴,Norway,"1562415,01",54%
+🇨🇱,Chile,725280,25%
+🇬🇧,United Kingdom,205000,7%
+🇨🇦,Canada,120186,4%
+🇫🇴,Faroe Islands,115650,4%
+🇦🇺,Australia,"84045,234",3%
+🇮🇸,Iceland,46458,2%
+🇺🇲,United States of America,"16490,52",1%
+🇷🇺,Russian Federation,14959,1%
+🇮🇪,Ireland,12844,"0,4%"

@@ -1,0 +1,901 @@
+,Year,Tonnes - live weight,Country,alpha-3
+0,1950,0.0,United Kingdom,GBR
+1,1950,0.0,Sweden,SWE
+2,1950,0.0,Norway,NOR
+3,1950,0.0,"Korea, Dem. People's Rep",PRK
+4,1950,0.0,Ireland,IRL
+5,1950,0.0,Finland,FIN
+6,1950,0.0,Canada,CAN
+7,1951,0.0,United Kingdom,GBR
+8,1951,0.0,Sweden,SWE
+9,1951,0.0,Norway,NOR
+10,1951,0.0,"Korea, Dem. People's Rep",PRK
+11,1951,0.0,Ireland,IRL
+12,1951,0.0,Finland,FIN
+13,1951,0.0,Canada,CAN
+14,1952,0.0,United Kingdom,GBR
+15,1952,0.0,Sweden,SWE
+16,1952,0.0,Norway,NOR
+17,1952,0.0,"Korea, Dem. People's Rep",PRK
+18,1952,0.0,Ireland,IRL
+19,1952,0.0,Finland,FIN
+20,1952,0.0,Canada,CAN
+21,1953,0.0,United Kingdom,GBR
+22,1953,0.0,Sweden,SWE
+23,1953,0.0,Norway,NOR
+24,1953,0.0,"Korea, Dem. People's Rep",PRK
+25,1953,0.0,Ireland,IRL
+26,1953,0.0,Finland,FIN
+27,1953,0.0,Canada,CAN
+28,1954,0.0,United Kingdom,GBR
+29,1954,0.0,Sweden,SWE
+30,1954,0.0,Norway,NOR
+31,1954,0.0,"Korea, Dem. People's Rep",PRK
+32,1954,0.0,Ireland,IRL
+33,1954,0.0,Finland,FIN
+34,1954,0.0,Canada,CAN
+35,1955,0.0,United Kingdom,GBR
+36,1955,0.0,Sweden,SWE
+37,1955,0.0,Norway,NOR
+38,1955,0.0,"Korea, Dem. People's Rep",PRK
+39,1955,0.0,Ireland,IRL
+40,1955,0.0,Finland,FIN
+41,1955,0.0,Canada,CAN
+42,1956,0.0,United Kingdom,GBR
+43,1956,0.0,Sweden,SWE
+44,1956,0.0,Norway,NOR
+45,1956,0.0,"Korea, Dem. People's Rep",PRK
+46,1956,0.0,Ireland,IRL
+47,1956,0.0,Finland,FIN
+48,1956,0.0,Canada,CAN
+49,1957,0.0,United Kingdom,GBR
+50,1957,0.0,Sweden,SWE
+51,1957,0.0,Norway,NOR
+52,1957,0.0,"Korea, Dem. People's Rep",PRK
+53,1957,0.0,Ireland,IRL
+54,1957,0.0,Finland,FIN
+55,1957,0.0,Canada,CAN
+56,1958,0.0,United Kingdom,GBR
+57,1958,0.0,Sweden,SWE
+58,1958,0.0,Norway,NOR
+59,1958,0.0,"Korea, Dem. People's Rep",PRK
+60,1958,0.0,Ireland,IRL
+61,1958,0.0,Finland,FIN
+62,1958,0.0,Canada,CAN
+63,1959,0.0,United Kingdom,GBR
+64,1959,0.0,Sweden,SWE
+65,1959,0.0,Norway,NOR
+66,1959,0.0,"Korea, Dem. People's Rep",PRK
+67,1959,0.0,Ireland,IRL
+68,1959,0.0,Finland,FIN
+69,1959,0.0,Canada,CAN
+70,1960,0.0,United Kingdom,GBR
+71,1960,0.0,Sweden,SWE
+72,1960,0.0,Norway,NOR
+73,1960,0.0,"Korea, Dem. People's Rep",PRK
+74,1960,0.0,Ireland,IRL
+75,1960,0.0,Finland,FIN
+76,1960,0.0,Canada,CAN
+77,1961,0.0,United Kingdom,GBR
+78,1961,0.0,Sweden,SWE
+79,1961,0.0,Norway,NOR
+80,1961,0.0,"Korea, Dem. People's Rep",PRK
+81,1961,0.0,Ireland,IRL
+82,1961,0.0,Finland,FIN
+83,1961,0.0,Canada,CAN
+84,1962,0.0,United Kingdom,GBR
+85,1962,0.0,Sweden,SWE
+86,1962,0.0,Norway,NOR
+87,1962,0.0,"Korea, Dem. People's Rep",PRK
+88,1962,0.0,Ireland,IRL
+89,1962,0.0,Finland,FIN
+90,1962,0.0,Canada,CAN
+91,1963,0.0,United Kingdom,GBR
+92,1963,0.0,Sweden,SWE
+93,1963,0.0,Norway,NOR
+94,1963,0.0,"Korea, Dem. People's Rep",PRK
+95,1963,0.0,Ireland,IRL
+96,1963,0.0,Finland,FIN
+97,1963,0.0,Canada,CAN
+98,1964,0.0,United Kingdom,GBR
+99,1964,0.0,Sweden,SWE
+100,1964,1.0,Norway,NOR
+101,1964,0.0,"Korea, Dem. People's Rep",PRK
+102,1964,0.0,Ireland,IRL
+103,1964,0.0,Finland,FIN
+104,1964,0.0,Canada,CAN
+105,1965,0.0,United Kingdom,GBR
+106,1965,0.0,Sweden,SWE
+107,1965,2.0,Norway,NOR
+108,1965,0.0,"Korea, Dem. People's Rep",PRK
+109,1965,0.0,Ireland,IRL
+110,1965,0.0,Finland,FIN
+111,1965,0.0,Canada,CAN
+112,1966,0.0,United Kingdom,GBR
+113,1966,0.0,Sweden,SWE
+114,1966,4.0,Norway,NOR
+115,1966,0.0,"Korea, Dem. People's Rep",PRK
+116,1966,0.0,Ireland,IRL
+117,1966,0.0,Finland,FIN
+118,1966,0.0,Canada,CAN
+119,1967,0.0,United Kingdom,GBR
+120,1967,0.0,Sweden,SWE
+121,1967,8.0,Norway,NOR
+122,1967,0.0,"Korea, Dem. People's Rep",PRK
+123,1967,0.0,Ireland,IRL
+124,1967,0.0,Finland,FIN
+125,1967,0.0,Canada,CAN
+126,1968,0.0,United Kingdom,GBR
+127,1968,0.0,Sweden,SWE
+128,1968,15.0,Norway,NOR
+129,1968,0.0,"Korea, Dem. People's Rep",PRK
+130,1968,0.0,Ireland,IRL
+131,1968,0.0,Finland,FIN
+132,1968,0.0,Canada,CAN
+133,1969,0.0,United Kingdom,GBR
+134,1969,0.0,Sweden,SWE
+135,1969,27.0,Norway,NOR
+136,1969,0.0,"Korea, Dem. People's Rep",PRK
+137,1969,0.0,Ireland,IRL
+138,1969,0.0,Finland,FIN
+139,1969,0.0,Canada,CAN
+140,1970,244.0,United Kingdom,GBR
+141,1970,0.0,Sweden,SWE
+142,1970,50.0,Norway,NOR
+143,1970,0.0,"Korea, Dem. People's Rep",PRK
+144,1970,0.0,Ireland,IRL
+145,1970,0.0,Iceland,ISL
+146,1970,0.0,Finland,FIN
+147,1970,0.0,Chile,CHL
+148,1970,0.0,Canada,CAN
+149,1971,216.0,United Kingdom,GBR
+150,1971,0.0,Sweden,SWE
+151,1971,98.0,Norway,NOR
+152,1971,0.0,"Korea, Dem. People's Rep",PRK
+153,1971,0.0,Ireland,IRL
+154,1971,0.0,Iceland,ISL
+155,1971,0.0,Finland,FIN
+156,1971,0.0,Chile,CHL
+157,1971,0.0,Canada,CAN
+158,1972,213.0,United Kingdom,GBR
+159,1972,0.0,Sweden,SWE
+160,1972,146.0,Norway,NOR
+161,1972,0.0,"Korea, Dem. People's Rep",PRK
+162,1972,0.0,Ireland,IRL
+163,1972,0.0,Iceland,ISL
+164,1972,0.0,Finland,FIN
+165,1972,0.0,Chile,CHL
+166,1972,0.0,Canada,CAN
+167,1973,401.0,United Kingdom,GBR
+168,1973,0.0,Sweden,SWE
+169,1973,171.0,Norway,NOR
+170,1973,0.0,"Korea, Dem. People's Rep",PRK
+171,1973,0.0,Ireland,IRL
+172,1973,0.0,Iceland,ISL
+173,1973,0.0,Finland,FIN
+174,1973,0.0,Chile,CHL
+175,1973,0.0,Canada,CAN
+176,1974,372.0,United Kingdom,GBR
+177,1974,0.0,Sweden,SWE
+178,1974,601.0,Norway,NOR
+179,1974,0.0,"Korea, Dem. People's Rep",PRK
+180,1974,1.0,Ireland,IRL
+181,1974,0.0,Iceland,ISL
+182,1974,0.0,Finland,FIN
+183,1974,0.0,Chile,CHL
+184,1974,0.0,Canada,CAN
+185,1975,393.0,United Kingdom,GBR
+186,1975,0.0,Sweden,SWE
+187,1975,862.0,Norway,NOR
+188,1975,0.0,"Korea, Dem. People's Rep",PRK
+189,1975,2.0,Ireland,IRL
+190,1975,1.0,Iceland,ISL
+191,1975,0.0,Finland,FIN
+192,1975,0.0,Chile,CHL
+193,1975,0.0,Canada,CAN
+194,1976,209.0,United Kingdom,GBR
+195,1976,0.0,Sweden,SWE
+196,1976,1431.0,Norway,NOR
+197,1976,0.0,"Korea, Dem. People's Rep",PRK
+198,1976,5.0,Ireland,IRL
+199,1976,5.0,Iceland,ISL
+200,1976,0.0,Finland,FIN
+201,1976,1.0,Faroe Islands,FRO
+202,1976,0.0,Chile,CHL
+203,1976,0.0,Canada,CAN
+204,1977,115.0,United Kingdom,GBR
+205,1977,5.0,Sweden,SWE
+206,1977,2137.0,Norway,NOR
+207,1977,0.0,"Korea, Dem. People's Rep",PRK
+208,1977,10.0,Ireland,IRL
+209,1977,8.0,Iceland,ISL
+210,1977,0.0,Finland,FIN
+211,1977,2.0,Faroe Islands,FRO
+212,1977,0.0,Chile,CHL
+213,1977,0.0,Canada,CAN
+214,1978,378.0,United Kingdom,GBR
+215,1978,10.0,Sweden,SWE
+216,1978,3540.0,Norway,NOR
+217,1978,0.0,"Korea, Dem. People's Rep",PRK
+218,1978,10.0,Ireland,IRL
+219,1978,13.0,Iceland,ISL
+220,1978,0.0,Finland,FIN
+221,1978,5.0,Faroe Islands,FRO
+222,1978,0.0,Chile,CHL
+223,1978,0.0,Canada,CAN
+224,1979,520.0,United Kingdom,GBR
+225,1979,15.0,Sweden,SWE
+226,1979,4389.0,Norway,NOR
+227,1979,0.0,"Korea, Dem. People's Rep",PRK
+228,1979,13.0,Ireland,IRL
+229,1979,19.0,Iceland,ISL
+230,1979,0.0,Finland,FIN
+231,1979,0.0,Chile,CHL
+232,1979,5.0,Canada,CAN
+233,1980,598.0,United Kingdom,GBR
+234,1980,30.0,Sweden,SWE
+235,1980,4312.0,Norway,NOR
+236,1980,0.0,"Korea, Dem. People's Rep",PRK
+237,1980,21.0,Ireland,IRL
+238,1980,27.0,Iceland,ISL
+239,1980,251.0,Finland,FIN
+240,1980,22.0,Faroe Islands,FRO
+241,1980,0.0,Chile,CHL
+242,1980,27.0,Canada,CAN
+243,1981,1133.0,United Kingdom,GBR
+244,1981,0.0,Türkiye,
+245,1981,50.0,Sweden,SWE
+246,1981,8418.0,Norway,NOR
+247,1981,0.0,"Korea, Dem. People's Rep",PRK
+248,1981,35.0,Ireland,IRL
+249,1981,39.0,Iceland,ISL
+250,1981,312.0,Finland,FIN
+251,1981,45.0,Faroe Islands,FRO
+252,1981,0.0,Chile,CHL
+253,1981,76.0,Canada,CAN
+254,1982,2152.0,United Kingdom,GBR
+255,1982,0.0,Türkiye,
+256,1982,50.0,Sweden,SWE
+257,1982,10695.0,Norway,NOR
+258,1982,0.0,"Korea, Dem. People's Rep",PRK
+259,1982,100.0,Ireland,IRL
+260,1982,56.0,Iceland,ISL
+261,1982,9.0,Finland,FIN
+262,1982,60.0,Faroe Islands,FRO
+263,1982,0.0,Chile,CHL
+264,1982,143.0,Canada,CAN
+265,1983,2536.0,United Kingdom,GBR
+266,1983,0.0,Türkiye,
+267,1983,75.0,Sweden,SWE
+268,1983,17298.0,Norway,NOR
+269,1983,0.0,"Korea, Dem. People's Rep",PRK
+270,1983,257.0,Ireland,IRL
+271,1983,79.0,Iceland,ISL
+272,1983,235.0,Finland,FIN
+273,1983,90.0,Faroe Islands,FRO
+274,1983,0.0,Chile,CHL
+275,1983,68.0,Canada,CAN
+276,1984,3912.0,United Kingdom,GBR
+277,1984,0.0,Türkiye,
+278,1984,118.0,Sweden,SWE
+279,1984,150.0,Spain,ESP
+280,1984,21881.0,Norway,NOR
+281,1984,0.0,"Korea, Dem. People's Rep",PRK
+282,1984,385.0,Ireland,IRL
+283,1984,107.0,Iceland,ISL
+284,1984,93.0,Finland,FIN
+285,1984,117.0,Faroe Islands,FRO
+286,1984,0.0,Chile,CHL
+287,1984,222.0,Canada,CAN
+288,1985,6921.0,United Kingdom,GBR
+289,1985,0.0,Türkiye,
+290,1985,81.0,Sweden,SWE
+291,1985,150.0,Spain,ESP
+292,1985,29473.0,Norway,NOR
+293,1985,0.0,"Korea, Dem. People's Rep",PRK
+294,1985,700.0,Ireland,IRL
+295,1985,91.0,Iceland,ISL
+296,1985,92.0,Finland,FIN
+297,1985,940.0,Faroe Islands,FRO
+298,1985,0.0,Chile,CHL
+299,1985,349.0,Canada,CAN
+300,1986,8.0,United States of America,USA
+301,1986,10337.0,United Kingdom,GBR
+302,1986,0.0,Türkiye,
+303,1986,160.0,Sweden,SWE
+304,1986,150.0,Spain,ESP
+305,1986,44831.0,Norway,NOR
+306,1986,0.0,"Korea, Dem. People's Rep",PRK
+307,1986,1215.0,Ireland,IRL
+308,1986,123.0,Iceland,ISL
+309,1986,93.0,Finland,FIN
+310,1986,1370.0,Faroe Islands,FRO
+311,1986,0.0,Chile,CHL
+312,1986,682.0,Canada,CAN
+313,1986,10.0,Australia,AUS
+314,1987,113.0,United States of America,USA
+315,1987,12721.0,United Kingdom,GBR
+316,1987,0.0,Türkiye,
+317,1987,224.0,Sweden,SWE
+318,1987,150.0,Spain,ESP
+319,1987,46453.0,Norway,NOR
+320,1987,0.0,"Korea, Dem. People's Rep",PRK
+321,1987,2300.0,Ireland,IRL
+322,1987,490.0,Iceland,ISL
+323,1987,3.0,Greece,GRC
+324,1987,11.0,Finland,FIN
+325,1987,3193.0,Faroe Islands,FRO
+326,1987,41.0,Chile,CHL
+327,1987,1385.0,Canada,CAN
+328,1987,62.0,Australia,AUS
+329,1988,898.0,United States of America,USA
+330,1988,17951.0,United Kingdom,GBR
+331,1988,0.0,Türkiye,
+332,1988,363.0,Sweden,SWE
+333,1988,150.0,Spain,ESP
+334,1988,0.0,Portugal,PRT
+335,1988,78744.0,Norway,NOR
+336,1988,0.0,"Korea, Dem. People's Rep",PRK
+337,1988,4075.0,Ireland,IRL
+338,1988,1053.0,Iceland,ISL
+339,1988,11.0,Greece,GRC
+340,1988,117.0,Finland,FIN
+341,1988,3400.0,Faroe Islands,FRO
+342,1988,165.0,Chile,CHL
+343,1988,3431.0,Canada,CAN
+344,1988,240.0,Australia,AUS
+345,1989,2554.0,United States of America,USA
+346,1989,28603.0,United Kingdom,GBR
+347,1989,0.0,Türkiye,
+348,1989,771.0,Sweden,SWE
+349,1989,150.0,Spain,ESP
+350,1989,100.0,Portugal,PRT
+351,1989,111337.0,Norway,NOR
+352,1989,0.0,"Korea, Dem. People's Rep",PRK
+353,1989,5500.0,Ireland,IRL
+354,1989,1480.0,Iceland,ISL
+355,1989,19.0,Greece,GRC
+356,1989,71.0,Finland,FIN
+357,1989,7901.0,Faroe Islands,FRO
+358,1989,1860.0,Chile,CHL
+359,1989,5967.0,Canada,CAN
+360,1989,1750.0,Australia,AUS
+361,1990,3185.0,United States of America,USA
+362,1990,32004.0,United Kingdom,GBR
+363,1990,300.0,Türkiye,
+364,1990,602.0,Sweden,SWE
+365,1990,355.0,Spain,ESP
+366,1990,120.0,Portugal,PRT
+367,1990,145990.0,Norway,NOR
+368,1990,0.0,"Korea, Dem. People's Rep",PRK
+369,1990,6323.0,Ireland,IRL
+370,1990,2716.0,Iceland,ISL
+371,1990,12.0,Greece,GRC
+372,1990,157.0,Finland,FIN
+373,1990,13025.0,Faroe Islands,FRO
+374,1990,9478.0,Chile,CHL
+375,1990,9625.0,Canada,CAN
+376,1990,1750.0,Australia,AUS
+377,1991,6661.0,United States of America,USA
+378,1991,40657.0,United Kingdom,GBR
+379,1991,1500.0,Türkiye,
+380,1991,270.0,Sweden,SWE
+381,1991,553.0,Spain,ESP
+382,1991,100.0,Portugal,PRT
+383,1991,154900.0,Norway,NOR
+384,1991,0.0,"Korea, Dem. People's Rep",PRK
+385,1991,9300.0,Ireland,IRL
+386,1991,2566.0,Iceland,ISL
+387,1991,33.0,Greece,GRC
+388,1991,574.0,France,FRA
+389,1991,146.0,Finland,FIN
+390,1991,17914.0,Faroe Islands,FRO
+391,1991,14957.0,Chile,CHL
+392,1991,13499.0,Canada,CAN
+393,1991,2653.0,Australia,AUS
+394,1992,10028.0,United States of America,USA
+395,1992,36302.0,United Kingdom,GBR
+396,1992,680.0,Türkiye,
+397,1992,388.0,Sweden,SWE
+398,1992,782.0,Spain,ESP
+399,1992,0.0,Russian Federation,RUS
+400,1992,0.0,Portugal,PRT
+401,1992,124138.0,Norway,NOR
+402,1992,0.0,"Korea, Dem. People's Rep",PRK
+403,1992,9696.0,Ireland,IRL
+404,1992,2125.0,Iceland,ISL
+405,1992,20.0,Greece,GRC
+406,1992,600.0,France,FRA
+407,1992,85.0,Finland,FIN
+408,1992,18364.0,Faroe Islands,FRO
+409,1992,23715.0,Chile,CHL
+410,1992,17305.0,Canada,CAN
+411,1992,3300.0,Australia,AUS
+412,1993,10750.0,United States of America,USA
+413,1993,48791.0,United Kingdom,GBR
+414,1993,791.0,Türkiye,
+415,1993,4.0,Sweden,SWE
+416,1993,562.0,Spain,ESP
+417,1993,0.0,Russian Federation,RUS
+418,1993,0.0,Portugal,PRT
+419,1993,155581.0,Norway,NOR
+420,1993,0.0,"Korea, Dem. People's Rep",PRK
+421,1993,12366.0,Ireland,IRL
+422,1993,2348.0,Iceland,ISL
+423,1993,30.0,Greece,GRC
+424,1993,564.0,France,FRA
+425,1993,0.0,Finland,FIN
+426,1993,17660.0,Faroe Islands,FRO
+427,1993,29180.0,Chile,CHL
+428,1993,23483.0,Canada,CAN
+429,1993,3500.0,Australia,AUS
+430,1994,10906.0,United States of America,USA
+431,1994,64266.0,United Kingdom,GBR
+432,1994,434.0,Türkiye,
+433,1994,7.0,Sweden,SWE
+434,1994,909.0,Spain,ESP
+435,1994,0.0,Russian Federation,RUS
+436,1994,0.0,Portugal,PRT
+437,1994,202459.0,Norway,NOR
+438,1994,0.0,"Korea, Dem. People's Rep",PRK
+439,1994,11616.0,Ireland,IRL
+440,1994,2588.0,Iceland,ISL
+441,1994,74.0,Greece,GRC
+442,1994,856.0,France,FRA
+443,1994,0.0,Finland,FIN
+444,1994,14868.0,Faroe Islands,FRO
+445,1994,34175.0,Chile,CHL
+446,1994,27773.0,Canada,CAN
+447,1994,4000.0,Australia,AUS
+448,1995,14075.0,United States of America,USA
+449,1995,70322.0,United Kingdom,GBR
+450,1995,654.0,Türkiye,
+451,1995,19.0,Sweden,SWE
+452,1995,695.0,Spain,ESP
+453,1995,0.0,Russian Federation,RUS
+454,1995,0.0,Portugal,PRT
+455,1995,261522.0,Norway,NOR
+456,1995,0.0,"Korea, Dem. People's Rep",PRK
+457,1995,11811.0,Ireland,IRL
+458,1995,2591.0,Iceland,ISL
+459,1995,7.0,Greece,GRC
+460,1995,894.0,France,FRA
+461,1995,0.0,Finland,FIN
+462,1995,8539.0,Faroe Islands,FRO
+463,1995,54250.0,Chile,CHL
+464,1995,33674.0,Canada,CAN
+465,1995,6192.0,Australia,AUS
+466,1996,13906.0,United States of America,USA
+467,1996,83344.0,United Kingdom,GBR
+468,1996,193.0,Türkiye,
+469,1996,12.0,Sweden,SWE
+470,1996,726.0,Spain,ESP
+471,1996,0.0,Russian Federation,RUS
+472,1996,4.0,Portugal,PRT
+473,1996,297557.0,Norway,NOR
+474,1996,0.0,"Korea, Dem. People's Rep",PRK
+475,1996,14025.0,Ireland,IRL
+476,1996,2832.0,Iceland,ISL
+477,1996,9.0,Greece,GRC
+478,1996,800.0,France,FRA
+479,1996,0.0,Finland,FIN
+480,1996,17049.0,Faroe Islands,FRO
+481,1996,77327.0,Chile,CHL
+482,1996,36475.0,Canada,CAN
+483,1996,7647.0,Australia,AUS
+484,1997,18005.0,United States of America,USA
+485,1997,99422.0,United Kingdom,GBR
+486,1997,50.0,Türkiye,
+487,1997,0.0,Sweden,SWE
+488,1997,851.0,Spain,ESP
+489,1997,0.0,Russian Federation,RUS
+490,1997,250.0,Portugal,PRT
+491,1997,332581.0,Norway,NOR
+492,1997,0.0,"Korea, Dem. People's Rep",PRK
+493,1997,15441.0,Ireland,IRL
+494,1997,2513.0,Iceland,ISL
+495,1997,12.0,Greece,GRC
+496,1997,950.0,France,FRA
+497,1997,0.0,Finland,FIN
+498,1997,21103.0,Faroe Islands,FRO
+499,1997,96675.0,Chile,CHL
+500,1997,51015.0,Canada,CAN
+501,1997,7648.0,Australia,AUS
+502,1998,14507.0,United States of America,USA
+503,1998,110917.0,United Kingdom,GBR
+504,1998,40.0,Türkiye,
+505,1998,0.0,Sweden,SWE
+506,1998,798.0,Spain,ESP
+507,1998,0.0,Russian Federation,RUS
+508,1998,360806.0,Norway,NOR
+509,1998,0.0,"Korea, Dem. People's Rep",PRK
+510,1998,14860.0,Ireland,IRL
+511,1998,2742.0,Iceland,ISL
+512,1998,11.0,Greece,GRC
+513,1998,760.0,France,FRA
+514,1998,0.0,Finland,FIN
+515,1998,19176.0,Faroe Islands,FRO
+516,1998,107066.0,Chile,CHL
+517,1998,49475.0,Canada,CAN
+518,1998,7069.0,Australia,AUS
+519,1999,17739.0,United States of America,USA
+520,1999,126686.0,United Kingdom,GBR
+521,1999,0.0,Türkiye,
+522,1999,0.0,Sweden,SWE
+523,1999,618.0,Spain,ESP
+524,1999,5.0,Russian Federation,RUS
+525,1999,425154.0,Norway,NOR
+526,1999,0.0,"Korea, Dem. People's Rep",PRK
+527,1999,18076.0,Ireland,IRL
+528,1999,2900.0,Iceland,ISL
+529,1999,9.0,Greece,GRC
+530,1999,750.0,France,FRA
+531,1999,0.0,Finland,FIN
+532,1999,39252.0,Faroe Islands,FRO
+533,1999,103242.0,Chile,CHL
+534,1999,61990.0,Canada,CAN
+535,1999,9195.0,Australia,AUS
+536,2000,22395.0,United States of America,USA
+537,2000,128959.0,United Kingdom,GBR
+538,2000,0.0,Türkiye,
+539,2000,0.0,Sweden,SWE
+540,2000,226.0,Spain,ESP
+541,2000,0.0,Russian Federation,RUS
+542,2000,440061.0,Norway,NOR
+543,2000,0.0,"Korea, Dem. People's Rep",PRK
+544,2000,17648.0,Ireland,IRL
+545,2000,2593.0,Iceland,ISL
+546,2000,17.0,Greece,GRC
+547,2000,102.0,France,FRA
+548,2000,0.0,Finland,FIN
+549,2000,33508.0,Faroe Islands,FRO
+550,2000,166897.0,Chile,CHL
+551,2000,72495.0,Canada,CAN
+552,2000,10907.0,Australia,AUS
+553,2001,20769.0,United States of America,USA
+554,2001,138519.0,United Kingdom,GBR
+555,2001,0.0,Türkiye,
+556,2001,0.0,Sweden,SWE
+557,2001,323.0,Spain,ESP
+558,2001,0.0,Russian Federation,RUS
+559,2001,436103.0,Norway,NOR
+560,2001,0.0,"Korea, Dem. People's Rep",PRK
+561,2001,23312.0,Ireland,IRL
+562,2001,2645.0,Iceland,ISL
+563,2001,23.0,Greece,GRC
+564,2001,90.0,France,FRA
+565,2001,0.0,Finland,FIN
+566,2001,46041.0,Faroe Islands,FRO
+567,2001,253850.0,Chile,CHL
+568,2001,95606.0,Canada,CAN
+569,2001,12724.0,Australia,AUS
+570,2002,12734.0,United States of America,USA
+571,2002,145609.0,United Kingdom,GBR
+572,2002,0.0,Türkiye,
+573,2002,0.0,Sweden,SWE
+574,2002,152.0,Spain,ESP
+575,2002,0.0,Russian Federation,RUS
+576,2002,462495.0,Norway,NOR
+577,2002,0.0,"Korea, Dem. People's Rep",PRK
+578,2002,23231.0,Ireland,IRL
+579,2002,1471.0,Iceland,ISL
+580,2002,28.0,Greece,GRC
+581,2002,443.0,France,FRA
+582,2002,0.0,Finland,FIN
+583,2002,44953.0,Faroe Islands,FRO
+584,2002,15.0,Denmark,DNK
+585,2002,265726.0,Chile,CHL
+586,2002,114921.0,Canada,CAN
+587,2002,14356.0,Australia,AUS
+588,2003,16315.0,United States of America,USA
+589,2003,145609.0,United Kingdom,GBR
+590,2003,0.0,Türkiye,
+591,2003,0.0,Sweden,SWE
+592,2003,27.0,Spain,ESP
+593,2003,300.0,Russian Federation,RUS
+594,2003,509544.0,Norway,NOR
+595,2003,0.0,"Korea, Dem. People's Rep",PRK
+596,2003,16347.0,Ireland,IRL
+597,2003,3708.0,Iceland,ISL
+598,2003,9.0,Greece,GRC
+599,2003,544.0,France,FRA
+600,2003,0.0,Finland,FIN
+601,2003,52526.0,Faroe Islands,FRO
+602,2003,16.0,Denmark,DNK
+603,2003,280301.0,Chile,CHL
+604,2003,107228.0,Canada,CAN
+605,2003,15208.0,Australia,AUS
+606,2004,15127.0,United States of America,USA
+607,2004,158099.0,United Kingdom,GBR
+608,2004,0.0,Türkiye,
+609,2004,0.0,Sweden,SWE
+610,2004,15.0,Spain,ESP
+611,2004,203.0,Russian Federation,RUS
+612,2004,563815.0,Norway,NOR
+613,2004,0.0,"Korea, Dem. People's Rep",PRK
+614,2004,14067.0,Ireland,IRL
+615,2004,6624.0,Iceland,ISL
+616,2004,7.0,Greece,GRC
+617,2004,735.0,France,FRA
+618,2004,0.0,Finland,FIN
+619,2004,40985.0,Faroe Islands,FRO
+620,2004,16.0,Denmark,DNK
+621,2004,348983.0,Chile,CHL
+622,2004,96774.0,Canada,CAN
+623,2004,16476.0,Australia,AUS
+624,2005,9401.0,United States of America,USA
+625,2005,129823.0,United Kingdom,GBR
+626,2005,0.0,Türkiye,
+627,2005,0.0,Sweden,SWE
+628,2005,0.0,Spain,ESP
+629,2005,204.0,Russian Federation,RUS
+630,2005,586512.0,Norway,NOR
+631,2005,0.0,"Korea, Dem. People's Rep",PRK
+632,2005,13764.0,Ireland,IRL
+633,2005,6488.0,Iceland,ISL
+634,2005,6.0,Greece,GRC
+635,2005,1190.0,France,FRA
+636,2005,0.0,Finland,FIN
+637,2005,18962.0,Faroe Islands,FRO
+638,2005,18.0,Denmark,DNK
+639,2005,385779.0,Chile,CHL
+640,2005,98370.0,Canada,CAN
+641,2005,16780.0,Australia,AUS
+642,2006,10485.0,United States of America,USA
+643,2006,131973.0,United Kingdom,GBR
+644,2006,0.0,Türkiye,
+645,2006,0.0,Sweden,SWE
+646,2006,2.0,Spain,ESP
+647,2006,229.0,Russian Federation,RUS
+648,2006,629888.0,Norway,NOR
+649,2006,0.0,"Korea, Dem. People's Rep",PRK
+650,2006,11174.0,Ireland,IRL
+651,2006,5224.0,Iceland,ISL
+652,2006,11.0,Greece,GRC
+653,2006,1391.0,France,FRA
+654,2006,0.0,Finland,FIN
+655,2006,13078.0,Faroe Islands,FRO
+656,2006,18.0,Denmark,DNK
+657,2006,376476.0,Chile,CHL
+658,2006,118061.0,Canada,CAN
+659,2006,20710.0,Australia,AUS
+660,2007,11001.0,United States of America,USA
+661,2007,130104.0,United Kingdom,GBR
+662,2007,0.0,Türkiye,
+663,2007,0.0,Sweden,SWE
+664,2007,0.0,Spain,ESP
+665,2007,111.0,Russian Federation,RUS
+666,2007,744222.0,Norway,NOR
+667,2007,0.0,"Korea, Dem. People's Rep",PRK
+668,2007,9923.0,Ireland,IRL
+669,2007,1197.0,Iceland,ISL
+670,2007,8.0,Greece,GRC
+671,2007,1100.0,France,FRA
+672,2007,0.0,Finland,FIN
+673,2007,22305.0,Faroe Islands,FRO
+674,2007,16.0,Denmark,DNK
+675,2007,331042.0,Chile,CHL
+676,2007,102509.0,Canada,CAN
+677,2007,25336.0,Australia,AUS
+678,2008,16714.0,United States of America,USA
+679,2008,128744.0,United Kingdom,GBR
+680,2008,0.0,Türkiye,
+681,2008,10.0,Sweden,SWE
+682,2008,0.0,Spain,ESP
+683,2008,51.0,Russian Federation,RUS
+684,2008,737694.0,Norway,NOR
+685,2008,9217.0,Ireland,IRL
+686,2008,330.0,Iceland,ISL
+687,2008,8.0,Greece,GRC
+688,2008,1335.0,France,FRA
+689,2008,0.0,Finland,FIN
+690,2008,38494.0,Faroe Islands,FRO
+691,2008,11.0,Denmark,DNK
+692,2008,388847.0,Chile,CHL
+693,2008,104075.0,Canada,CAN
+694,2008,25736.9,Australia,AUS
+695,2009,14074.0,United States of America,USA
+696,2009,144663.0,United Kingdom,GBR
+697,2009,0.0,Türkiye,
+698,2009,0.0,Sweden,SWE
+699,2009,110.0,Spain,ESP
+700,2009,2126.0,Russian Federation,RUS
+701,2009,862907.7,Norway,NOR
+702,2009,10.0,"Korea, Dem. People's Rep",PRK
+703,2009,12210.0,Ireland,IRL
+704,2009,714.0,Iceland,ISL
+705,2009,22.0,Greece,GRC
+706,2009,0.0,Finland,FIN
+707,2009,51383.0,Faroe Islands,FRO
+708,2009,1.9,Denmark,DNK
+709,2009,233308.0,Chile,CHL
+710,2009,100212.0,Canada,CAN
+711,2009,0.33,Bulgaria,BGR
+712,2009,29893.0,Australia,AUS
+713,2010,19535.0,United States of America,USA
+714,2010,154633.0,United Kingdom,GBR
+715,2010,0.0,Türkiye,
+716,2010,0.0,Sweden,SWE
+717,2010,79.2,Spain,ESP
+718,2010,4500.0,Russian Federation,RUS
+719,2010,939536.0,Norway,NOR
+720,2010,10.0,"Korea, Dem. People's Rep",PRK
+721,2010,15691.0,Ireland,IRL
+722,2010,1068.0,Iceland,ISL
+723,2010,10.0,Greece,GRC
+724,2010,0.0,Finland,FIN
+725,2010,45391.0,Faroe Islands,FRO
+726,2010,15.0,Denmark,DNK
+727,2010,123233.0,Chile,CHL
+728,2010,101544.0,Canada,CAN
+729,2010,31806.79,Australia,AUS
+730,2011,18595.0,United States of America,USA
+731,2011,158309.5,United Kingdom,GBR
+732,2011,0.0,Türkiye,
+733,2011,0.0,Sweden,SWE
+734,2011,0.0,Spain,ESP
+735,2011,8500.0,Russian Federation,RUS
+736,2011,1064868.0,Norway,NOR
+737,2011,15.0,"Korea, Dem. People's Rep",PRK
+738,2011,12196.0,Ireland,IRL
+739,2011,1083.0,Iceland,ISL
+740,2011,0.0,Greece,GRC
+741,2011,0.0,Finland,FIN
+742,2011,60473.0,Faroe Islands,FRO
+743,2011,10.0,Denmark,DNK
+744,2011,264349.0,Chile,CHL
+745,2011,110328.0,Canada,CAN
+746,2011,36662.04,Australia,AUS
+747,2012,19295.0,United States of America,USA
+748,2012,162547.0,United Kingdom,GBR
+749,2012,0.0,Türkiye,
+750,2012,0.0,Sweden,SWE
+751,2012,4.0,Spain,ESP
+752,2012,8754.0,Russian Federation,RUS
+753,2012,1232094.9,Norway,NOR
+754,2012,15.0,"Korea, Dem. People's Rep",PRK
+755,2012,12440.0,Ireland,IRL
+756,2012,2923.0,Iceland,ISL
+757,2012,0.0,Greece,GRC
+758,2012,0.0,Finland,FIN
+759,2012,76564.0,Faroe Islands,FRO
+760,2012,0.2,Denmark,DNK
+761,2012,399678.0,Chile,CHL
+762,2012,116101.0,Canada,CAN
+763,2012,43982.0,Australia,AUS
+764,2013,18866.0,United States of America,USA
+765,2013,163240.0,United Kingdom,GBR
+766,2013,0.0,Türkiye,
+767,2013,6.0,Sweden,SWE
+768,2013,0.0,Spain,ESP
+769,2013,22500.0,Russian Federation,RUS
+770,2013,1168324.0,Norway,NOR
+771,2013,15.0,"Korea, Dem. People's Rep",PRK
+772,2013,9124.9,Ireland,IRL
+773,2013,3018.0,Iceland,ISL
+774,2013,0.0,Greece,GRC
+775,2013,0.0,Finland,FIN
+776,2013,75821.0,Faroe Islands,FRO
+777,2013,10.0,Denmark,DNK
+778,2013,492329.0,Chile,CHL
+779,2013,97629.0,Canada,CAN
+780,2013,42825.01,Australia,AUS
+781,2014,18719.0,United States of America,USA
+782,2014,179028.0,United Kingdom,GBR
+783,2014,8.0,Sweden,SWE
+784,2014,3.8,Spain,ESP
+785,2014,18675.0,Russian Federation,RUS
+786,2014,1258355.9,Norway,NOR
+787,2014,20.0,"Korea, Dem. People's Rep",PRK
+788,2014,9367.6,Ireland,IRL
+789,2014,3965.0,Iceland,ISL
+790,2014,0.0,Greece,GRC
+791,2014,0.0,Finland,FIN
+792,2014,86454.0,Faroe Islands,FRO
+793,2014,405.0,Denmark,DNK
+794,2014,644459.0,Chile,CHL
+795,2014,86347.0,Canada,CAN
+796,2014,41590.66,Australia,AUS
+797,2015,18719.0,United States of America,USA
+798,2015,171731.0,United Kingdom,GBR
+799,2015,7.785,Spain,ESP
+800,2015,10834.0,Russian Federation,RUS
+801,2015,1303345.8,Norway,NOR
+802,2015,20.0,"Korea, Dem. People's Rep",PRK
+803,2015,13116.0,Ireland,IRL
+804,2015,3260.0,Iceland,ISL
+805,2015,0.0,Greece,GRC
+806,2015,0.0,Finland,FIN
+807,2015,80600.0,Faroe Islands,FRO
+808,2015,428.0,Denmark,DNK
+809,2015,608546.0,Chile,CHL
+810,2015,121926.0,Canada,CAN
+811,2015,48330.56,Australia,AUS
+812,2016,16185.0,United States of America,USA
+813,2016,162820.0,United Kingdom,GBR
+814,2016,1.0,Sweden,SWE
+815,2016,5.162,Spain,ESP
+816,2016,12857.0,Russian Federation,RUS
+817,2016,1233619.2,Norway,NOR
+818,2016,20.0,"Korea, Dem. People's Rep",PRK
+819,2016,16300.0,Ireland,IRL
+820,2016,8420.0,Iceland,ISL
+821,2016,0.0,Greece,GRC
+822,2016,0.0,Finland,FIN
+823,2016,83300.0,Faroe Islands,FRO
+824,2016,1289.0,Denmark,DNK
+825,2016,532225.0,Chile,CHL
+826,2016,123522.0,Canada,CAN
+827,2016,56115.197,Australia,AUS
+828,2017,14685.0,United States of America,USA
+829,2017,189707.0,United Kingdom,GBR
+830,2017,24.39,Spain,ESP
+831,2017,13016.0,Russian Federation,RUS
+832,2017,1236353.0,Norway,NOR
+833,2017,50.0,"Korea, Dem. People's Rep",PRK
+834,2017,18342.0,Ireland,IRL
+835,2017,11265.0,Iceland,ISL
+836,2017,0.0,Greece,GRC
+837,2017,0.0,Finland,FIN
+838,2017,86800.0,Faroe Islands,FRO
+839,2017,807.0,Denmark,DNK
+840,2017,614180.46,Chile,CHL
+841,2017,120553.0,Canada,CAN
+842,2017,52580.2,Australia,AUS
+843,2018,16107.0,United States of America,USA
+844,2018,156025.0,United Kingdom,GBR
+845,2018,100.0,Switzerland,CHE
+846,2018,20566.0,Russian Federation,RUS
+847,2018,1282003.2,Norway,NOR
+848,2018,60.0,"Korea, Dem. People's Rep",PRK
+849,2018,11984.0,Ireland,IRL
+850,2018,13448.0,Iceland,ISL
+851,2018,0.0,Finland,FIN
+852,2018,78900.0,Faroe Islands,FRO
+853,2018,1030.0,Denmark,DNK
+854,2018,661138.39,Chile,CHL
+855,2018,123184.0,Canada,CAN
+856,2018,61227.0,Australia,AUS
+857,2019,16490.52,United States of America,USA
+858,2019,203881.0,United Kingdom,GBR
+859,2019,159.4,Switzerland,CHE
+860,2019,11.606,Spain,ESP
+861,2019,32343.0,Russian Federation,RUS
+862,2019,1364042.038,Norway,NOR
+863,2019,60.0,"Korea, Dem. People's Rep",PRK
+864,2019,11333.0,Ireland,IRL
+865,2019,26957.0,Iceland,ISL
+866,2019,0.0,Finland,FIN
+867,2019,95000.0,Faroe Islands,FRO
+868,2019,1462.53,Denmark,DNK
+869,2019,701984.0,Chile,CHL
+870,2019,118630.0,Canada,CAN
+871,2019,56989.34,Australia,AUS
+872,2020,16490.52,United States of America,USA
+873,2020,192129.0,United Kingdom,GBR
+874,2020,300.0,United Arab Emirates,ARE
+875,2020,159.4,Switzerland,CHE
+876,2020,10855.0,Russian Federation,RUS
+877,2020,1388433.84,Norway,NOR
+878,2020,60.0,"Korea, Dem. People's Rep",PRK
+879,2020,12870.0,Ireland,IRL
+880,2020,34341.0,Iceland,ISL
+881,2020,88950.0,Faroe Islands,FRO
+882,2020,1940.0,Denmark,DNK
+883,2020,787131.0,Chile,CHL
+884,2020,120427.0,Canada,CAN
+885,2020,66918.495,Australia,AUS
+886,2021,16490.52,United States of America,USA
+887,2021,205000.0,United Kingdom,GBR
+888,2021,180.0,United Arab Emirates,ARE
+889,2021,160.0,Switzerland,CHE
+890,2021,14959.0,Russian Federation,RUS
+891,2021,1562415.01,Norway,NOR
+892,2021,60.0,"Korea, Dem. People's Rep",PRK
+893,2021,12844.0,Ireland,IRL
+894,2021,46458.0,Iceland,ISL
+895,2021,115650.0,Faroe Islands,FRO
+896,2021,1668.0,Denmark,DNK
+897,2021,725280.0,Chile,CHL
+898,2021,120186.0,Canada,CAN
+899,2021,84045.234,Australia,AUS
