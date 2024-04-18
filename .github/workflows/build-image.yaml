@@ -18,9 +18,9 @@ jobs:
         password: ${{ secrets.SCALEWAY_SECRET_KEY }}
         registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}
     - name: Build the Docker image
-      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dataapp:latest
     - name: Push the Docker Image
-      run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+      run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dataapp:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
           -e SCW_SECRET_KEY=${{ secrets.SCALEWAY_SECRET_KEY }} \
           -e SCW_DEFAULT_ORGANIZATION_ID=${{ secrets.SCALEWAY_ORGANIZATION_ID }} \
           scaleway/cli:latest container container update ${{ env.CONTAINER_ID }} \
-          registry-image=${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/webapp:latest
+          registry-image=${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dataapp:latest
