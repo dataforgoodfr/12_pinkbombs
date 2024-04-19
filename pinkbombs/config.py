@@ -104,12 +104,6 @@ MAPPING = {
             False,
         ],
     },
-    "ras-map": {
-        "filename": "ras_projects_for_map_2.4.csv",
-        "function": pb.make_ras_bubble_map,
-        "parser": pd.read_csv,
-        "arguments": [],
-    },
     "antibiotic-conso": {
         "filename": "antibiotic_consumption_chile_4.2.csv",
         "function": pb.make_color_bar_chart2,
@@ -125,5 +119,14 @@ MAPPING = {
             "Antibiotic usage in Chile (2007-2021)",
             "Antibiotics usage (tonnes)",
         ],
+    },
+}
+
+MAPS = {
+    "ras-map": {
+        "filename": "ras_projects_for_map_2.4.csv",
+        "function": pb.make_ras_bubble_map,
+        "parser": pd.read_csv,
+        "arguments": [],
     },
 }

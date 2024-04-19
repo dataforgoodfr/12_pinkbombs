@@ -234,4 +234,4 @@ def make_ras_bubble_map(input_df):
         collapsed=False,
     ).add_to(map)
 
-    return map.render()
+    return map.get_root().render()
