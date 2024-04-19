@@ -127,9 +127,12 @@ data2_4_name = "ras_projects_for_map_2.4"
 data2_4_file = "data/" + data2_4_name + ".csv"
 df_data2_4 = pd.read_csv(data2_4_file)
 
-g2_4 = pb.make_ras_bubble_map(df_data2_4)
+g2_4 = pb.make_ras_bubble_map(df_data2_4, add_title_legend=True)
 
-g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
+#g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
+func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html","w") 
+func.write(g2_4) 
+func.close()
 
 # Graph 4.2 - Antibiotics consumption
 data4_2_name = "antibiotic_consumption_chile_4.2"

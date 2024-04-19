@@ -2,6 +2,7 @@ import numpy as np
 import geopandas as gpd
 import folium
 from folium.plugins import GroupedLayerControl
+from branca.element import Template, MacroElement
 
 
 def get_transfo_param(df, col, min_rad=2.5, max_rad=60):
@@ -173,10 +174,131 @@ def define_colors():
     return (shades_salmon, shades_brown)
 
 
-def make_ras_bubble_map(input_df):
+def make_title_html(map_title):
+    """Returns a html title for the map"""
+    title_html = '''
+             <h3 align="center" style="font-size:16px"><b>{}</b></h3>
+             '''.format(map_title)
+    return title_html
+
+
+def make_legend_for_map():
+    """Returns a html legend for the map - all hard-coded for now!"""
+
+    template = """
+    {% macro html(this, kwargs) %}
+    
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>jQuery UI Draggable - Default functionality</title>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      
+      <script>
+      $( function() {
+        $( "#maplegend" ).draggable({
+                        start: function (event, ui) {
+                            $(this).css({
+                                right: "auto",
+                                top: "auto",
+                                bottom: "auto"
+                            });
+                        }
+                    });
+    });
+    
+      </script>
+    </head>
+    <body>
+
+    <div id='maplegend' class='maplegend' 
+    style='position: absolute; z-index:9999; border:2px solid grey; background-color:rgba(255, 255, 255, 0.8);
+     border-radius:6px; padding: 10px; font-size:14px; left: 20px; bottom: 20px;'>
+
+    <div class='legend-subtitle'>Land-based Farms by Status</div>
+    
+    <div class='legend-title'>Electricity Consumption</div>
+    
+    <div class='legend-scale'>
+      <ul class='legend-labels'>
+        <li><span style='background:#C66264;opacity:0.7;'></span>Operating</li>
+        <li><span style='background:#FA8072;opacity:0.7;'></span>In construction</li>
+        <li><span style='background:#FEA993;opacity:0.7;'></span>Project</li>
+    
+    <div class='legend-title'>Carbon footprint</div>
+    
+    <div class='legend-scale'>
+      <ul class='legend-labels'>
+        <li><span style='background:#412829;opacity:0.7;'></span>Operating</li>
+        <li><span style='background:#6e4546;opacity:0.7;'></span>In construction</li>
+        <li><span style='background:#ac7b7d;opacity:0.7;'></span>Project</li>
+    
+    <li><a >Size depends on farm production, electricity</a></li>
+    <li><a >consumption (a) and carbon footprint (b)</a></li>
+    <li><a href='https://www.sciencedirect.com/science/article/pii/S0144860923000171' target='_blank'>(a) based on 9.59 kWh/kg LW</a></li>
+    <li><a href='https://ourworldindata.org/grapher/carbon-intensity-electricity' target='_blank'>(b) Carbon intensity of electricity by country</a></li>
+      </ul>
+    </div>
+    </div>
+     
+    </body>
+    </html>
+
+    <style type='text/css'>
+      .maplegend .legend-title {
+        text-align: left;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 90%;
+        }
+      .maplegend .legend-scale ul {
+        margin: 0;
+        margin-bottom: 5px;
+        padding: 0;
+        float: left;
+        list-style: none;
+        }
+      .maplegend .legend-scale ul li {
+        font-size: 80%;
+        list-style: none;
+        margin-left: 0;
+        line-height: 18px;
+        margin-bottom: 2px;
+        }
+      .maplegend ul.legend-labels li span {
+        display: block;
+        float: left;
+        height: 16px;
+        width: 30px;
+        margin-right: 5px;
+        margin-left: 0;
+        border: 1px solid #999;
+        }
+      .maplegend .legend-source {
+        font-size: 80%;
+        color: #777;
+        clear: both;
+        }
+      .maplegend a {
+        color: #777;
+        }
+    </style>
+    {% endmacro %} 
+    """
+    return template
+
+
+
+def make_ras_bubble_map(input_df, add_title_legend=False):
     """Returns a folium map object with the RAS farms as bubble and pop-ups
     Parameters:
             input_df (DataFrame): Dataframe containing data to display
+            add_title_legend (boolean): turn true to add title and legend default is False
     Returns:
             map (folium object): Map with all elements
     """
@@ -233,5 +355,14 @@ def make_ras_bubble_map(input_df):
         exclusive_groups=True,
         collapsed=False,
     ).add_to(map)
+
+    if add_title_legend:
+        map_title = 'Land-based farms and their theoretical Electricity consumption and Carbon footprint'
+        map.get_root().html.add_child(folium.Element(make_title_html(map_title)))
+
+        legend_temp = make_legend_for_map()
+        macro = MacroElement()
+        macro._template = Template(legend_temp)
+        map.get_root().add_child(macro)
 
     return map.get_root().render()
