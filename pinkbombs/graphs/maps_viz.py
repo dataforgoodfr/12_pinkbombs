@@ -293,7 +293,6 @@ def make_legend_for_map():
     return template
 
 
-
 def make_ras_bubble_map(input_df, add_title_legend=False):
     """Returns a folium map object with the RAS farms as bubble and pop-ups
     Parameters:
