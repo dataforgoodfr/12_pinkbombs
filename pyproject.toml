@@ -21,6 +21,8 @@ loguru = "^0.7.2"
 gunicorn = "^21.2.0"
 fastapi = "^0.110.1"
 uvicorn = "^0.29.0"
+folium = "^0.16.0"
+geopandas = "^0.14.3"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.6.2"

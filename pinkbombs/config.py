@@ -77,15 +77,56 @@ MAPPING = {
         ],
     },
     "top-land": {
-        "filename": "top_10_land_based_companies_2.3.csv",
-        "function": pb.make_bar_chart,
+        "filename": "top_10_ras_companies_2.3.csv",
+        "function": pb.make_simple_bar_chart,
         "parser": pd.read_csv,
         "arguments": [
-            "Production Capacity in tons",
+            "Production in tonnes",
+            "Parent company",
+            "Flag",
+            "Revenues 2022 dollars",
+            "Employees 2022",
+            [
+                "Commercial name",
+                "Creation date",
+                "Headquarters",
+                "Website",
+                "Revenues 2022 dollars",
+                "Employees 2022",
+                "Number of projects",
+                "Countries of projects",
+                "Note",
+            ],
+            "Top 10 RAS companies producing salmon",
+            "Company ambition for salmon production in tonnes",
             "Company",
-            "Countries",
-            "Top 10 companies producing salmon on land",
-            "Planned production capacity per year in tonnes",
+            "#151c97",
+            False,
         ],
+    },
+    "antibiotic-conso": {
+        "filename": "antibiotic_consumption_chile_4.2.csv",
+        "function": pb.make_color_bar_chart2,
+        "parser": pd.read_csv,
+        "arguments": [
+            "year",
+            "consom_atb_ton",
+            "biomass_harvested_ton",
+            {
+                "consom_atb_ton": "Antibiotics usage (tonnes)",
+                "biomass_harvested_ton": "Harvested biomass (tonnes)",
+            },
+            "Antibiotic usage in Chile (2007-2021)",
+            "Antibiotics usage (tonnes)",
+        ],
+    },
+}
+
+MAPS = {
+    "ras-map": {
+        "filename": "ras_projects_for_map_2.4.csv",
+        "function": pb.make_ras_bubble_map,
+        "parser": pd.read_csv,
+        "arguments": [],
     },
 }

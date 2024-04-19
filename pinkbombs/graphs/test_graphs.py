@@ -98,19 +98,53 @@ g2_1 = pb.make_simple_bar_chart(
 
 g2_1.write_html("pinkbombs/graphs/test_html/" + data2_1_name + ".html")
 
-# Graph 2.3 -  Top 10 land-based companies producing salmon
-data2_3_name = "top_10_land_based_companies_2.3"
+# Graph 2.3 -  Top 10 RAS companies producing salmon
+data2_3_name = "top_10_ras_companies_2.3"
 data2_3_file = "data/" + data2_3_name + ".csv"
 df_data2_3 = pd.read_csv(data2_3_file)
 
-g2_3 = pb.make_bar_chart(
+g2_3 = pb.make_simple_bar_chart(
     df_data2_3,
-    input_x="Production Capacity in tons",
-    input_y="Company",
-    input_other="Countries",
-    title="Top 10 companies producing salmon on land",
-    xtitle="Planned production capacity per year in tonnes",
-    palette=px.colors.qualitative.Prism,
-)
+    input_x='Production in tonnes',
+    input_y1='Parent company',
+    input_y2='Flag',
+    input_n1='Revenues 2022 dollars',
+    input_n2='Employees 2022',
+    input_other=['Commercial name', 'Creation date', 'Headquarters', 'Website',
+                 'Revenues 2022 dollars', 'Employees 2022', 'Number of projects', 
+                 'Countries of projects', 'Note'],
+    title="Top 10 RAS companies producing salmon",
+    xtitle='Company ambition for salmon production in tonnes',
+    ytitle='Company',
+    mycolor='#151c97', 
+    fix_approx=False
+    )
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + ".html")
+
+# Graph 2.4 - Map of RAS projects
+data2_4_name = "ras_projects_for_map_2.4"
+data2_4_file = "data/" + data2_4_name + ".csv"
+df_data2_4 = pd.read_csv(data2_4_file)
+
+g2_4 = pb.make_ras_bubble_map(df_data2_4)
+
+g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
+
+# Graph 4.2 - Antibiotics consumption
+data4_2_name = "antibiotic_consumption_chile_4.2"
+data4_2_file = "data/" + data4_2_name + ".csv"
+df_data4_2 = pd.read_csv(data4_2_file)
+
+g4_2 = pb.make_color_bar_chart2(
+    df_data4_2,
+    input_x='year',
+    input_y='consom_atb_ton',
+    input_col='biomass_harvested_ton', 
+    col_rename={'consom_atb_ton': 'Antibiotics usage (tonnes)',
+                'biomass_harvested_ton': 'Harvested biomass (tonnes)'},
+    title="Antibiotic usage in Chile (2007-2021)",
+    ytitle='Antibiotics usage (tonnes)')
+
+g4_2.write_html("pinkbombs/graphs/test_html/" + data4_2_name + ".html")
+

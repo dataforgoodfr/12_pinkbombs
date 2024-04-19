@@ -127,7 +127,7 @@ def make_color_bar_chart(
     palette=px.colors.sequential.Burg,
     theme="simple_white",
 ) -> Figure:
-    """Returns plotly express object as bar chart
+    """Returns plotly express object as bar chart - specific to graph 1.3 ATM!!!
     Parameters:
             input_df (pd.DataFrame): dataframe with data to be visualised
             input_x (str): name of the field for the x axis
@@ -186,6 +186,60 @@ def make_color_bar_chart(
     return bar
 
 
+def make_color_bar_chart2(
+    input_df,
+    input_x,
+    input_y,
+    input_col,
+    col_rename,
+    title,
+    ytitle,
+    palette=px.colors.sequential.Burg,
+    theme="simple_white",
+) -> Figure:
+    """Returns plotly express object as bar chart with gradient color - speficif to graph 4.2 ATM!!!
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualised
+            input_x (str): name of the field for the x axis
+            input_y (str): name of the field for the y axis
+            input_col (str): name of the field to display in color
+            col_rename (dict): dictionary with the column rename of input_df
+            title (str): chart title
+            ytitle (str): y-axis title
+            palette (px.object): plotly discrete palette, default is Burg
+            theme (str): plotly chart theme, default is 'simple_white'
+    Returns:
+            bar (plotly object): output chart object
+    """
+    # Sort out number format
+    input_df[input_y] = input_df[input_y].str.replace(",", ".")
+    input_df[input_y] = input_df[input_y].astype(float)
+
+    # Rename columns
+    input_df = input_df.rename(columns=col_rename)
+
+    bar = px.bar(
+        input_df,
+        y=col_rename[input_y],
+        x=input_x,
+        color=col_rename[input_col],
+        title=title,
+        color_continuous_scale=palette,
+        hover_name=input_x,
+        hover_data={col_rename[input_y]: ":,.0f", input_x: False, col_rename[input_col]: ":,.0f"},
+    )
+    bar.update_traces(
+        textfont_size=12,
+        textangle=0,
+        textposition="outside",
+        cliponaxis=False,
+    )
+    bar.update_layout(template="simple_white", yaxis_title=ytitle)
+    bar.update_xaxes(exponentformat="none")
+
+    return bar
+
+
 def make_simple_bar_chart(
     input_df,
     input_x,
@@ -200,6 +254,7 @@ def make_simple_bar_chart(
     mycolor,
     palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
+    fix_approx=True,
 ) -> Figure:
     """Returns a Plotly Express object as a bar chart with only 1 color
     Parameters:
@@ -216,6 +271,7 @@ def make_simple_bar_chart(
             mycolor (str): name of the color code for the bars
             palette (px.object): Plotly discrete palette, default is Pastel1
             theme (str): Plotly chart theme, default is 'simple_white'
+            fix_approx (boolean): if data has "~" symbol (to remove from this function!)
     Returns:
             bar (Plotly object): output chart object
     """
@@ -226,22 +282,20 @@ def make_simple_bar_chart(
     input_y = input_y1 + "_" + input_y2
     input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
-    # Replace NaN values with an empty string in all columns
-    input_df = input_df.fillna("")
-
     # Get a list of all columns except input_x, input_y1, and input_y2
     hover_data = {input_x: ":,.0f", input_y: False}
     for column in input_other:
         hover_data[column] = True
 
-    # Remove '~' characters from input_n1 and input_n2 and convert them to integers
-    input_df[input_n1] = input_df[input_n1].str.replace("~", "")
-    input_df[input_n2] = input_df[input_n2].str.replace("~", "")
-    input_df[input_n1] = input_df[input_n1].astype(int)
-    input_df[input_n2] = input_df[input_n2].astype(int)
+    if fix_approx:
+        # Remove '~' characters from input_n1 and input_n2 and convert them to integers
+        input_df[input_n1] = input_df[input_n1].str.replace("~", "")
+        input_df[input_n2] = input_df[input_n2].str.replace("~", "")
+        input_df[input_n1] = input_df[input_n1].astype(int)
+        input_df[input_n2] = input_df[input_n2].astype(int)
 
     # Divide the values in input_n1 by 1,000,000 to display revenues in millions
-    input_df[input_n1] = input_df[input_n1] / 1_000_000
+    input_df[input_n1] = input_df[input_n1] / 1000000
     # Format the values with "$" symbol preceding and add "M" for millions and "B" for billions
     input_df[input_n1] = input_df[input_n1].map(
         lambda x: f"${x:.1f}M" if x < 1000 else f"${x/1000:.1f}B"
@@ -255,6 +309,9 @@ def make_simple_bar_chart(
         if row[input_y1] == "Cooke":
             input_df.at[index, input_n2] = "~" + str(row[input_n2])
             input_df.at[index, input_n1] = "~" + str(row[input_n1])
+
+    # Replace NaN values with an empty string in all columns
+    input_df = input_df.fillna("")
 
     bar = px.bar(
         input_df,

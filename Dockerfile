@@ -10,6 +10,8 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 
 ENV PATH="${PATH}:${POETRY_HOME}/bin"
 
+RUN apt-get update && apt-get install --yes libgdal-dev
+
 WORKDIR /app
 
 # COPY ./d4g-utils /app/d4g-utils
