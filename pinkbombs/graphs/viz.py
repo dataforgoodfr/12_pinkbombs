@@ -186,25 +186,33 @@ def make_color_bar_chart(
     return bar
 
 
-def make_color_bar_chart2(input_df, input_x, input_y, input_col, col_rename, 
-                          title, ytitle, palette=px.colors.sequential.Burg,
-                          theme='simple_white') -> Figure:
+def make_color_bar_chart2(
+    input_df,
+    input_x,
+    input_y,
+    input_col,
+    col_rename,
+    title,
+    ytitle,
+    palette=px.colors.sequential.Burg,
+    theme="simple_white",
+) -> Figure:
     """Returns plotly express object as bar chart with gradient color - speficif to graph 4.2 ATM!!!
-            Parameters:
-                    input_df (pd.DataFrame): dataframe with data to be visualised
-                    input_x (str): name of the field for the x axis
-                    input_y (str): name of the field for the y axis
-                    input_col (str): name of the field to display in color
-                    col_rename (dict): dictionary with the column rename of input_df
-                    title (str): chart title
-                    ytitle (str): y-axis title
-                    palette (px.object): plotly discrete palette, default is Burg
-                    theme (str): plotly chart theme, default is 'simple_white'
-            Returns:
-                    bar (plotly object): output chart object
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualised
+            input_x (str): name of the field for the x axis
+            input_y (str): name of the field for the y axis
+            input_col (str): name of the field to display in color
+            col_rename (dict): dictionary with the column rename of input_df
+            title (str): chart title
+            ytitle (str): y-axis title
+            palette (px.object): plotly discrete palette, default is Burg
+            theme (str): plotly chart theme, default is 'simple_white'
+    Returns:
+            bar (plotly object): output chart object
     """
     # Sort out number format
-    input_df[input_y] = input_df[input_y].str.replace(',', '.')
+    input_df[input_y] = input_df[input_y].str.replace(",", ".")
     input_df[input_y] = input_df[input_y].astype(float)
 
     # Rename columns
@@ -218,39 +226,54 @@ def make_color_bar_chart2(input_df, input_x, input_y, input_col, col_rename,
         title=title,
         color_continuous_scale=palette,
         hover_name=input_x,
-        hover_data={col_rename[input_y]:':,.0f', input_x:False, 
-                    col_rename[input_col]:':,.0f'}
-        )
-    bar.update_traces(textfont_size=12, textangle=0,
-                      textposition="outside", cliponaxis=False,)
-    bar.update_layout(template='simple_white', yaxis_title=ytitle)
+        hover_data={col_rename[input_y]: ":,.0f", input_x: False, col_rename[input_col]: ":,.0f"},
+    )
+    bar.update_traces(
+        textfont_size=12,
+        textangle=0,
+        textposition="outside",
+        cliponaxis=False,
+    )
+    bar.update_layout(template="simple_white", yaxis_title=ytitle)
     bar.update_xaxes(exponentformat="none")
 
     return bar
 
 
-def make_simple_bar_chart(input_df, input_x, input_y1, input_y2, input_n1,
-                          input_n2, input_other, title, xtitle, ytitle, mycolor,
-                          palette=px.colors.qualitative.Pastel1,
-                          theme='simple_white', fix_approx=True) -> Figure:
+def make_simple_bar_chart(
+    input_df,
+    input_x,
+    input_y1,
+    input_y2,
+    input_n1,
+    input_n2,
+    input_other,
+    title,
+    xtitle,
+    ytitle,
+    mycolor,
+    palette=px.colors.qualitative.Pastel1,
+    theme="simple_white",
+    fix_approx=True,
+) -> Figure:
     """Returns a Plotly Express object as a bar chart with only 1 color
-            Parameters:
-                    input_df (pd.DataFrame): dataframe with data to be visualized
-                    input_x (str): name of the field for the x-axis
-                    input_y1 (str): name of the field for the first part of the y-axis
-                    input_y2 (str): name of the field for the second part of the y-axis
-                    input_n1 (str): name of field for revenues in $
-                    input_n2 (str): name of field for employees
-                    input_other (List[str]): names of other fields to display on hover
-                    title (str): chart title
-                    xtitle (str): x-axis title
-                    ytitle (str): y-axis title
-                    mycolor (str): name of the color code for the bars
-                    palette (px.object): Plotly discrete palette, default is Pastel1
-                    theme (str): Plotly chart theme, default is 'simple_white'
-                    fix_approx (boolean): if data has "~" symbol (to remove from this function!)
-            Returns:
-                    bar (Plotly object): output chart object
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualized
+            input_x (str): name of the field for the x-axis
+            input_y1 (str): name of the field for the first part of the y-axis
+            input_y2 (str): name of the field for the second part of the y-axis
+            input_n1 (str): name of field for revenues in $
+            input_n2 (str): name of field for employees
+            input_other (List[str]): names of other fields to display on hover
+            title (str): chart title
+            xtitle (str): x-axis title
+            ytitle (str): y-axis title
+            mycolor (str): name of the color code for the bars
+            palette (px.object): Plotly discrete palette, default is Pastel1
+            theme (str): Plotly chart theme, default is 'simple_white'
+            fix_approx (boolean): if data has "~" symbol (to remove from this function!)
+    Returns:
+            bar (Plotly object): output chart object
     """
     # Reorder the dataframe
     input_df = input_df.sort_values(input_x, ascending=False)
@@ -260,55 +283,60 @@ def make_simple_bar_chart(input_df, input_x, input_y1, input_y2, input_n1,
     input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
     # Get a list of all columns except input_x, input_y1, and input_y2
-    hover_data = {input_x: ':,.0f', input_y: False}
+    hover_data = {input_x: ":,.0f", input_y: False}
     for column in input_other:
         hover_data[column] = True
 
     if fix_approx:
         # Remove '~' characters from input_n1 and input_n2 and convert them to integers
-        input_df[input_n1] = input_df[input_n1].str.replace('~', '')
-        input_df[input_n2] = input_df[input_n2].str.replace('~', '')
+        input_df[input_n1] = input_df[input_n1].str.replace("~", "")
+        input_df[input_n2] = input_df[input_n2].str.replace("~", "")
         input_df[input_n1] = input_df[input_n1].astype(int)
         input_df[input_n2] = input_df[input_n2].astype(int)
 
     # Divide the values in input_n1 by 1,000,000 to display revenues in millions
     input_df[input_n1] = input_df[input_n1] / 1000000
     # Format the values with "$" symbol preceding and add "M" for millions and "B" for billions
-    input_df[input_n1] = input_df[input_n1].map(lambda x: f"${x:.1f}M" if x < 1000 else f"${x/1000:.1f}B")
+    input_df[input_n1] = input_df[input_n1].map(
+        lambda x: f"${x:.1f}M" if x < 1000 else f"${x/1000:.1f}B"
+    )
 
     # Format the values in input_n2 with commas for thousand separators
     input_df[input_n2] = input_df[input_n2].apply(lambda x: f"{x:,.0f}")
 
     # Loop through the DataFrame and update values for the company "Cooke"
     for index, row in input_df.iterrows():
-        if row[input_y1] == 'Cooke':
+        if row[input_y1] == "Cooke":
             input_df.at[index, input_n2] = "~" + str(row[input_n2])
             input_df.at[index, input_n1] = "~" + str(row[input_n1])
 
     # Replace NaN values with an empty string in all columns
-    input_df = input_df.fillna('')
+    input_df = input_df.fillna("")
 
     bar = px.bar(
         input_df,
         y=input_y,
         x=input_x,
-        orientation='h',
+        orientation="h",
         category_orders={input_y: input_df[input_y].tolist()},
-        text_auto=',.0f',
+        text_auto=",.0f",
         title=title,
-        color_discrete_sequence=palette, #[px.colors.qualitative.Pastel1[0]],
+        color_discrete_sequence=palette,  # [px.colors.qualitative.Pastel1[0]],
         hover_name=input_y,
-        hover_data=hover_data
+        hover_data=hover_data,
     )
 
-    bar.update_traces(textfont_size=12, textangle=0,
-                      textposition="inside", cliponaxis=False,
-                      marker_color=mycolor)
-    bar.update_layout(template='simple_white', xaxis_title=xtitle,
-                      yaxis_title=ytitle,
-                      yaxis = dict(tickfont = dict(size=13)))
+    bar.update_traces(
+        textfont_size=12, textangle=0, textposition="inside", cliponaxis=False, marker_color=mycolor
+    )
+    bar.update_layout(
+        template="simple_white",
+        xaxis_title=xtitle,
+        yaxis_title=ytitle,
+        yaxis=dict(tickfont=dict(size=13)),
+    )
     bar.update_xaxes(exponentformat="none")
-    bar.update_yaxes(ticks='')
+    bar.update_yaxes(ticks="")
 
     return bar
 

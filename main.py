@@ -18,8 +18,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(
-    api.router,
-    prefix="/api/v1/secure",
-    dependencies=[Depends(verify_token)]
-)
+app.include_router(api.router, prefix="/api/v1/secure", dependencies=[Depends(verify_token)])

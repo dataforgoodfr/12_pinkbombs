@@ -79,7 +79,7 @@ MAPPING = {
     "top-land": {
         "filename": "top_10_ras_companies_2.3.csv",
         "function": pb.make_simple_bar_chart,
-        "parser": pd.read_csv,      
+        "parser": pd.read_csv,
         "arguments": [
             "Production in tonnes",
             "Parent company",
@@ -101,7 +101,7 @@ MAPPING = {
             "Company ambition for salmon production in tonnes",
             "Company",
             "#151c97",
-            False
+            False,
         ],
     },
     "ras-map": {
@@ -119,9 +119,9 @@ MAPPING = {
             "consom_atb_ton",
             "biomass_harvested_ton",
             {
-                'consom_atb_ton': 'Antibiotics usage (tonnes)',
-                'biomass_harvested_ton': 'Harvested biomass (tonnes)'
-                },
+                "consom_atb_ton": "Antibiotics usage (tonnes)",
+                "biomass_harvested_ton": "Harvested biomass (tonnes)",
+            },
             "Antibiotic usage in Chile (2007-2021)",
             "Antibiotics usage (tonnes)",
         ],
