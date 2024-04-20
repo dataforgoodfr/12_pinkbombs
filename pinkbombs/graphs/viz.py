@@ -429,6 +429,8 @@ def make_animated_bubble_map(
         color_discrete_sequence=palette,
         title=title,
     )
+    map.update_geos(showcountries=True)
+
     return map
 
 

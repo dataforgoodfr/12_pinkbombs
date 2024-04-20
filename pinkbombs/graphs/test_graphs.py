@@ -64,6 +64,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_time="Year",
     input_size="Tonnes - live weight",
     title="Evolution of salmon farming by country",
+    palette=['#151c97'],
 )
 
 g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + ".html")
