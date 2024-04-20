@@ -134,6 +134,23 @@ func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html","w")
 func.write(g2_4) 
 func.close()
 
+# Graph 3.5 -  Escapes from marine cages
+data3_5_name = "escapes_marine_cages_3.5"
+data3_5_file = "data/" + data3_5_name + ".csv"
+df_data3_5 = pd.read_csv(data3_5_file)
+
+g3_5 = pb.make_treemap_chart(
+    df_data3_5, 
+    input_x1='n_escape', 
+    input_x2='n_salmon_produced',
+    input_x3='escape_rate', 
+    input_y='production (t)',
+    input_n='Company',
+    title='More than 4 millions fish escaped since 2018'
+    )
+
+g3_5.write_html("pinkbombs/graphs/test_html/" + data3_5_name + ".html")
+
 # Graph 4.2 - Antibiotics consumption
 data4_2_name = "antibiotic_consumption_chile_4.2"
 data4_2_file = "data/" + data4_2_name + ".csv"
