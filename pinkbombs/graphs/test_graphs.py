@@ -81,7 +81,6 @@ g2_1 = pb.make_simple_bar_chart(
     input_n1="Revenues 2022",
     input_n2="Employees 2022",
     input_other=[
-        "Country",
         "Commercial name",
         "Creation date",
         "Headquarters",
