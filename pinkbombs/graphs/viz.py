@@ -435,7 +435,7 @@ def make_animated_bubble_map(
 
 
 def make_treemap_chart(input_df, input_x1, input_x2, input_x3, input_y, input_n,
-                          title, top_x=6) -> Figure:
+                          title, height=400, width=500, top_x=6) -> Figure:
     """Returns a Plotly Express object as a treemap chart
             Parameters:
                     input_df (pd.DataFrame): dataframe with data to be visualized
@@ -444,6 +444,8 @@ def make_treemap_chart(input_df, input_x1, input_x2, input_x3, input_y, input_n,
                     input_x3 (str): name of the field for the %
                     input_y (str): name of the field for the production
                     input_n (str): name of field names
+                    height (int): number of pixels for chart height, default is 400
+                    width (int): number of pixels for chart width, default is 500
                     top_x(int): top x to be shown in the treemap, default is 6
                     title (str): title at top of the treemap
             Returns:
@@ -465,7 +467,8 @@ def make_treemap_chart(input_df, input_x1, input_x2, input_x3, input_y, input_n,
                         path=[px.Constant(title), 'labels'],
                         values=input_x1, 
                         names='labels',
-                        width=800, height=600,
+                        width=width, 
+                        height=height,
                         color_discrete_sequence=[
                             '#151c97', #seastemik dark blue
                             '#f4e8d7', #seastemik terre
