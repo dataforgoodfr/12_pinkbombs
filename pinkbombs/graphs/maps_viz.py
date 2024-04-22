@@ -59,6 +59,17 @@ def make_geojson_layer(temp_geojson0, fields, aliases, mylistcol, modality, a, b
     return layer
 
 
+def keep_4_figures(input):
+    """Returns the number as string with only 3-4 significant figures"""
+    if input >= 100:
+        output = "{:,.0f}".format(input)
+    elif input >= 10:
+        output = "{:,.1f}".format(input)
+    else:
+        output = "{:,.2f}".format(input)
+    return output
+
+
 def create_elements_popups(input_df):
     """Returns the dataframe with all the fields necessary to make the pop-ups on the map
     Parameters:
@@ -66,22 +77,31 @@ def create_elements_popups(input_df):
     Returns:
             input_df (Geopandas DataFrame): Dataframe with additionnal fields for the pop-ups
     """
-    # Simplify elec conso
-    input_df["elec_conso_GWh"] = input_df["elec_conso_kWh"] / 1e6
+
+    # Simplify elec conso and calculate mid points
+    input_df["elec_conso_GWh_low"] = input_df["elec_conso_kWh_low"] / 1e6
+    input_df["elec_conso_GWh_high"] = input_df["elec_conso_kWh_high"] / 1e6
+    input_df["elec_conso_GWh_mid"] = (input_df["elec_conso_GWh_high"] + input_df["elec_conso_GWh_low"])/2
+    input_df["carbon_kt_mid"] = (input_df["carbon_kt_high"] + input_df["carbon_kt_low"])/2
 
     # Create strings to display on box
-    input_df["Electricity consumption (annual) [GWh]"] = input_df["elec_conso_GWh"].apply(
-        lambda x: "{:,.2f}".format(x)
-    )
-    input_df["Production Capacity (annual) [tonnes]"] = input_df["Production Max"].apply(
+    input_df["Production Capacity (annual)"] = input_df["Production Max"].apply(
         lambda x: format(int(x), "8,d")
-    )
-    input_df["Carbon Footprint (annual) [kilo tonnes C02 equ]"] = input_df["carbon_elec_kt"].apply(
-        lambda x: format(x, ".2f")
-    )
-    input_df["Country carbon intensity of electricity [gCO2/kWh]"] = input_df[
+        ) + " tonnes"
+    input_df["Electricity consumption (annual)"] = input_df["elec_conso_GWh_low"].apply(
+        lambda x: keep_4_figures(x)
+        ) + " - " + input_df["elec_conso_GWh_high"].apply(
+        lambda x: keep_4_figures(x)
+        ) + " GWh"
+    input_df["Carbon Footprint (annual)"] = input_df["carbon_kt_low"].apply(
+        lambda x: keep_4_figures(x)
+        ) + " - " + input_df["carbon_kt_high"].apply(
+        lambda x: keep_4_figures(x)
+        ) + " kilo tonnes C02"
+    input_df["Country carbon intensity of electricity"] = input_df[
         "Carbon intensity of electricity - gCO2/kWh"
-    ].apply(lambda x: format(x, ".0f")) + input_df["Country"].apply(lambda x: " (" + x + ")")
+        ].apply(lambda x: format(x, ".0f")
+                ) + " gCO2/kWh"+ input_df["Country"].apply(lambda x: ' ('+ x +')') 
 
     # Create a field to combine Status and Detailed Status
     input_df["Detailed status ()"] = np.where(
@@ -103,18 +123,10 @@ def create_elements_popups(input_df):
         lambda x: "NAN</a>" if np.isnan(x) else f"{str(int(x))}</a>"
     )
 
-    # Create hyperlinks
-    input_df["Location source link"] = input_df["Location source"].apply(
-        lambda x: f"<a href={x}>Online article</a>"
-    )
-    input_df["Information source link"] = input_df["Link info (no text)"].apply(
-        lambda x: f"<a href={x}>Online article</a>"
-    )
-
     # Create hyperlink for the Carbon Electricity by country
     carbon_intensity_link = "https://ourworldindata.org/grapher/carbon-intensity-electricity"
-    input_df["Country carbon intensity of electricity [gCO2/kWh] link"] = input_df[
-        "Country carbon intensity of electricity [gCO2/kWh]"
+    input_df["Country carbon intensity of electricity link"] = input_df[
+        "Country carbon intensity of electricity"
     ].apply(lambda x: f"<a href={carbon_intensity_link}>{x}</a>")
 
     # Define colors indeces
@@ -137,24 +149,24 @@ def define_fields():
         "Country",
         "Location source link2",
         "Status2",
-        "Production Capacity (annual) [tonnes]",
+        "Production Capacity (annual)",
         "Latest update2",
-        "Electricity consumption (annual) [GWh]",
-        "Country carbon intensity of electricity [gCO2/kWh] link",
-        "Carbon Footprint (annual) [kilo tonnes C02 equ]",
+        "Electricity consumption (annual)",
+        "Country carbon intensity of electricity link",
+        "Carbon Footprint (annual)",
     ]
     aliases = [
         "Company:",
         "Technology:",
         "Salmon species:",
         "Country:",
-        "Location (approx.):",
+        "Location:",
         "Status:",
-        "Production Capacity (annual) [tonnes]:",
-        "Latest update found (year):",
-        "Electricity consumption (annual) [GWh]:",
-        "Country carbon intensity of electricity [gCO2/kWh]:",
-        "Carbon Footprint (annual) [kilo tonnes C02 equ]:",
+        "Production capacity (annual):",
+        "Latest update found:",
+        "Electricity consumption (annual):",
+        "Carbon intensity of electricity:",
+        "Carbon footprint (annual):",
     ]
     return (fields, aliases)
 
@@ -238,11 +250,10 @@ def make_legend_for_map():
         <li><span style='background:#6e4546;opacity:0.7;'></span>In construction</li>
         <li><span style='background:#ac7b7d;opacity:0.7;'></span>Project</li>
     
-    <li><a >Size depends on farm production, electricity</a></li>
-    <li><a >consumption (a) and carbon footprint (b)</a></li>
-    <li><a href='https://www.sciencedirect.com/science/article/pii/S0144860923000171' target='_blank'>(a) based on 9.59 kWh/kg LW</a></li>
-    <li><a href='https://ourworldindata.org/grapher/carbon-intensity-electricity' target='_blank'>(b) Carbon intensity of electricity by country</a></li>
-      </ul>
+    <li><a >Size depends on farm production, estimated</a></li>
+    <li><a >electricity consumption and carbon footprint</a></li>
+    <li><a >see the Methodology section.</a></li>
+       </ul>
     </div>
     </div>
      
@@ -312,8 +323,8 @@ def make_ras_bubble_map(input_df, add_title_legend=False):
     input_gdf = create_elements_popups(input_gdf)
 
     # Determine transformation for display on the map - ELEC, CARBON
-    (a_carbon, b_carbon) = get_transfo_param(input_gdf, "carbon_elec_kt", min_rad=3, max_rad=60)
-    (a_elec, b_elec) = get_transfo_param(input_gdf, "elec_conso_GWh", min_rad=3, max_rad=50)
+    (a_carbon, b_carbon) = get_transfo_param(input_gdf, "carbon_kt_mid", min_rad=3, max_rad=50)
+    (a_elec, b_elec) = get_transfo_param(input_gdf, "elec_conso_GWh_mid", min_rad=3, max_rad=40)
 
     # Define fields, aliases and colors
     (fields, aliases) = define_fields()
@@ -337,26 +348,26 @@ def make_ras_bubble_map(input_df, add_title_legend=False):
 
         # Elec
         temp_geojson_layer = make_geojson_layer(
-            temp_geojson, fields, aliases, shades_salmon, "elec_conso_GWh", a_elec, b_elec
+            temp_geojson, fields, aliases, shades_salmon, "elec_conso_GWh_mid", a_elec, b_elec
         )
         temp_geojson_layer.add_to(hg1)
 
         # Carbon
         temp_geojson_layer = make_geojson_layer(
-            temp_geojson, fields, aliases, shades_brown, "carbon_elec_kt", a_carbon, b_carbon
+            temp_geojson, fields, aliases, shades_brown, "carbon_kt_mid", a_carbon, b_carbon
         )
         temp_geojson_layer.add_to(hg2)
 
     hg1.add_to(map)
     hg2.add_to(map)
     GroupedLayerControl(
-        groups={"Modality": [hg1, hg2]},
+        groups={"Farms represented by estimated:": [hg1, hg2]},
         exclusive_groups=True,
         collapsed=False,
     ).add_to(map)
 
     if add_title_legend:
-        map_title = 'Land-based farms and their theoretical Electricity consumption and Carbon footprint'
+        map_title = 'The future of land-based salmon farming'
         map.get_root().html.add_child(folium.Element(make_title_html(map_title)))
 
         legend_temp = make_legend_for_map()
