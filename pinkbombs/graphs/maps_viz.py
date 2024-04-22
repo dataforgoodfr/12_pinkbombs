@@ -81,27 +81,32 @@ def create_elements_popups(input_df):
     # Simplify elec conso and calculate mid points
     input_df["elec_conso_GWh_low"] = input_df["elec_conso_kWh_low"] / 1e6
     input_df["elec_conso_GWh_high"] = input_df["elec_conso_kWh_high"] / 1e6
-    input_df["elec_conso_GWh_mid"] = (input_df["elec_conso_GWh_high"] + input_df["elec_conso_GWh_low"])/2
-    input_df["carbon_kt_mid"] = (input_df["carbon_kt_high"] + input_df["carbon_kt_low"])/2
+    input_df["elec_conso_GWh_mid"] = (
+        input_df["elec_conso_GWh_high"] + input_df["elec_conso_GWh_low"]
+    ) / 2
+    input_df["carbon_kt_mid"] = (input_df["carbon_kt_high"] + input_df["carbon_kt_low"]) / 2
 
     # Create strings to display on box
-    input_df["Production Capacity (annual)"] = input_df["Production Max"].apply(
-        lambda x: format(int(x), "8,d")
-        ) + " tonnes"
-    input_df["Electricity consumption (annual)"] = input_df["elec_conso_GWh_low"].apply(
-        lambda x: keep_4_figures(x)
-        ) + " - " + input_df["elec_conso_GWh_high"].apply(
-        lambda x: keep_4_figures(x)
-        ) + " GWh"
-    input_df["Carbon Footprint (annual)"] = input_df["carbon_kt_low"].apply(
-        lambda x: keep_4_figures(x)
-        ) + " - " + input_df["carbon_kt_high"].apply(
-        lambda x: keep_4_figures(x)
-        ) + " kilo tonnes C02"
-    input_df["Country carbon intensity of electricity"] = input_df[
-        "Carbon intensity of electricity - gCO2/kWh"
-        ].apply(lambda x: format(x, ".0f")
-                ) + " gCO2/kWh"+ input_df["Country"].apply(lambda x: ' ('+ x +')') 
+    input_df["Production Capacity (annual)"] = (
+        input_df["Production Max"].apply(lambda x: format(int(x), "8,d")) + " tonnes"
+    )
+    input_df["Electricity consumption (annual)"] = (
+        input_df["elec_conso_GWh_low"].apply(lambda x: keep_4_figures(x))
+        + " - "
+        + input_df["elec_conso_GWh_high"].apply(lambda x: keep_4_figures(x))
+        + " GWh"
+    )
+    input_df["Carbon Footprint (annual)"] = (
+        input_df["carbon_kt_low"].apply(lambda x: keep_4_figures(x))
+        + " - "
+        + input_df["carbon_kt_high"].apply(lambda x: keep_4_figures(x))
+        + " kilo tonnes C02"
+    )
+    input_df["Country carbon intensity of electricity"] = (
+        input_df["Carbon intensity of electricity - gCO2/kWh"].apply(lambda x: format(x, ".0f"))
+        + " gCO2/kWh"
+        + input_df["Country"].apply(lambda x: " (" + x + ")")
+    )
 
     # Create a field to combine Status and Detailed Status
     input_df["Detailed status ()"] = np.where(
@@ -188,9 +193,9 @@ def define_colors():
 
 def make_title_html(map_title):
     """Returns a html title for the map"""
-    title_html = '''
+    title_html = """
              <h3 align="center" style="font-size:16px"><b>{}</b></h3>
-             '''.format(map_title)
+             """.format(map_title)
     return title_html
 
 
@@ -367,7 +372,7 @@ def make_ras_bubble_map(input_df, add_title_legend=False):
     ).add_to(map)
 
     if add_title_legend:
-        map_title = 'The future of land-based salmon farming'
+        map_title = "The future of land-based salmon farming"
         map.get_root().html.add_child(folium.Element(make_title_html(map_title)))
 
         legend_temp = make_legend_for_map()
