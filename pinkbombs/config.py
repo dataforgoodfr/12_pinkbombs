@@ -132,8 +132,6 @@ MAPPING = {
         "parser": pd.read_csv,
         "arguments": [
             "Company",
-            "More than 4 millions fish escaped since 2018",
-            "Company",
             "Mortality_rate",
             "Mortality rate by Companies",
             "Company",
