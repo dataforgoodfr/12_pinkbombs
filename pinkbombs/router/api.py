@@ -28,7 +28,7 @@ async def generate_graphs(graph_name, connection: bool = Depends(verify_token)):
 @router.get("/maps/{map_name}")
 async def generate_maps(map_name, connection: bool = Depends(verify_token)):
     if map_name not in MAPS:
-        raise HTTPException(status_code=404, detail="Graph not found")
+        raise HTTPException(status_code=404, detail="Map not found")
     df = MAPS[map_name]["parser"](
         "data/" + MAPS[map_name]["filename"],
     )
