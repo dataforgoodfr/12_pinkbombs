@@ -491,3 +491,48 @@ def make_treemap_chart(input_df, input_x1, input_x2, input_x3, input_y, input_n,
     fig.update_layout(margin = dict(t=50, l=25, r=25, b=25), showlegend=True)
 
     return fig
+
+
+def make_simple_pie_chart(input_df, names, values, title, hover_data, color_discrete_sequence,
+                          total_annotation=None, total_value=None, total_text='', textfont_size=16) -> Figure:
+    """Returns a Plotly Express object as a pie chart
+            Parameters:
+                    input_df (pd.DataFrame): dataframe with data to be visualized
+                    names (str): name of the field for the names in the pie chart
+                    values (str): name of the field for the values in the pie chart
+                    title (str): chart title
+                    hover_data (dict): dictionary of columns to be included in the hover tooltip
+                    color_discrete_sequence (list): list of colors for the pie chart
+                    total_annotation (dict): annotation details for the total value (default=None)
+                    total_value (float): total value for annotation (default=None)
+                    total_text (str): text for total value (default='')
+                    textfont_size (int): font size for text (default=16)
+            Returns:
+                    pie (Plotly object): output chart object
+    """
+    # Calculate percentages relative to the total
+    input_df[values] = input_df[values].str.replace(',', '.').astype(float)
+    total_sum = input_df[values].sum()
+    input_df['Percentage'] = round(input_df[values] / total_sum * 100, 2)
+
+    # Create the pie chart
+    pie = px.pie(
+        input_df,
+        names=names,
+        #values=values,
+        values='Percentage',
+        title=title,
+        hover_data=hover_data,
+        color_discrete_sequence=color_discrete_sequence,
+        #custom_data=['Percentage']
+    )
+
+    # Add total annotation if provided
+    pie.add_annotation(
+        x=0, y=0, text=f"Total: {total_sum / 1_000_000:.2f} Millions tons of CO2 emitted",
+        showarrow=False, font=dict(size=30)
+    )
+    # Update trace properties
+    pie.update_traces(marker=dict(line=dict(color='#ffffff', width=2)), textfont_size=textfont_size)
+
+    return pie
