@@ -126,6 +126,37 @@ MAPPING = {
             "More than 4 millions fish escaped since 2018",
         ],
     },
+    "mortality-rates": {
+        "filename": "mortality_rates_4.4.csv",
+        "function": pb.make_simple_box_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Company",
+            "More than 4 millions fish escaped since 2018",
+            "Company",
+            "Mortality_rate",
+            "Mortality rate by Companies",
+            "Company",
+        ],
+    },
+    "carbon-bomb": {
+        "filename": "carbon_bombs_pie_chart_5.1.csv",
+        "function": pb.make_simple_pie_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Scopes",
+            "Emissions (tons CO2eq)",
+            "Distribution of Emissions",
+            {
+                'Emissions (tons CO2eq)': ':,.0f'
+            },
+            [
+                '#f4e8d7', 
+                '#151c97', 
+                '#f8ef50'
+            ]
+        ],
+    },
 }
 
 MAPS = {

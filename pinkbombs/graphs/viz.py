@@ -536,3 +536,43 @@ def make_simple_pie_chart(input_df, names, values, title, hover_data, color_disc
     pie.update_traces(marker=dict(line=dict(color='#ffffff', width=2)), textfont_size=textfont_size)
 
     return pie
+
+
+def make_simple_box_chart(input_df, input_x, input_y, title, xtitle, palette=px.colors.qualitative.Pastel1,
+                          theme='simple_white') -> Figure:
+    """Returns a Plotly Express object as a box plot with only 1 color
+            Parameters:
+                    input_df (pd.DataFrame): dataframe with data to be visualized
+                    input_x (str): name of the field for the x-axis
+                    input_y (str): name of the field for the y-axis
+                    title (str): chart title
+                    xtitle (str): x-axis title
+                    palette (px.object): Plotly discrete palette, default is Pastel1
+                    theme (str): Plotly chart theme, default is 'simple_white'
+            Returns:
+                    box (Plotly object): output chart object
+    """
+    # Reorder the dataframe
+    input_df = input_df.sort_values(input_x, ascending=False)
+
+    # Transform the input_y data
+    input_df[input_y] = input_df[input_y].str.replace(',', '.')
+    input_df[input_y] = input_df[input_y].astype(float)
+
+    # Create the box plot
+    box = px.box(
+        input_df,
+        y=input_y,  # Use the input_y field for the y-axis
+        x=input_x,
+        title=title,
+        category_orders={input_x: input_df.groupby(input_x)[input_y].median().sort_values().index.tolist()},  # Update category orders accordingly
+        color_discrete_sequence=palette,  # Set color palette
+        hover_name=input_x,  # Update hover_name accordingly
+    )
+
+    box.update_layout(template=theme, xaxis_title=xtitle, yaxis_title='Mortality Rate (%)')
+    box.update_xaxes(exponentformat="none")
+    box.update_coloraxes(colorbar_tickformat='0%')
+
+    return box
+

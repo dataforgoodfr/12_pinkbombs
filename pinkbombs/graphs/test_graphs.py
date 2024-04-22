@@ -167,6 +167,21 @@ g4_2 = pb.make_color_bar_chart2(
 
 g4_2.write_html("pinkbombs/graphs/test_html/" + data4_2_name + ".html")
 
+# Graph 4.4 - Escapes from marine cages
+data4_4_name = "mortality_rates_4.4"
+data4_4_file = "data/" + data4_4_name + ".csv"
+df_data4_4 = pd.read_csv(data4_4_file)
+
+g4_4 = pb.make_simple_box_chart(
+    input_df=df_data4_4,
+    input_x='Company',
+    input_y='Mortality_rate',
+    title='Mortality rate by Companies',
+    xtitle='Company',
+)
+
+g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + ".html")
+
 # Graph 5.1 - Carbon bombs
 data5_1_name = "carbon_bombs_pie_chart_5.1"
 data5_1_file = "data/" + data5_1_name + ".csv"
