@@ -61,7 +61,6 @@ MAPPING = {
             "Revenues 2022",
             "Employees 2022",
             [
-                "Country",
                 "Commercial name",
                 "Creation date",
                 "Headquarters",
@@ -87,12 +86,6 @@ MAPPING = {
             "Revenues 2022 dollars",
             "Employees 2022",
             [
-                "Commercial name",
-                "Creation date",
-                "Headquarters",
-                "Website",
-                "Revenues 2022 dollars",
-                "Employees 2022",
                 "Number of projects",
                 "Countries of projects",
                 "Note",
@@ -118,6 +111,19 @@ MAPPING = {
             },
             "Antibiotic usage in Chile (2007-2021)",
             "Antibiotics usage (tonnes)",
+        ],
+    },
+    "escapes-rates": {
+        "filename": "escapes_marine_cages_3.5.csv",
+        "function": pb.make_treemap_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "n_escape", 
+            "n_salmon_produced",
+            "escape_rate", 
+            "production (t)",
+            "Company",
+            "More than 4 millions fish escaped since 2018",
         ],
     },
 }
