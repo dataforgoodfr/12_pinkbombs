@@ -64,6 +64,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_time="Year",
     input_size="Tonnes - live weight",
     title="Evolution of salmon farming by country",
+    palette=['#151c97'],
 )
 
 g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + ".html")
@@ -109,9 +110,7 @@ g2_3 = pb.make_simple_bar_chart(
     input_y2='Flag',
     input_n1='Revenues 2022 dollars',
     input_n2='Employees 2022',
-    input_other=['Commercial name', 'Creation date', 'Headquarters', 'Website',
-                 'Revenues 2022 dollars', 'Employees 2022', 'Number of projects', 
-                 'Countries of projects', 'Note'],
+    input_other=['Number of projects', 'Countries of projects', 'Note'],
     title="Top 10 RAS companies producing salmon",
     xtitle='Company ambition for salmon production in tonnes',
     ytitle='Company',
@@ -126,9 +125,29 @@ data2_4_name = "ras_projects_for_map_2.4"
 data2_4_file = "data/" + data2_4_name + ".csv"
 df_data2_4 = pd.read_csv(data2_4_file)
 
-g2_4 = pb.make_ras_bubble_map(df_data2_4)
+g2_4 = pb.make_ras_bubble_map(df_data2_4, add_title_legend=True)
 
-g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
+#g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
+func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html","w") 
+func.write(g2_4) 
+func.close()
+
+# Graph 3.5 -  Escapes from marine cages
+data3_5_name = "escapes_marine_cages_3.5"
+data3_5_file = "data/" + data3_5_name + ".csv"
+df_data3_5 = pd.read_csv(data3_5_file)
+
+g3_5 = pb.make_treemap_chart(
+    df_data3_5, 
+    input_x1='n_escape', 
+    input_x2='n_salmon_produced',
+    input_x3='escape_rate', 
+    input_y='production (t)',
+    input_n='Company',
+    title='More than 4 millions fish escaped since 2018'
+    )
+
+g3_5.write_html("pinkbombs/graphs/test_html/" + data3_5_name + ".html")
 
 # Graph 4.2 - Antibiotics consumption
 data4_2_name = "antibiotic_consumption_chile_4.2"
@@ -143,7 +162,38 @@ g4_2 = pb.make_color_bar_chart2(
     col_rename={'consom_atb_ton': 'Antibiotics usage (tonnes)',
                 'biomass_harvested_ton': 'Harvested biomass (tonnes)'},
     title="Antibiotic usage in Chile (2007-2021)",
-    ytitle='Antibiotics usage (tonnes)')
+    ytitle='Antibiotics usage (tonnes)'
+    )
 
 g4_2.write_html("pinkbombs/graphs/test_html/" + data4_2_name + ".html")
 
+# Graph 4.4 - Escapes from marine cages
+data4_4_name = "mortality_rates_4.4"
+data4_4_file = "data/" + data4_4_name + ".csv"
+df_data4_4 = pd.read_csv(data4_4_file)
+
+g4_4 = pb.make_simple_box_chart(
+    input_df=df_data4_4,
+    input_x='Company',
+    input_y='Mortality_rate',
+    title='Mortality rate by Companies',
+    xtitle='Company',
+)
+
+g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + ".html")
+
+# Graph 5.1 - Carbon bombs
+data5_1_name = "carbon_bombs_pie_chart_5.1"
+data5_1_file = "data/" + data5_1_name + ".csv"
+df_data5_1 = pd.read_csv(data5_1_file)
+
+g5_1 = pb.make_simple_pie_chart(
+    input_df=df_data5_1,
+    names='Scopes',
+    values='Emissions (tons CO2eq)',
+    title='Distribution of Emissions',
+    hover_data={'Emissions (tons CO2eq)': ':,.0f'},
+    color_discrete_sequence=['#f4e8d7', '#151c97', '#f8ef50']
+    )
+
+g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")

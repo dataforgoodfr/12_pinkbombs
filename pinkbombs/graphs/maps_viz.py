@@ -2,6 +2,7 @@ import numpy as np
 import geopandas as gpd
 import folium
 from folium.plugins import GroupedLayerControl
+from branca.element import Template, MacroElement
 
 
 def get_transfo_param(df, col, min_rad=2.5, max_rad=60):
@@ -58,6 +59,17 @@ def make_geojson_layer(temp_geojson0, fields, aliases, mylistcol, modality, a, b
     return layer
 
 
+def keep_4_figures(input):
+    """Returns the number as string with only 3-4 significant figures"""
+    if input >= 100:
+        output = "{:,.0f}".format(input)
+    elif input >= 10:
+        output = "{:,.1f}".format(input)
+    else:
+        output = "{:,.2f}".format(input)
+    return output
+
+
 def create_elements_popups(input_df):
     """Returns the dataframe with all the fields necessary to make the pop-ups on the map
     Parameters:
@@ -65,22 +77,36 @@ def create_elements_popups(input_df):
     Returns:
             input_df (Geopandas DataFrame): Dataframe with additionnal fields for the pop-ups
     """
-    # Simplify elec conso
-    input_df["elec_conso_GWh"] = input_df["elec_conso_kWh"] / 1e6
+
+    # Simplify elec conso and calculate mid points
+    input_df["elec_conso_GWh_low"] = input_df["elec_conso_kWh_low"] / 1e6
+    input_df["elec_conso_GWh_high"] = input_df["elec_conso_kWh_high"] / 1e6
+    input_df["elec_conso_GWh_mid"] = (
+        input_df["elec_conso_GWh_high"] + input_df["elec_conso_GWh_low"]
+    ) / 2
+    input_df["carbon_kt_mid"] = (input_df["carbon_kt_high"] + input_df["carbon_kt_low"]) / 2
 
     # Create strings to display on box
-    input_df["Electricity consumption (annual) [GWh]"] = input_df["elec_conso_GWh"].apply(
-        lambda x: "{:,.2f}".format(x)
+    input_df["Production Capacity (annual)"] = (
+        input_df["Production Max"].apply(lambda x: format(int(x), "8,d")) + " tonnes"
     )
-    input_df["Production Capacity (annual) [tonnes]"] = input_df["Production Max"].apply(
-        lambda x: format(int(x), "8,d")
+    input_df["Electricity consumption (annual)"] = (
+        input_df["elec_conso_GWh_low"].apply(lambda x: keep_4_figures(x))
+        + " - "
+        + input_df["elec_conso_GWh_high"].apply(lambda x: keep_4_figures(x))
+        + " GWh"
     )
-    input_df["Carbon Footprint (annual) [kilo tonnes C02 equ]"] = input_df["carbon_elec_kt"].apply(
-        lambda x: format(x, ".2f")
+    input_df["Carbon Footprint (annual)"] = (
+        input_df["carbon_kt_low"].apply(lambda x: keep_4_figures(x))
+        + " - "
+        + input_df["carbon_kt_high"].apply(lambda x: keep_4_figures(x))
+        + " kilo tonnes C02"
     )
-    input_df["Country carbon intensity of electricity [gCO2/kWh]"] = input_df[
-        "Carbon intensity of electricity - gCO2/kWh"
-    ].apply(lambda x: format(x, ".0f")) + input_df["Country"].apply(lambda x: " (" + x + ")")
+    input_df["Country carbon intensity of electricity"] = (
+        input_df["Carbon intensity of electricity - gCO2/kWh"].apply(lambda x: format(x, ".0f"))
+        + " gCO2/kWh"
+        + input_df["Country"].apply(lambda x: " (" + x + ")")
+    )
 
     # Create a field to combine Status and Detailed Status
     input_df["Detailed status ()"] = np.where(
@@ -102,18 +128,10 @@ def create_elements_popups(input_df):
         lambda x: "NAN</a>" if np.isnan(x) else f"{str(int(x))}</a>"
     )
 
-    # Create hyperlinks
-    input_df["Location source link"] = input_df["Location source"].apply(
-        lambda x: f"<a href={x}>Online article</a>"
-    )
-    input_df["Information source link"] = input_df["Link info (no text)"].apply(
-        lambda x: f"<a href={x}>Online article</a>"
-    )
-
     # Create hyperlink for the Carbon Electricity by country
     carbon_intensity_link = "https://ourworldindata.org/grapher/carbon-intensity-electricity"
-    input_df["Country carbon intensity of electricity [gCO2/kWh] link"] = input_df[
-        "Country carbon intensity of electricity [gCO2/kWh]"
+    input_df["Country carbon intensity of electricity link"] = input_df[
+        "Country carbon intensity of electricity"
     ].apply(lambda x: f"<a href={carbon_intensity_link}>{x}</a>")
 
     # Define colors indeces
@@ -136,24 +154,24 @@ def define_fields():
         "Country",
         "Location source link2",
         "Status2",
-        "Production Capacity (annual) [tonnes]",
+        "Production Capacity (annual)",
         "Latest update2",
-        "Electricity consumption (annual) [GWh]",
-        "Country carbon intensity of electricity [gCO2/kWh] link",
-        "Carbon Footprint (annual) [kilo tonnes C02 equ]",
+        "Electricity consumption (annual)",
+        "Country carbon intensity of electricity link",
+        "Carbon Footprint (annual)",
     ]
     aliases = [
         "Company:",
         "Technology:",
         "Salmon species:",
         "Country:",
-        "Location (approx.):",
+        "Location:",
         "Status:",
-        "Production Capacity (annual) [tonnes]:",
-        "Latest update found (year):",
-        "Electricity consumption (annual) [GWh]:",
-        "Country carbon intensity of electricity [gCO2/kWh]:",
-        "Carbon Footprint (annual) [kilo tonnes C02 equ]:",
+        "Production capacity (annual):",
+        "Latest update found:",
+        "Electricity consumption (annual):",
+        "Carbon intensity of electricity:",
+        "Carbon footprint (annual):",
     ]
     return (fields, aliases)
 
@@ -173,10 +191,129 @@ def define_colors():
     return (shades_salmon, shades_brown)
 
 
-def make_ras_bubble_map(input_df):
+def make_title_html(map_title):
+    """Returns a html title for the map"""
+    title_html = """
+             <h3 align="center" style="font-size:16px"><b>{}</b></h3>
+             """.format(map_title)
+    return title_html
+
+
+def make_legend_for_map():
+    """Returns a html legend for the map - all hard-coded for now!"""
+
+    template = """
+    {% macro html(this, kwargs) %}
+    
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>jQuery UI Draggable - Default functionality</title>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      
+      <script>
+      $( function() {
+        $( "#maplegend" ).draggable({
+                        start: function (event, ui) {
+                            $(this).css({
+                                right: "auto",
+                                top: "auto",
+                                bottom: "auto"
+                            });
+                        }
+                    });
+    });
+    
+      </script>
+    </head>
+    <body>
+
+    <div id='maplegend' class='maplegend' 
+    style='position: absolute; z-index:9999; border:2px solid grey; background-color:rgba(255, 255, 255, 0.8);
+     border-radius:6px; padding: 10px; font-size:14px; left: 20px; bottom: 20px;'>
+
+    <div class='legend-subtitle'>Land-based Farms by Status</div>
+    
+    <div class='legend-title'>Electricity Consumption</div>
+    
+    <div class='legend-scale'>
+      <ul class='legend-labels'>
+        <li><span style='background:#C66264;opacity:0.7;'></span>Operating</li>
+        <li><span style='background:#FA8072;opacity:0.7;'></span>In construction</li>
+        <li><span style='background:#FEA993;opacity:0.7;'></span>Project</li>
+    
+    <div class='legend-title'>Carbon footprint</div>
+    
+    <div class='legend-scale'>
+      <ul class='legend-labels'>
+        <li><span style='background:#412829;opacity:0.7;'></span>Operating</li>
+        <li><span style='background:#6e4546;opacity:0.7;'></span>In construction</li>
+        <li><span style='background:#ac7b7d;opacity:0.7;'></span>Project</li>
+    
+    <li><a >Size depends on farm production, estimated</a></li>
+    <li><a >electricity consumption and carbon footprint</a></li>
+    <li><a >see the Methodology section.</a></li>
+       </ul>
+    </div>
+    </div>
+     
+    </body>
+    </html>
+
+    <style type='text/css'>
+      .maplegend .legend-title {
+        text-align: left;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 90%;
+        }
+      .maplegend .legend-scale ul {
+        margin: 0;
+        margin-bottom: 5px;
+        padding: 0;
+        float: left;
+        list-style: none;
+        }
+      .maplegend .legend-scale ul li {
+        font-size: 80%;
+        list-style: none;
+        margin-left: 0;
+        line-height: 18px;
+        margin-bottom: 2px;
+        }
+      .maplegend ul.legend-labels li span {
+        display: block;
+        float: left;
+        height: 16px;
+        width: 30px;
+        margin-right: 5px;
+        margin-left: 0;
+        border: 1px solid #999;
+        }
+      .maplegend .legend-source {
+        font-size: 80%;
+        color: #777;
+        clear: both;
+        }
+      .maplegend a {
+        color: #777;
+        }
+    </style>
+    {% endmacro %} 
+    """
+    return template
+
+
+def make_ras_bubble_map(input_df, add_title_legend=False):
     """Returns a folium map object with the RAS farms as bubble and pop-ups
     Parameters:
             input_df (DataFrame): Dataframe containing data to display
+            add_title_legend (boolean): turn true to add title and legend default is False
     Returns:
             map (folium object): Map with all elements
     """
@@ -191,8 +328,8 @@ def make_ras_bubble_map(input_df):
     input_gdf = create_elements_popups(input_gdf)
 
     # Determine transformation for display on the map - ELEC, CARBON
-    (a_carbon, b_carbon) = get_transfo_param(input_gdf, "carbon_elec_kt", min_rad=3, max_rad=60)
-    (a_elec, b_elec) = get_transfo_param(input_gdf, "elec_conso_GWh", min_rad=3, max_rad=50)
+    (a_carbon, b_carbon) = get_transfo_param(input_gdf, "carbon_kt_mid", min_rad=3, max_rad=50)
+    (a_elec, b_elec) = get_transfo_param(input_gdf, "elec_conso_GWh_mid", min_rad=3, max_rad=40)
 
     # Define fields, aliases and colors
     (fields, aliases) = define_fields()
@@ -216,22 +353,31 @@ def make_ras_bubble_map(input_df):
 
         # Elec
         temp_geojson_layer = make_geojson_layer(
-            temp_geojson, fields, aliases, shades_salmon, "elec_conso_GWh", a_elec, b_elec
+            temp_geojson, fields, aliases, shades_salmon, "elec_conso_GWh_mid", a_elec, b_elec
         )
         temp_geojson_layer.add_to(hg1)
 
         # Carbon
         temp_geojson_layer = make_geojson_layer(
-            temp_geojson, fields, aliases, shades_brown, "carbon_elec_kt", a_carbon, b_carbon
+            temp_geojson, fields, aliases, shades_brown, "carbon_kt_mid", a_carbon, b_carbon
         )
         temp_geojson_layer.add_to(hg2)
 
     hg1.add_to(map)
     hg2.add_to(map)
     GroupedLayerControl(
-        groups={"Modality": [hg1, hg2]},
+        groups={"Farms represented by estimated:": [hg1, hg2]},
         exclusive_groups=True,
         collapsed=False,
     ).add_to(map)
+
+    if add_title_legend:
+        map_title = "The future of land-based salmon farming"
+        map.get_root().html.add_child(folium.Element(make_title_html(map_title)))
+
+        legend_temp = make_legend_for_map()
+        macro = MacroElement()
+        macro._template = Template(legend_temp)
+        map.get_root().add_child(macro)
 
     return map.get_root().render()
