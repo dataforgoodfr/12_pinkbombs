@@ -239,7 +239,7 @@ def make_color_bar_chart2(
     col_rename,
     title,
     ytitle,
-    palette=px.colors.sequential.Burg,
+    palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
 ) -> Figure:
     """Returns plotly express object as bar chart with gradient color - speficif to graph 4.2 ATM!!!
