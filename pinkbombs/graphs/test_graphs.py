@@ -49,6 +49,7 @@ g1_3 = pb.make_color_bar_chart(
     title="Top 10 countries producing salmon (2021)",
     xtitle="Tonnes of farmed salmon produced",
     ytitle="Country",
+    palette=['#151c97', '#ff4530'],
 )
 
 g1_3.write_html("pinkbombs/graphs/test_html/" + data1_3_name + ".html")

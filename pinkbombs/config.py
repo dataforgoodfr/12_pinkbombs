@@ -50,6 +50,10 @@ MAPPING = {
             "Top 10 countries producing salmon (2021)",
             "Tonnes of farmed salmon produced",
             "Country",
+            [
+                '#151c97', 
+                '#ff4530'
+            ]
         ],
     },
     "evolution-map": {
