@@ -1,5 +1,8 @@
 FROM python:3.12-bookworm
 
+ARG API_KEY=pinkbombs
+ENV PINKBOMBS_API_KEY=$api_key
+
 ENV POETRY_HOME=/app/.poetry \
     POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON=1
 ENV VIRTUAL_ENV /env

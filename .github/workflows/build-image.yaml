@@ -18,7 +18,7 @@ jobs:
         password: ${{ secrets.SCALEWAY_SECRET_KEY }}
         registry: ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}
     - name: Build the Docker image
-      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dataapp:latest
+      run: docker build . -t ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dataapp:latest --build-arg API_KEY=${{ secrets.PINKBOMBS_API_KEY }}
     - name: Push the Docker Image
       run: docker push ${{ secrets.SCALEWAY_CONTAINER_REGISTRY_ENDPOINT }}/dataapp:latest
 
