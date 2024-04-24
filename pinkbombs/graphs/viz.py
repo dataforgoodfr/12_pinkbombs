@@ -252,9 +252,9 @@ def make_simple_bar_chart(
     xtitle,
     ytitle,
     mycolor,
+    fix_approx=True,
     palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
-    fix_approx=True,
 ) -> Figure:
     """Returns a Plotly Express object as a bar chart with only 1 color
     Parameters:
