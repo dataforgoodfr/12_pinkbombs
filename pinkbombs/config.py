@@ -173,6 +173,16 @@ MAPPING = {
             ]
         ],
     },
+    "alternatives": {
+        "filename": "carbon_bombs_pie_chart_5.1.csv",
+        "function": pb.make_matrix_alternatives,
+        "parser": pd.read_csv,
+        "arguments": [
+            900,
+            500,
+            True,
+        ],
+    },
 }
 
 MAPS = {

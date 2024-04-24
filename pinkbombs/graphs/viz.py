@@ -656,7 +656,7 @@ def make_simple_box_chart(
     return box
 
 
-def make_matrix_alternatives(width=900, height=500, hover_disable=False):
+def make_matrix_alternatives(df_dummy, width=900, height=500, hover_disable=False):
     """Returns a waffle plot with 4 colors, with or without hover"""
 
     # Define size of matrix
