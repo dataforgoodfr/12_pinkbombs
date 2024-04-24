@@ -129,6 +129,10 @@ MAPPING = {
             },
             "Antibiotic usage in Chile (2007-2021)",
             "Antibiotics usage (tonnes)",
+            [
+                '#151c97', 
+                '#ff4530',
+            ] 
         ],
     },
     "escapes-rates": {
