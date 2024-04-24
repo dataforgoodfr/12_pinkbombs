@@ -14,6 +14,7 @@ g1_1 = pb.make_area_single_chart(
     "Year",
     "Tons of wild salmon catch in Atlantic waters",
     "Wild Altantic salmon collapse",
+    palette=['#151c97']
 )
 
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + ".html")
@@ -48,6 +49,7 @@ g1_3 = pb.make_color_bar_chart(
     title="Top 10 countries producing salmon (2021)",
     xtitle="Tonnes of farmed salmon produced",
     ytitle="Country",
+    palette=['#151c97', '#ff4530'],
 )
 
 g1_3.write_html("pinkbombs/graphs/test_html/" + data1_3_name + ".html")
@@ -211,3 +213,9 @@ gx_x = pb.make_area_order_chart_grouped(
     title="Hyper-growth in salmon farming",
 )
 gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
+
+
+# Graph 7 - Altenratives - no data
+g7 = pb.make_matrix_alternatives(hover_disable=True)
+
+g7.write_html("pinkbombs/graphs/test_html/alternatives.html")

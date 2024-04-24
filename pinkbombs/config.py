@@ -10,6 +10,9 @@ MAPPING = {
             "Year",
             "Tons of wild salmon catch in Atlantic waters",
             "Wild Altantic salmon collapse",
+            [
+                '#151c97'
+            ],
         ],
     },
     "hyper-growth": {
@@ -47,6 +50,10 @@ MAPPING = {
             "Top 10 countries producing salmon (2021)",
             "Tonnes of farmed salmon produced",
             "Country",
+            [
+                '#151c97', 
+                '#ff4530'
+            ]
         ],
     },
     "evolution-map": {

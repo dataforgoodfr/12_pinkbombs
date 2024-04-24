@@ -1,6 +1,7 @@
 import pandas as pd
+import numpy as np
 import plotly.express as px
-from plotly.graph_objects import Figure, Scatter
+from plotly.graph_objects import Figure, Scatter, Heatmap
 
 
 def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figure:
@@ -653,3 +654,65 @@ def make_simple_box_chart(
     box.update_coloraxes(colorbar_tickformat="0%")
 
     return box
+
+
+def make_matrix_alternatives(width=900, height=500, hover_disable=False):
+    """Returns a waffle plot with 4 colors, with or without hover"""
+
+    # Define size of matrix
+    m = 5
+    n = 8
+    data = np.zeros((m, n))
+
+    # Original data
+    data_original = np.matrix([
+            [2,2,3,2,0,0,0,0],
+            [1,1,0,1,2,2,4,4],
+            [0,0,1,1,1,1,4,1],
+            [4,2,1,2,2,2,0,0],
+            [4,3,2,2,0,0,0,0]])
+
+    # Change data to have only one green   
+    for i in range(m):
+        for j in range(n):
+            if data_original[i,j] == 0 or data_original[i,j] == 1:
+                data[i,j] = 0
+            else : 
+                data[i,j] = data_original[i,j] - 1
+    
+    # Extra information to display on each cell
+    extra_info = [['Extra information to provide on this cell' for c in range(n)] for r in range(m)]
+
+    # Define colorscale and axes
+    colorscale = [
+                  #"#aaed99",  # light green
+                  "#6ecb57",  # dark green
+                  "#ffd336",  # yellow
+                  "#ff7e36",  # orange
+                  "#f34620"]  # red
+
+    xlabels = ['Saumon<br>Elevage<br>terrestre',
+              'Saumon<br>Elevage<br>en mer' ,
+              'Pélagiques:<br>maquereaux/<br>sardines',
+              "Mollusques &<br>Coquillages",
+              "Algue", 'Graine de lin<br>ou noix', "Huile de<br>Colza",
+              "Legumineuse<br>ou soja local"]
+    ylabels = ['Metaux lourds', 'Apport en Omegas', 'Apport en proteines', 'Empreinte Carbone',
+              'Impacts sociaux'] 
+
+    fig = Figure(Heatmap(x=xlabels, y = ylabels, z=data,
+                              customdata=extra_info, xgap=4, ygap=4,
+                              colorscale=colorscale, 
+                              showscale=False,
+                              hovertemplate="(%{y}, %{x}): %{customdata}<extra></extra>"))
+    fig.update_layout(width=width, height=height, 
+                      yaxis_autorange='reversed',
+                      paper_bgcolor="rgba(0,0,0,0)", 
+                      plot_bgcolor="rgba(0,0,0,0)") #, template='simple_white')
+    fig.update_xaxes(side='top') #visible=False, showticklabels=True)
+
+    if hover_disable:
+        fig.update_traces(hovertemplate = None, hoverinfo = "skip")
+
+    return fig  
+
