@@ -4,7 +4,6 @@
 import pinkbombs as pb
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 # Graph 1.1 - Wild Altantic salmon collapse
 data1_1_name = "discrease_wild_salmon_1.1"
@@ -15,6 +14,7 @@ g1_1 = pb.make_area_single_chart(
     "Year",
     "Tons of wild salmon catch in Atlantic waters",
     "Wild Altantic salmon collapse",
+    palette=['#151c97']
 )
 
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + ".html")

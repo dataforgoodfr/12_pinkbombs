@@ -10,6 +10,9 @@ MAPPING = {
             "Year",
             "Tons of wild salmon catch in Atlantic waters",
             "Wild Altantic salmon collapse",
+            [
+                '#151c97'
+            ],
         ],
     },
     "hyper-growth": {
