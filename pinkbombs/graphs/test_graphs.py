@@ -4,6 +4,7 @@
 import pinkbombs as pb
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # Graph 1.1 - Wild Altantic salmon collapse
 data1_1_name = "discrease_wild_salmon_1.1"
@@ -211,3 +212,9 @@ gx_x = pb.make_area_order_chart_grouped(
     title="Hyper-growth in salmon farming",
 )
 gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
+
+
+# Graph 7 - Altenratives - no data
+g7 = pb.make_matrix_alternatives(hover_disable=True)
+
+g7.write_html("pinkbombs/graphs/test_html/alternatives.html")
