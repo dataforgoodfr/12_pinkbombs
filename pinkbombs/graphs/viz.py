@@ -462,6 +462,7 @@ def make_animated_bubble_map(
     Returns:
             area (plotly object): output chart object
     """
+    input_df = input_df.sort_values(by=input_time, ascending=False)
     map = px.scatter_geo(
         input_df,
         locations=input_loc,
