@@ -23,6 +23,17 @@ MAPPING = {
             "Hyper-growth in salmon farming",
             True,
         ],
+    },    
+    "hyper-growth-grouped": {
+        "filename": "hyper_growth_salmon_farming_1.2.csv",
+        "function": pb.make_area_order_chart_grouped,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Year",
+            "Tonnes - live weight",
+            "Hyper-growth in salmon farming",
+            "#fd442f",
+        ],
     },
     "top-10": {
         "filename": "top_10_countries_producing_1.3.csv",

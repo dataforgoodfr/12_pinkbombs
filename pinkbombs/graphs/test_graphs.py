@@ -197,3 +197,17 @@ g5_1 = pb.make_simple_pie_chart(
     )
 
 g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")
+
+
+# Graph xx - Croissance 1ere page
+datax_x_name = "hyper_growth_salmon_farming_1.2"
+datax_x_file = "data/" + datax_x_name + ".csv"
+df_datax_x = pd.read_csv(datax_x_file)
+
+gx_x = pb.make_area_order_chart_grouped(
+    df_datax_x,
+    "Year",
+    "Tonnes - live weight",
+    title="Hyper-growth in salmon farming",
+)
+gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")

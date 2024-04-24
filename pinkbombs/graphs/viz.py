@@ -1,6 +1,6 @@
 import pandas as pd
 import plotly.express as px
-from plotly.graph_objects import Figure
+from plotly.graph_objects import Figure, Scatter
 
 
 def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figure:
@@ -38,6 +38,50 @@ def make_area_single_chart(
     )
     area.update_layout(template=theme, title=title)
     area.update_yaxes(exponentformat="none")
+    return area
+
+
+def make_area_order_chart_grouped(
+    input_df,
+    input_x,
+    input_y,
+    title,
+    color="#fd442f",
+    theme="simple_white",
+) -> Figure:
+    """Returns plotly express object as area chart with multiple lines
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualised
+            input_x (str): name of the field for the x axis
+            input_y (str): name of the field for the y axis
+            input_col (str): name of the field for the colors
+            title (str): chart title
+            reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False
+            palette (px.object): plotly discrete palette, default is Dark24
+            theme (str): plotly chart theme, default is 'simple_white'
+    Returns:
+            area (plotly object): output chart object
+    """
+    # Data cleaning - TO REMOVE
+    input_df[input_y] = input_df[input_y].str.replace(",", ".")
+    input_df[input_y] = input_df[input_y].astype(float)
+
+    input_df = input_df.groupby(input_x)[input_y].sum().reset_index()
+    input_df["color"] = color
+
+    area = Figure()
+    area.add_trace(
+        Scatter(
+            x=input_df[input_x],
+            y=input_df[input_y],
+            fill="tozeroy",
+            line=dict(color=color),
+            mode="lines",
+        )
+    )
+    area.update_layout(template=theme, title=title, xaxis_title=input_x, yaxis_title=input_y)
+    area.update_yaxes(exponentformat="none", showgrid=True)
+
     return area
 
 
