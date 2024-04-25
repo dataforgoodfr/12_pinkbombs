@@ -19,6 +19,12 @@ async def generate_graphs(graph_name, connection: bool = Depends(verify_token)):
         "data/" + MAPPING[graph_name]["filename"],
     )
     chart_obj = MAPPING[graph_name]["function"](df, *MAPPING[graph_name]["arguments"])
+    chart_obj.update_layout(
+        hoverlabel=dict(
+            bgcolor="white",
+        )
+    )
+
     return {
         "graph_name": graph_name,
         "graph": chart_obj.to_json(),
