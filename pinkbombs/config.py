@@ -66,6 +66,9 @@ MAPPING = {
             "Year",
             "Tonnes - live weight",
             "Evolution of salmon farming by country",
+            [
+                '#151c97',
+            ],
         ],
     },
     "top-comp": {
