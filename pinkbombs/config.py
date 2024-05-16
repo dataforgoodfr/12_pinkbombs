@@ -15,6 +15,19 @@ MAPPING = {
             ],
         ],
     },
+    "salmon-collapse-fr": {
+        "filename": "discrease_wild_salmon_1.1_fr.csv",
+        "function": pb.make_area_single_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Année",
+            "Saumon pêché dans l'Atlantique en tonnes",
+            "Effondrement des stocks de saumon sauvage",
+            [
+                '#151c97'
+            ],
+        ],
+    },
     "hyper-growth": {
         "filename": "hyper_growth_salmon_farming_1.2.csv",
         "function": pb.make_area_order_chart,

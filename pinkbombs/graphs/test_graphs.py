@@ -19,6 +19,21 @@ g1_1 = pb.make_area_single_chart(
 
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + ".html")
 
+# Graph 1.1 - Wild Altantic salmon collapse - FRENCH
+data1_1_name = "discrease_wild_salmon_1.1"
+data1_1_file = "data/" + data1_1_name + "_fr.csv"
+df_data1_1 = pd.read_csv(data1_1_file)
+g1_1 = pb.make_area_single_chart(
+    df_data1_1,
+    "Année",
+    "Saumon pêché dans l'Atlantique en tonnes",
+    "Effondrement des stocks de saumon sauvage",
+    palette=['#151c97']
+)
+
+g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + "_fr.html")
+
+
 # Graph 1.2 - Wild Altantic salmon collapse
 data1_2_name = "hyper_growth_salmon_farming_1.2"
 data1_2_file = "data/" + data1_2_name + ".csv"
@@ -216,6 +231,6 @@ gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
 
 
 # Graph 7 - Altenratives - no data
-g7 = pb.make_matrix_alternatives(hover_disable=True)
+g7 = pb.make_matrix_alternatives(pd.DataFrame({'A' : []}), hover_disable=True)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives.html")
