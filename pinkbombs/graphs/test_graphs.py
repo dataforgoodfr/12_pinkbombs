@@ -83,6 +83,24 @@ g1_3 = pb.make_color_bar_chart(
 
 g1_3.write_html("pinkbombs/graphs/test_html/" + data1_3_name + ".html")
 
+# Graph 1.3 - Main countries producing farmed salmon - FRENCH
+data1_3_file = "data/" + data1_3_name + "_fr.csv"
+df_data1_3 = pd.read_csv(data1_3_file)
+
+g1_3 = pb.make_color_bar_chart(
+    df_data1_3,
+    input_x="Tonnes de saumon", 
+    input_y1='Pays', 
+    input_y2='Drapeau',
+    input_col="% du total",
+    title='Top 10 pays producteurs de saumon (2021)',
+    xtitle="Tonnes de saumon d'élevage produites",
+    ytitle='Pays',
+    palette = ['#151c97', '#ff4530'],
+)
+
+g1_3.write_html("pinkbombs/graphs/test_html/" + data1_3_name + "_fr.html")
+
 # Graph 1.4 -  Evolution of salmon farming by country
 data1_4_name = "evolution_salmon_farming_country_iso_1.4"
 data1_4_file = "data/" + data1_4_name + ".csv"

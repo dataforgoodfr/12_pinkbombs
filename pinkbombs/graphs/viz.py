@@ -191,8 +191,11 @@ def make_color_bar_chart(
             bar (plotly object): output chart object
     """
     # Sort out number format
-    input_df[input_x] = input_df[input_x].str.replace(",", ".")
-    input_df[input_x] = input_df[input_x].astype(float)
+    try:
+        input_df[input_x] = input_df[input_x].str.replace(",", ".")
+        input_df[input_x] = input_df[input_x].astype(float)
+    except:
+        print("Input is not in string format")
 
     # Recalculate %
     input_df[input_col] = input_df[input_x] / input_df[input_x].sum()
