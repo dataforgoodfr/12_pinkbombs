@@ -164,6 +164,34 @@ g2_1 = pb.make_simple_bar_chart(
 
 g2_1.write_html("pinkbombs/graphs/test_html/" + data2_1_name + ".html")
 
+# Graph 2.1 -  Top 10 companies producing salmon - FRENCH
+data2_1_file = "data/" + data2_1_name + "_fr.csv"
+df_data2_1 = pd.read_csv(data2_1_file)
+
+g2_1 = pb.make_simple_bar_chart(
+    df_data2_1,
+    input_x="Tonnes de saumon 2022",
+    input_y1="Producteur",
+    input_y2="Drapeau",
+    input_n1="Revenus 2022",
+    input_n2="Employés 2022",
+    input_other=[
+        "Nom commercial",
+        "Date de création",
+        "Siège",
+        "Site internet",
+        "Revenus 2022",
+        "Employés 2022",
+        "Note",
+    ],
+    title="Top 10 producteurs de saumon",
+    xtitle="Volume de saumon produit en tonnes (2022)",
+    ytitle="Producteur",
+    mycolor="#151c97",  # Seastemik dark blue
+)
+
+g2_1.write_html("pinkbombs/graphs/test_html/" + data2_1_name + "_fr.html")
+
 # Graph 2.3 -  Top 10 RAS companies producing salmon
 data2_3_name = "top_10_ras_companies_2.3"
 data2_3_file = "data/" + data2_3_name + ".csv"

@@ -71,3 +71,25 @@ df_data1_4_fr = df_data1_4.rename(columns={
 data1_4_file_out = "data/" + data1_4_name + "_fr.csv"
 col_1_4_fr = ["Année", "Pays", "Tonnes de saumon", "alpha-3"]
 df_data1_4_fr[col_1_4_fr].to_csv(data1_4_file_out)
+
+
+# Data for Graph 2.1 
+data2_1_name = "top_10_companies_producing_2.1"
+data2_1_file = "data/" + data2_1_name + ".csv"
+df_data2_1 = pd.read_csv(data2_1_file)
+
+df_data2_1_fr = df_data2_1.rename(columns={
+    "Company": "Producteur",
+    "Country": "Pays",
+    "Flag": "Drapeau",
+    "Volume, in tons, 2022": "Tonnes de saumon 2022",
+    "Revenues 2022": "Revenus 2022",
+    "Employees 2022": "Employés 2022",
+    "Commercial name": "Nom commercial",
+    "Website": "Site internet",
+    "Creation date": "Date de création",
+    "Headquarters": "Siège",
+    })
+
+data2_1_file_out = "data/" + data2_1_name + "_fr.csv"
+df_data2_1_fr.to_csv(data2_1_file_out)
