@@ -23,8 +23,7 @@ df_data1_2 = pd.read_csv(data1_2_file)
 
 df_data1_2.loc[df_data1_2.Country == "Korea, Dem. People's Rep", 
                "Country"]	= "Democratic People's Republic of Korea"
-df_data1_2.loc[df_data1_2.Country == "Türkiye", 
-               "Country"]	= "Turkey"
+df_data1_2.loc[df_data1_2.Country == "Türkiye", "Country"]	= "Turkey"
 df_data1_2 = df_data1_2.merge(df_pays, left_on='Country', right_on='name_eng', how = 'left')
 
 df_data1_2_fr = df_data1_2.rename(columns = {
@@ -52,3 +51,23 @@ df_data1_3_fr = df_data1_3.rename(columns={
 data1_3_file_out = "data/" + data1_3_name + "_fr.csv"
 col_1_3_fr = ["Drapeau", "Pays",	"Tonnes de saumon", "% du total"]
 df_data1_3_fr[col_1_3_fr].to_csv(data1_3_file_out)
+
+
+# Data for Graph 1.4
+data1_4_name = "evolution_salmon_farming_country_iso_1.4"
+data1_4_file = "data/" + data1_4_name + ".csv"
+df_data1_4 = pd.read_csv(data1_4_file)
+
+df_data1_4.loc[df_data1_4.Country == "Korea, Dem. People's Rep", 
+               "Country"]	= "Democratic People's Republic of Korea"
+df_data1_4.loc[df_data1_4.Country == "Türkiye", "Country"]	= "Turkey"
+df_data1_4 = df_data1_4.merge(df_pays, left_on='Country', right_on='name_eng', how = 'left')
+
+df_data1_4_fr = df_data1_4.rename(columns={
+    "Year": "Année",
+    "name_fr": "Pays",
+    "Tonnes - live weight": "Tonnes de saumon"})
+
+data1_4_file_out = "data/" + data1_4_name + "_fr.csv"
+col_1_4_fr = ["Année", "Pays", "Tonnes de saumon", "alpha-3"]
+df_data1_4_fr[col_1_4_fr].to_csv(data1_4_file_out)

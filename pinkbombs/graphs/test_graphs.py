@@ -118,6 +118,23 @@ g1_4 = pb.make_animated_bubble_map(
 
 g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + ".html")
 
+# Graph 1.4 -  Evolution of salmon farming by country - FRENCH
+data1_4_file = "data/" + data1_4_name + "_fr.csv"
+df_data1_4 = pd.read_csv(data1_4_file)
+
+g1_4 = pb.make_animated_bubble_map(
+    df_data1_4,
+    input_loc="alpha-3",
+    input_hover="Pays",
+    input_time="Année",
+    input_size="Tonnes de saumon",
+    title="Evolution de l'élevage du saumon par pays",
+    palette=['#151c97'],
+)
+
+g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html")
+
+
 # Graph 2.1 -  Top 10 companies producing salmon
 data2_1_name = "top_10_companies_producing_2.1"
 data2_1_file = "data/" + data2_1_name + ".csv"

@@ -453,6 +453,7 @@ def make_animated_bubble_map(
     size_max=50,
     palette=px.colors.qualitative.Prism,
     theme="simple_white",
+    reverse=False,
 ) -> Figure:
     """Returns plotly express object as Bubbles map with animation
     Parameters:
@@ -465,10 +466,13 @@ def make_animated_bubble_map(
             size_max (int): size of the maximum bubble radius, default=50
             palette (px.object): plotly discrete palette, default is Prism
             theme (str): plotly chart theme, default is 'simple_white'
+            reverse (boolean): to decide if time is reverse in the animation
     Returns:
             area (plotly object): output chart object
     """
-    input_df = input_df.sort_values(by=input_time, ascending=False)
+    if reverse:
+        input_df = input_df.sort_values(by=input_time, ascending=False)
+        
     map = px.scatter_geo(
         input_df,
         locations=input_loc,
