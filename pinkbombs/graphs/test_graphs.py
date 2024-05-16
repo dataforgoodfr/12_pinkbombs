@@ -214,6 +214,27 @@ g2_3 = pb.make_simple_bar_chart(
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + ".html")
 
+# Graph 2.3 -  Top 10 RAS companies producing salmon - FRENCH
+data2_3_file = "data/" + data2_3_name + "_fr.csv"
+df_data2_3 = pd.read_csv(data2_3_file)
+
+g2_3 = pb.make_simple_bar_chart(
+    df_data2_3,
+    input_x='Production en tonnes',
+    input_y1='Producteur',
+    input_y2='Drapeau',
+    input_n1='Revenus 2022 dollars',
+    input_n2='Employés 2022',
+    input_other=['Nombre de projets', 'Pays des projets', 'Note'],
+    title="Top 10 producteurs RAS de saumon",
+    xtitle='Ambitions des producteurs pour la production de saumon de production de saumon en tonnes',
+    ytitle='Producteur',
+    mycolor='#151c97', 
+    fix_approx=False
+    )
+
+g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + "_fr.html")
+
 # Graph 2.4 - Map of RAS projects
 data2_4_name = "ras_projects_for_map_2.4"
 data2_4_file = "data/" + data2_4_name + ".csv"

@@ -93,3 +93,6 @@ df_data2_1_fr = df_data2_1.rename(columns={
 
 data2_1_file_out = "data/" + data2_1_name + "_fr.csv"
 df_data2_1_fr.to_csv(data2_1_file_out)
+
+
+# Data for Graph 2.3 - translated in Google sheet
