@@ -20,7 +20,6 @@ g1_1 = pb.make_area_single_chart(
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + ".html")
 
 # Graph 1.1 - Wild Altantic salmon collapse - FRENCH
-data1_1_name = "discrease_wild_salmon_1.1"
 data1_1_file = "data/" + data1_1_name + "_fr.csv"
 df_data1_1 = pd.read_csv(data1_1_file)
 g1_1 = pb.make_area_single_chart(
@@ -49,6 +48,21 @@ g1_2 = pb.make_area_order_chart(
 )
 
 g1_2.write_html("pinkbombs/graphs/test_html/" + data1_2_name + ".html")
+
+# Graph 1.2 - Wild Altantic salmon collapse - FRENCH
+data1_2_file = "data/" + data1_2_name + "_fr.csv"
+df_data1_2 = pd.read_csv(data1_2_file)
+
+g1_2 = pb.make_area_order_chart(
+    df_data1_2,
+    "Année", 
+    "Tonnes de saumon produit en élevage", 
+    "Pays",
+    title="Hypercroissance de l'élevage du saumon",
+    reorder=True,
+)
+
+g1_2.write_html("pinkbombs/graphs/test_html/" + data1_2_name + "_fr.html")
 
 # Graph 1.3 - Main countries producing farmed salmon
 data1_3_name = "top_10_countries_producing_1.3"

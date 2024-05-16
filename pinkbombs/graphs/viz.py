@@ -63,9 +63,12 @@ def make_area_order_chart_grouped(
     Returns:
             area (plotly object): output chart object
     """
-    # Data cleaning - TO REMOVE
-    input_df[input_y] = input_df[input_y].str.replace(",", ".")
-    input_df[input_y] = input_df[input_y].astype(float)
+    # Data cleaning
+    try:
+        input_df[input_y] = input_df[input_y].str.replace(',', '.')
+        input_df[input_y] = input_df[input_y].astype(float)
+    except:
+        print("Input is not in string format")
 
     input_df = input_df.groupby(input_x)[input_y].sum().reset_index()
     input_df["color"] = color
