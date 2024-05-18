@@ -13,8 +13,9 @@ g1_1 = pb.make_area_single_chart(
     df_data1_1,
     "Year",
     "Tons of wild salmon catch in Atlantic waters",
-    "Wild Altantic salmon collapse",
-    palette=['#151c97']
+    "Tons of wild salmon catch in Atlantic waters",
+    palette=['#151c97'],
+    block_zoom=True,
 )
 
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + ".html")
@@ -26,8 +27,9 @@ g1_1 = pb.make_area_single_chart(
     df_data1_1,
     "Année",
     "Saumon pêché dans l'Atlantique en tonnes",
-    "Effondrement des stocks de saumon sauvage",
-    palette=['#151c97']
+    "Saumon pêché dans l'Atlantique en tonnes",
+    palette=['#151c97'],
+    block_zoom=True,
 )
 
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + "_fr.html")

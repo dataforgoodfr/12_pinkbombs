@@ -18,7 +18,8 @@ def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figur
 
 
 def make_area_single_chart(
-    input_df, input_x, input_y, title, palette=px.colors.qualitative.Pastel1, theme="simple_white"
+    input_df, input_x, input_y, title, palette=px.colors.qualitative.Pastel1, 
+    theme="simple_white", source_text='', block_zoom=False
 ) -> Figure:
     """Returns plotly express object as area chart with a single line
     Parameters:
@@ -28,6 +29,8 @@ def make_area_single_chart(
             title (str): chart title
             palette (px.object): plotly discrete palette, default is Pastel1
             theme (str): plotly chart theme, default is 'simple_white'
+            source_text (string): Text to display as source at the bottom. Default is empty.
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
     Returns:
             area (plotly object): output chart object
     """
@@ -37,8 +40,24 @@ def make_area_single_chart(
         y=input_y,
         color_discrete_sequence=palette,
     )
-    area.update_layout(template=theme, title=title)
+    area.update_layout(template=theme, title=title,
+                       hoverlabel=dict(bgcolor='white'))
     area.update_yaxes(exponentformat="none")
+    area.update_xaxes(title=None)
+
+    if source_text != '':
+        area.update_layout(margin=dict(l=50, r=50, t=60, b=80))
+        area.update_layout(annotations = [dict(
+            text = source_text,
+            font = dict(size = 12),
+            showarrow = False,
+            xref = 'paper', x = 0,
+            yref = 'paper', y = -0.15)])
+        
+    if block_zoom:
+        area.layout.xaxis.fixedrange = True
+        area.layout.yaxis.fixedrange = True
+
     return area
 
 
@@ -472,7 +491,7 @@ def make_animated_bubble_map(
     """
     if reverse:
         input_df = input_df.sort_values(by=input_time, ascending=False)
-        
+
     map = px.scatter_geo(
         input_df,
         locations=input_loc,
