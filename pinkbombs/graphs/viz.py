@@ -114,6 +114,8 @@ def make_area_order_chart(
     input_y,
     input_col,
     title,
+    y_title, 
+    min_date,
     reorder=False,
     palette=px.colors.qualitative.Dark24,
     theme="simple_white",
@@ -125,6 +127,8 @@ def make_area_order_chart(
             input_y (str): name of the field for the y axis
             input_col (str): name of the field for the colors
             title (str): chart title
+            y_title (str): y axis title
+            min_date (int): minimum year to be shown on plot initially
             reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False
             palette (px.object): plotly discrete palette, default is Dark24
             theme (str): plotly chart theme, default is 'simple_white'
@@ -148,8 +152,9 @@ def make_area_order_chart(
         color=input_col,
         color_discrete_sequence=palette,
     )
-    area.update_layout(template=theme, title=title)
+    area.update_layout(template=theme, title=title, yaxis_title=y_title)
     area.update_yaxes(exponentformat="none")
+    area.update_xaxes(title=None, range=[min_date, input_df[input_x].max()])
 
     # Ability to select/deselect all
     area.update_layout(

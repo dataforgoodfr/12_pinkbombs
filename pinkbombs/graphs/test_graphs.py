@@ -45,7 +45,9 @@ g1_2 = pb.make_area_order_chart(
     "Year",
     "Tonnes - live weight",
     "Country",
-    title="Hyper-growth in salmon farming",
+    title="Farmed salmon production by country",
+    y_title="Tonnes of salmon produced in farms", 
+    min_date = 1975,
     reorder=True,
 )
 
@@ -60,7 +62,9 @@ g1_2 = pb.make_area_order_chart(
     "Année", 
     "Tonnes de saumon produit en élevage", 
     "Pays",
-    title="Hypercroissance de l'élevage du saumon",
+    title="Production de saumon d'élevage par pays",
+    y_title="Tonnes de saumon produit en élevage", 
+    min_date = 1975,
     reorder=True,
 )
 
