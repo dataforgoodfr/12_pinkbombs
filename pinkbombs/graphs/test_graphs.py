@@ -111,10 +111,11 @@ g1_3 = pb.make_color_bar_chart(
     input_y1="Country",
     input_y2="Flag",
     input_col="% of total",
-    title="Top 10 countries producing salmon (2021)",
-    xtitle="Tonnes of farmed salmon produced",
-    ytitle="Country",
+    title="Top 10 countries producing salmon by tonnes (2021)",
+    xtitle=None,
+    ytitle=None,
     palette=['#151c97', '#ff4530'],
+    block_zoom=True,
 )
 
 g1_3.write_html("pinkbombs/graphs/test_html/" + data1_3_name + ".html")
@@ -129,10 +130,11 @@ g1_3 = pb.make_color_bar_chart(
     input_y1='Pays', 
     input_y2='Drapeau',
     input_col="% du total",
-    title='Top 10 pays producteurs de saumon (2021)',
-    xtitle="Tonnes de saumon d'élevage produites",
-    ytitle='Pays',
+    title='Top 10 pays producteurs de saumon par tonnes (2021)',
+    xtitle=None,
+    ytitle=None,
     palette = ['#151c97', '#ff4530'],
+    block_zoom=True,
 )
 
 g1_3.write_html("pinkbombs/graphs/test_html/" + data1_3_name + "_fr.html")

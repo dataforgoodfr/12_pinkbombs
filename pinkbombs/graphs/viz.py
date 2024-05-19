@@ -270,6 +270,7 @@ def make_color_bar_chart(
     xtitle,
     ytitle,
     palette=px.colors.sequential.Burg,
+    block_zoom=False,
     theme="simple_white",
 ) -> Figure:
     """Returns plotly express object as bar chart - specific to graph 1.3 ATM!!!
@@ -283,6 +284,7 @@ def make_color_bar_chart(
             xtitle (str): x-axis title
             ytitle (str): y-axis title
             palette (px.object): plotly discrete palette, default is Burg
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
             theme (str): plotly chart theme, default is 'simple_white'
     Returns:
             bar (plotly object): output chart object
@@ -326,10 +328,16 @@ def make_color_bar_chart(
         xaxis_title=xtitle,
         yaxis_title=ytitle,
         yaxis=dict(tickfont=dict(size=13)),
+        hoverlabel=dict(bgcolor='white'),
     )
     bar.update_xaxes(exponentformat="none", range=[0, 2000000])
     bar.update_yaxes(ticks="")
     bar.update_coloraxes(colorbar_tickformat="0%")
+
+    if block_zoom:
+        bar.layout.xaxis.fixedrange = True
+        bar.layout.yaxis.fixedrange = True
+        bar.update_layout(modebar_remove=['zoom', 'pan', 'lasso2d', 'select2d'])
 
     return bar
 
