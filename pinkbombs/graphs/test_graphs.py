@@ -197,10 +197,11 @@ g2_1 = pb.make_simple_bar_chart(
         "Employees 2022",
         "Note",
     ],
-    title="Top 10 companies producing salmon",
-    xtitle="Volume of salmon produced in tonnes (2022)",
-    ytitle="Company",
+    title="Top 10 companies producing salmon by tonnes (2022)",
+    xtitle=None,
+    ytitle=None,
     mycolor="#151c97",  # Seastemik dark blue
+    block_zoom=True,
 )
 
 g2_1.write_html("pinkbombs/graphs/test_html/" + data2_1_name + ".html")
@@ -225,10 +226,11 @@ g2_1 = pb.make_simple_bar_chart(
         "Employés 2022",
         "Note",
     ],
-    title="Top 10 producteurs de saumon",
-    xtitle="Volume de saumon produit en tonnes (2022)",
-    ytitle="Producteur",
+    title="Top 10 producteurs de saumon par tonnes (2022)",
+    xtitle=None,
+    ytitle=None,
     mycolor="#151c97",  # Seastemik dark blue
+    block_zoom=True,
 )
 
 g2_1.write_html("pinkbombs/graphs/test_html/" + data2_1_name + "_fr.html")
@@ -246,11 +248,12 @@ g2_3 = pb.make_simple_bar_chart(
     input_n1='Revenues 2022 dollars',
     input_n2='Employees 2022',
     input_other=['Number of projects', 'Countries of projects', 'Note'],
-    title="Top 10 RAS companies producing salmon",
+    title="Top 10 land-based salmon productors (ambitions)",
     xtitle='Company ambition for salmon production in tonnes',
-    ytitle='Company',
+    ytitle=None,
     mycolor='#151c97', 
-    fix_approx=False
+    block_zoom=True,
+    fix_approx=False,
     )
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + ".html")
@@ -267,10 +270,11 @@ g2_3 = pb.make_simple_bar_chart(
     input_n1='Revenus 2022 dollars',
     input_n2='Employés 2022',
     input_other=['Nombre de projets', 'Pays des projets', 'Note'],
-    title="Top 10 producteurs RAS de saumon",
-    xtitle='Ambitions des producteurs pour la production de saumon de production de saumon en tonnes',
-    ytitle='Producteur',
+    title="Top 10 producteurs de saumon d'élevage terrestre (ambitions)",
+    xtitle='Ambitions des producteurs pour la production de saumon en tonnes',
+    ytitle=None,
     mycolor='#151c97', 
+    block_zoom=True,
     fix_approx=False
     )
 

@@ -408,6 +408,7 @@ def make_simple_bar_chart(
     xtitle,
     ytitle,
     mycolor,
+    block_zoom=False,
     fix_approx=True,
     palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
@@ -427,6 +428,7 @@ def make_simple_bar_chart(
             mycolor (str): name of the color code for the bars
             palette (px.object): Plotly discrete palette, default is Pastel1
             theme (str): Plotly chart theme, default is 'simple_white'
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
             fix_approx (boolean): if data has "~" symbol (to remove from this function!)
     Returns:
             bar (Plotly object): output chart object
@@ -490,9 +492,15 @@ def make_simple_bar_chart(
         xaxis_title=xtitle,
         yaxis_title=ytitle,
         yaxis=dict(tickfont=dict(size=13)),
+        hoverlabel=dict(bgcolor='white'),
     )
     bar.update_xaxes(exponentformat="none")
     bar.update_yaxes(ticks="")
+
+    if block_zoom:
+        bar.layout.xaxis.fixedrange = True
+        bar.layout.yaxis.fixedrange = True
+        bar.update_layout(modebar_remove=['zoom', 'pan', 'lasso2d', 'select2d'])
 
     return bar
 
