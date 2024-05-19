@@ -5,6 +5,36 @@ import pinkbombs as pb
 import pandas as pd
 import plotly.express as px
 
+# Graph 1.0 - Page Story production of salmons
+data1_0_name = 'numbers_salmons_farmed_1.0'
+data1_0_file = "data/"+data1_0_name+".csv"
+df_data1_0 = pd.read_csv(data1_0_file)
+
+g1_0 = pb.make_area_chart_options(
+    df_data1_0,
+    input_x="Year",
+    input_y="Number of salmons (5kg each)",
+    title="Production of farmed salmons",
+    legend_title="Number of salmons produced every year",
+)
+
+g1_0.write_html("pinkbombs/graphs/test_html/" + data1_0_name + ".html")
+
+# Graph 1.0 - Page Story production of salmons - FRENCH
+data1_0_file = "data/"+data1_0_name+"_fr.csv"
+df_data1_0 = pd.read_csv(data1_0_file)
+
+g1_0 = pb.make_area_chart_options(
+    df_data1_0,
+    input_x="Année",
+    input_y="Nombre de saumons (5kg chacun)",
+    title="Production de saumons d'élevage",
+    legend_title="Nombre de saumons produits chaque année",
+)
+
+g1_0.write_html("pinkbombs/graphs/test_html/" + data1_0_name + "_fr.html")
+
+
 # Graph 1.1 - Wild Altantic salmon collapse
 data1_1_name = "discrease_wild_salmon_1.1"
 data1_1_file = "data/" + data1_1_name + ".csv"
@@ -321,17 +351,17 @@ g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")
 
 
 # Graph xx - Croissance 1ere page
-datax_x_name = "hyper_growth_salmon_farming_1.2"
-datax_x_file = "data/" + datax_x_name + ".csv"
-df_datax_x = pd.read_csv(datax_x_file)
+#datax_x_name = "hyper_growth_salmon_farming_1.2"
+#datax_x_file = "data/" + datax_x_name + ".csv"
+#df_datax_x = pd.read_csv(datax_x_file)
 
-gx_x = pb.make_area_order_chart_grouped(
-    df_datax_x,
-    "Year",
-    "Tonnes - live weight",
-    title="Hyper-growth in salmon farming",
-)
-gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
+#gx_x = pb.make_area_order_chart_grouped(
+#    df_datax_x,
+#    "Year",
+#    "Tonnes - live weight",
+#    title="Hyper-growth in salmon farming",
+#)
+#gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
 
 
 # Graph 7 - Altenratives - no data

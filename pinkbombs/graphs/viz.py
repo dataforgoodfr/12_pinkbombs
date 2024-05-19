@@ -187,6 +187,79 @@ def make_area_order_chart(
     return area
 
 
+def make_area_chart_options(
+    input_df,
+    input_x,
+    input_y,
+    title,
+    legend_title,
+    color_area="#fd442f",
+    color_axis="white",
+    theme="simple_white",
+) -> Figure:
+    """Returns plotly express object as area chart with single lines
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualised
+            input_x (str): name of the field for the x axis
+            input_y (str): name of the field for the y axis
+            title (str): chart title
+            legend_title (str): legend title
+            color_area (str): color for the single area
+            color_axis (str): color of the axis, lines and font over transparent background, default is white 
+            theme (str): plotly chart theme, default is 'simple_white'
+    Returns:
+            area (plotly object): output chart object
+    """
+    # Data cleaning
+    try:
+        input_df[input_y] = input_df[input_y].str.replace(',', '.')
+        input_df[input_y] = input_df[input_y].astype(float)
+    except:
+        print("Input is not in string format")
+
+    fig = px.area(
+        input_df,
+        x=input_x,
+        y=input_y,
+        color_discrete_sequence=[color_area],
+        line_shape='spline',
+        )
+
+    fig.update_layout(template=theme, title=title,
+                      yaxis_title=None, xaxis_title=None)
+
+    fig.update_yaxes(exponentformat="none", tickformat='~s',
+                        #showgrid=True, 
+                        color=color_axis, linecolor=color_axis)    
+    fig.update_xaxes(color=color_axis, linecolor=color_axis)
+
+    # Remove hover functionality
+    fig.update_traces(hovertemplate=None, hoverinfo="skip")
+
+    # Set area with single color
+    fig.for_each_trace(lambda trace: trace.update(fillcolor = trace.line.color))
+
+    # Set up legend
+    fig.update_traces(showlegend = True)
+    fig.for_each_trace(lambda trace: trace.update(name=legend_title))
+    fig.update_layout(legend=dict(yanchor="top", y=1, xanchor="left", x=0.01))
+
+    # Block zoom
+    fig.layout.xaxis.fixedrange = True
+    fig.layout.yaxis.fixedrange = True
+
+    # Set background to transparent and axes in white
+    fig.update_layout({
+        'plot_bgcolor': 'rgba(0, 0, 0, 0)',
+        'paper_bgcolor': 'rgba(0, 0, 0, 0)',},                 
+                        font_color=color_axis)
+    fig.layout.yaxis.color = color_axis
+    fig.layout.legend.font.color = color_axis
+    #fig.layout.yaxis.gridcolor = color_axis
+
+    return fig
+
+
 def make_color_bar_chart(
     input_df,
     input_x,

@@ -4,6 +4,19 @@ import pandas as pd
 data_pays_file = 'data/country_pays.csv'
 df_pays = pd.read_csv(data_pays_file)
 
+# Data for Graph 1.0
+data1_0_name = 'numbers_salmons_farmed_1.0'
+data1_0_file = "data/"+data1_0_name+".csv"
+df_data1_0 = pd.read_csv(data1_0_file)
+
+df_data1_0_fr = df_data1_0.rename(columns = {
+    "Year":"Année",
+    "Tonnes - live weight": "Tonnes de saumon produit en élevage",
+    "Number of salmons (5kg each)": "Nombre de saumons (5kg chacun)"})
+
+data1_0_file_out = "data/" + data1_0_name + "_fr.csv"
+df_data1_0_fr.to_csv(data1_0_file_out)
+
 # Data for Graph 1.1
 data1_1_name = "discrease_wild_salmon_1.1"
 data1_1_file = "data/" + data1_1_name + ".csv"
