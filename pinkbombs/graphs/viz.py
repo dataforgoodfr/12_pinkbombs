@@ -547,7 +547,9 @@ def make_animated_bubble_map(
     input_time,
     input_size,
     title,
-    size_max=50,
+    min_year=1950, 
+    size_max=50, 
+    last_frame=True,
     palette=px.colors.qualitative.Prism,
     theme="simple_white",
     reverse=False,
@@ -559,16 +561,19 @@ def make_animated_bubble_map(
             input_hover (str): name of the field to show on hover
             input_time (str): name of the time field for the animation
             input_size (str): name of the field for the size of the bubbles
+            min_year (int): year to start the animation, default=1950
             title (str): chart title
             size_max (int): size of the maximum bubble radius, default=50
             palette (px.object): plotly discrete palette, default is Prism
             theme (str): plotly chart theme, default is 'simple_white'
-            reverse (boolean): to decide if time is reverse in the animation
+            last_frame (boolean): to add last frame as first
     Returns:
             area (plotly object): output chart object
     """
-    if reverse:
-        input_df = input_df.sort_values(by=input_time, ascending=False)
+    #if reverse:
+    #    input_df = input_df.sort_values(by=input_time, ascending=False)
+    if min_year > 1950:
+        input_df = input_df.loc[input_df[input_time] >= min_year, ]
 
     map = px.scatter_geo(
         input_df,
@@ -584,7 +589,15 @@ def make_animated_bubble_map(
     )
     map.update_geos(showcountries=True)
 
-    return map
+    if last_frame:
+        map2 = Figure()
+        for tr in map.frames[-1].data:
+            map2.add_trace(tr)
+        map2.layout = map.layout
+        map2.frames = map.frames
+        map2.layout['sliders'][0]['active'] = len(map.frames) - 1
+
+    return map2
 
 
 def make_treemap_chart(
