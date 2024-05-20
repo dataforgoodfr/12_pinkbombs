@@ -751,6 +751,8 @@ def make_simple_box_chart(
     input_y,
     title,
     xtitle,
+    ytitle, 
+    block_zoom=False,
     palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
 ) -> Figure:
@@ -761,6 +763,8 @@ def make_simple_box_chart(
             input_y (str): name of the field for the y-axis
             title (str): chart title
             xtitle (str): x-axis title
+            ytitle (str): y-axis title
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
             palette (px.object): Plotly discrete palette, default is Pastel1
             theme (str): Plotly chart theme, default is 'simple_white'
     Returns:
@@ -770,25 +774,41 @@ def make_simple_box_chart(
     input_df = input_df.sort_values(input_x, ascending=False)
 
     # Transform the input_y data
-    input_df[input_y] = input_df[input_y].str.replace(",", ".")
-    input_df[input_y] = input_df[input_y].astype(float)
+    try:
+        input_df[input_y] = input_df[input_y].str.replace(',', '.')
+        input_df[input_y] = input_df[input_y].astype(float)
+    except:
+        print("Input is not in string format")
+
+    # List of order and color
+    my_order = input_df.groupby(input_x)[input_y].median().sort_values().index.tolist()
+    my_col = ['#151c97'] * (len(my_order)-1) 
+    my_col.append('#ff4530')
 
     # Create the box plot
     box = px.box(
         input_df,
         y=input_y,  # Use the input_y field for the y-axis
         x=input_x,
+        color=input_x,
         title=title,
-        category_orders={
-            input_x: input_df.groupby(input_x)[input_y].median().sort_values().index.tolist()
-        },  # Update category orders accordingly
-        color_discrete_sequence=palette,  # Set color palette
+        category_orders={input_x: my_order},  # Update category orders accordingly
+        color_discrete_sequence=my_col,  
         hover_name=input_x,  # Update hover_name accordingly
     )
 
-    box.update_layout(template=theme, xaxis_title=xtitle, yaxis_title="Mortality Rate (%)")
+    box.update_layout(template=theme, xaxis_title=xtitle, yaxis_title=ytitle,
+                      showlegend=False)
     box.update_xaxes(exponentformat="none")
     box.update_coloraxes(colorbar_tickformat="0%")
+    box.update_traces(boxpoints=False) # remove outliers
+
+    # Remove hover
+    box.update_traces(hovertemplate = None, hoverinfo = "skip")
+
+    if block_zoom:
+        box.layout.xaxis.fixedrange = True
+        box.layout.yaxis.fixedrange = True
 
     return box
 

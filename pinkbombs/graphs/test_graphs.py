@@ -43,7 +43,7 @@ g1_1 = pb.make_area_single_chart(
     df_data1_1,
     "Year",
     "Tons of wild salmon catch in Atlantic waters",
-    "Tons of wild salmon catch in Atlantic waters",
+    "Tonnes of wild salmon catch in Atlantic waters",
     palette=['#151c97'],
     block_zoom=True,
 )
@@ -334,13 +334,31 @@ df_data4_4 = pd.read_csv(data4_4_file)
 
 g4_4 = pb.make_simple_box_chart(
     input_df=df_data4_4,
-    input_x='Company',
-    input_y='Mortality_rate',
-    title='Mortality rate by Companies',
-    xtitle='Company',
+    input_x="Company",
+    input_y="Mortality_rate",
+    title="Mortality rates of farmed salmons by company (2014-2022)",
+    xtitle=None,
+    ytitle="Mortality Rate (%)",
+    block_zoom=True,
 )
 
 g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + ".html")
+
+# Graph 4.4 - Escapes from marine cages - FRENCH
+data4_4_file = "data/" + data4_4_name + "_fr.csv"
+df_data4_4 = pd.read_csv(data4_4_file)
+
+g4_4 = pb.make_simple_box_chart(
+    input_df=df_data4_4,
+    input_x="Producteur",
+    input_y="Taux de mortalité",
+    title="Taux de mortalité des saumons d'élevage par producteur (2014-2022)",
+    xtitle=None,
+    ytitle="Taux de mortalité (%)",
+    block_zoom=True,
+)
+
+g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + "_fr.html")
 
 # Graph 5.1 - Carbon bombs
 data5_1_name = "carbon_bombs_pie_chart_5.1"

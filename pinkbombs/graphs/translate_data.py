@@ -109,3 +109,24 @@ df_data2_1_fr.to_csv(data2_1_file_out)
 
 
 # Data for Graph 2.3 - translated in Google sheet
+
+
+# Data for Graph 4.4
+data4_4_name = "mortality_rates_4.4"
+data4_4_file = "data/" + data4_4_name + ".csv"
+df_data4_4 = pd.read_csv(data4_4_file)
+
+df_data4_4 = df_data4_4.merge(df_pays, left_on='Area', right_on='name_eng', how = 'left')
+df_data4_4.loc[df_data4_4.name_fr.isna(),'name_fr'] = df_data4_4['Area']
+df_data4_4.loc[df_data4_4.name_fr == 'Scotland','name_fr'] = "Ecosse"
+
+df_data4_4_fr = df_data4_4.rename(columns={
+    "Year": "Année",
+    "Company":"Producteur",
+    "name_fr": "Région",
+    "Mortality_rate": "Taux de mortalité"
+    })
+
+data4_4_file_out = "data/" + data4_4_name + "_fr.csv"
+col_4_4_fr = ["Année", "Producteur", "Région", "Taux de mortalité"]
+df_data4_4_fr[col_4_4_fr].to_csv(data4_4_file_out)
