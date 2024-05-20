@@ -131,39 +131,6 @@ MAPPING = {
             False,
         ],
     },
-    "antibiotic-conso": {
-        "filename": "antibiotic_consumption_chile_4.2.csv",
-        "function": pb.make_color_bar_chart2,
-        "parser": pd.read_csv,
-        "arguments": [
-            "year",
-            "consom_atb_ton",
-            "biomass_harvested_ton",
-            {
-                "consom_atb_ton": "Antibiotics usage (tonnes)",
-                "biomass_harvested_ton": "Harvested biomass (tonnes)",
-            },
-            "Antibiotic usage in Chile (2007-2021)",
-            "Antibiotics usage (tonnes)",
-            [
-                '#151c97', 
-                '#ff4530',
-            ] 
-        ],
-    },
-    "escapes-rates": {
-        "filename": "escapes_marine_cages_3.5.csv",
-        "function": pb.make_treemap_chart,
-        "parser": pd.read_csv,
-        "arguments": [
-            "n_escape", 
-            "n_salmon_produced",
-            "escape_rate", 
-            "production (t)",
-            "Company",
-            "More than 4 millions fish escaped since 2018",
-        ],
-    },
     "mortality-rates": {
         "filename": "mortality_rates_4.4.csv",
         "function": pb.make_simple_box_chart,
@@ -173,24 +140,6 @@ MAPPING = {
             "Mortality_rate",
             "Mortality rate by Companies",
             "Company",
-        ],
-    },
-    "carbon-bomb": {
-        "filename": "carbon_bombs_pie_chart_5.1.csv",
-        "function": pb.make_simple_pie_chart,
-        "parser": pd.read_csv,
-        "arguments": [
-            "Scopes",
-            "Emissions (tons CO2eq)",
-            "Distribution of Emissions",
-            {
-                'Emissions (tons CO2eq)': ':,.0f'
-            },
-            [
-                '#f4e8d7', 
-                '#151c97', 
-                '#f8ef50'
-            ]
         ],
     },
     "alternatives": {
