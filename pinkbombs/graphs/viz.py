@@ -117,6 +117,7 @@ def make_area_order_chart(
     y_title, 
     min_date,
     reorder=False,
+    hide_zoom=False,
     palette=px.colors.qualitative.Dark24,
     theme="simple_white",
 ) -> Figure:
@@ -130,6 +131,7 @@ def make_area_order_chart(
             y_title (str): y axis title
             min_date (int): minimum year to be shown on plot initially
             reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False
+            hide_zoom (boolean): to hide the zoom in top right corner
             palette (px.object): plotly discrete palette, default is Dark24
             theme (str): plotly chart theme, default is 'simple_white'
     Returns:
@@ -183,6 +185,10 @@ def make_area_order_chart(
             ]
         )
     )
+
+    # Remove zoom
+    if hide_zoom:
+        area.update_layout(modebar_remove=['zoom', 'zoomIn', 'zoomOut'])
 
     return area
 
@@ -612,6 +618,9 @@ def make_animated_bubble_map(
         map2.layout = map.layout
         map2.frames = map.frames
         map2.layout['sliders'][0]['active'] = len(map.frames) - 1
+
+    # Remove lasso and select    
+    map2.update_layout(modebar_remove=['lasso2d', 'select2d'])
 
     return map2
 

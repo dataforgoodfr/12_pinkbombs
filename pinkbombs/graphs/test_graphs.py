@@ -65,7 +65,7 @@ g1_1 = pb.make_area_single_chart(
 g1_1.write_html("pinkbombs/graphs/test_html/" + data1_1_name + "_fr.html")
 
 
-# Graph 1.2 - Wild Altantic salmon collapse
+# Graph 1.2 - Hyper growth salmon farming
 data1_2_name = "hyper_growth_salmon_farming_1.2"
 data1_2_file = "data/" + data1_2_name + ".csv"
 df_data1_2 = pd.read_csv(data1_2_file)
@@ -79,6 +79,7 @@ g1_2 = pb.make_area_order_chart(
     y_title="Tonnes of salmon produced in farms", 
     min_date = 1975,
     reorder=True,
+    hide_zoom=True,
 )
 
 g1_2.write_html("pinkbombs/graphs/test_html/" + data1_2_name + ".html")
@@ -96,6 +97,7 @@ g1_2 = pb.make_area_order_chart(
     y_title="Tonnes de saumon produit en élevage", 
     min_date = 1975,
     reorder=True,
+    hide_zoom=True,
 )
 
 g1_2.write_html("pinkbombs/graphs/test_html/" + data1_2_name + "_fr.html")
