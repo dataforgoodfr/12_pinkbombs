@@ -76,7 +76,7 @@ g1_2 = pb.make_area_order_chart(
     "Tonnes - live weight",
     "Country",
     title="Farmed salmon production by country",
-    y_title="Tonnes of salmon produced in farms", 
+    y_title="Tonnes of farmed salmon produced", 
     min_date = 1975,
     reorder=True,
     hide_zoom=True,
