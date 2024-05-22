@@ -399,7 +399,8 @@ data7_file = "data/" + data7_name + ".csv"
 df_data_7 = pd.read_csv(data7_file)
 
 g7 = pb.make_matrix_alternatives(df_data_7, 
-                                 max_len_col=11,
+                                 max_len=60,
+                                 max_len_col=None, #11
                                  width=None, 
                                  height=None,
                                  hover_disable=False)
@@ -411,7 +412,8 @@ data7_file = "data/" + data7_name + "_fr.csv"
 df_data_7 = pd.read_csv(data7_file)
 
 g7 = pb.make_matrix_alternatives(df_data_7, 
-                                 max_len_col=11,
+                                 max_len=60,
+                                 max_len_col=None, #11
                                  width=None, 
                                  height=None,
                                  hover_disable=False)
