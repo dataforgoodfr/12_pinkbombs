@@ -140,13 +140,15 @@ MAPPING = {
         ],
     },
     "alternatives": {
-        "filename": "carbon_bombs_pie_chart_5.1.csv",
+        "filename": "alternatives_text_7.csv",
         "function": pb.make_matrix_alternatives,
         "parser": pd.read_csv,
         "arguments": [
-            900,
-            500,
-            True,
+            60,
+            11,
+            None,
+            None,
+            False
         ],
     },
 }
@@ -156,7 +158,9 @@ MAPS = {
         "filename": "ras_projects_for_map_2.4.csv",
         "function": pb.make_ras_bubble_map,
         "parser": pd.read_csv,
-        "arguments": [],
+        "arguments": [
+            True
+        ],
     },
 }
 
@@ -299,13 +303,15 @@ MAPPINGFR = {
         ],
     },
     "alternatives": {
-        "filename": "carbon_bombs_pie_chart_5.1.csv",
+        "filename": "alternatives_text_7_fr.csv",
         "function": pb.make_matrix_alternatives,
         "parser": pd.read_csv,
         "arguments": [
-            900,
-            500,
-            True,
+            60,
+            11,
+            None,
+            None,
+            False
         ],
     },
 }
@@ -315,6 +321,8 @@ MAPSFR = {
         "filename": "ras_projects_for_map_2.4.csv",
         "function": pb.make_ras_bubble_map,
         "parser": pd.read_csv,
-        "arguments": [],
+        "arguments": [
+            True
+        ],
     },
 }

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from plotly.graph_objects import Figure, Scatter, Heatmap
+import textwrap
 
 
 def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figure:
@@ -822,63 +823,84 @@ def make_simple_box_chart(
     return box
 
 
-def make_matrix_alternatives(df_dummy, width=900, height=500, hover_disable=False):
-    """Returns a waffle plot with 4 colors, with or without hover"""
+def make_matrix_alternatives(
+    input_df, 
+    max_len=60,
+    max_len_col=11,
+    width=900, 
+    height=500,
+    hover_disable=False
+) -> Figure:
+    """Returns a Plotly Express object as a Heatmap for the matrix of altenatives
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualized
+            title (str): chart title
+            max_len (int): Number of characters for text wrapping, Default is 60.
+            max_len_col (int): Number of characters for wrapping of columns names, Default is 11.
+            width (int): Dimension of the figure, Default is 900.
+            height (int): Dimension of the figure, Default is 500.
+            hover_disable (boolean): Decide if disable the hover. Default is False.
+    Returns:
+            box (Plotly object): output chart object
+    """
 
-    # Define size of matrix
-    m = 5
-    n = 8
-    data = np.zeros((m, n))
-
-    # Original data
-    data_original = np.matrix([
-            [2,2,3,2,0,0,0,0],
-            [1,1,0,1,2,2,4,4],
-            [0,0,1,1,1,1,4,1],
-            [4,2,1,2,2,2,0,0],
-            [4,3,2,2,0,0,0,0]])
-
-    # Change data to have only one green   
-    for i in range(m):
-        for j in range(n):
-            if data_original[i,j] == 0 or data_original[i,j] == 1:
-                data[i,j] = 0
-            else : 
-                data[i,j] = data_original[i,j] - 1
+    # Extract columns and rows names from the dataframe
+    col = input_df.columns.values.tolist()
+    col.pop(0)
+    row = input_df['Unnamed: 0'].tolist()[0:6]  
     
-    # Extra information to display on each cell
-    extra_info = [['Extra information to provide on this cell' for c in range(n)] for r in range(m)]
+    n_col = len(col)
+    n_row = len(row)
 
+    # Read the text into a matrix
+    customdata = input_df[col].to_numpy()
+    mat_col = input_df[col].to_numpy()
+
+    for i in range(n_row):
+        for j in range(n_col):
+            mat_col[i, j] = int(customdata[i, j][0]) # Take color code
+            customdata[i, j] = textwrap.fill(customdata[i, j][4:], max_len).replace("\n", "<br>") 
+        
     # Define colorscale and axes
-    colorscale = [
-                  #"#aaed99",  # light green
-                  "#6ecb57",  # dark green
-                  "#ffd336",  # yellow
-                  "#ff7e36",  # orange
-                  "#f34620"]  # red
+    mycolorscale = [
+                  "#bfcee1",  # light grey - NEW
+                  "#6ecb57",  # dark green - Paul
+                  "#aaed99",  # light green - Paul
+                  "#ffd336",  # yellow - Paul
+                  "#ff7e36",  # orange - Paul
+                  "#f34620",  # red - Paul
+                  "#cc0100",  # dark red - NEW
+        ]
+    
+    # Wrap column names
+    if max_len_col is not None:
+        col = [textwrap.fill(el, max_len_col).replace("\n", "<br>") for el in col]
 
-    xlabels = ['Saumon<br>Elevage<br>terrestre',
-              'Saumon<br>Elevage<br>en mer' ,
-              'Pélagiques:<br>maquereaux/<br>sardines',
-              "Mollusques &<br>Coquillages",
-              "Algue", 'Graine de lin<br>ou noix', "Huile de<br>Colza",
-              "Legumineuse<br>ou soja local"]
-    ylabels = ['Metaux lourds', 'Apport en Omegas', 'Apport en proteines', 'Empreinte Carbone',
-              'Impacts sociaux'] 
+    fig = Figure(Heatmap(x=col, y = row, z=mat_col,
+        customdata=customdata,
+        xgap=4, ygap=4,
+        colorscale=mycolorscale,
+        showscale=False,
+        hovertemplate="%{customdata}<extra></extra>",
+        hoverlabel=dict(bgcolor='white')))
 
-    fig = Figure(Heatmap(x=xlabels, y = ylabels, z=data,
-                              customdata=extra_info, xgap=4, ygap=4,
-                              colorscale=colorscale, 
-                              showscale=False,
-                              hovertemplate="(%{y}, %{x}): %{customdata}<extra></extra>"))
-    fig.update_layout(width=width, height=height, 
-                      yaxis_autorange='reversed',
+    # Transparent background and x-axis on top
+    fig.update_layout(yaxis_autorange='reversed',
                       paper_bgcolor="rgba(0,0,0,0)", 
-                      plot_bgcolor="rgba(0,0,0,0)") #, template='simple_white')
-    fig.update_xaxes(side='top') #visible=False, showticklabels=True)
+                      plot_bgcolor="rgba(0,0,0,0)",
+                      xaxis=dict(showgrid=False),
+                      yaxis=dict(showgrid=False)) 
+    fig.update_xaxes(side='top') 
+
+    #Block zoom
+    fig.layout.xaxis.fixedrange = True
+    fig.layout.yaxis.fixedrange = True
+
+    if width is not None:
+        fig.update_layout(width=width, height=height) 
 
     if hover_disable:
         fig.update_traces(hovertemplate = None, hoverinfo = "skip")
 
-    return fig  
+    return fig
 

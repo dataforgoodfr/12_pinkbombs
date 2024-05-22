@@ -393,7 +393,27 @@ g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")
 #gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
 
 
-# Graph 7 - Altenratives - no data
-g7 = pb.make_matrix_alternatives(pd.DataFrame({'A' : []}), hover_disable=True)
+# Graph 7 - Altenratives 
+data7_name = "alternatives_text_7"
+data7_file = "data/" + data7_name + ".csv"
+df_data_7 = pd.read_csv(data7_file)
 
-g7.write_html("pinkbombs/graphs/test_html/alternatives.html")
+g7 = pb.make_matrix_alternatives(df_data_7, 
+                                 max_len_col=11,
+                                 width=None, 
+                                 height=None,
+                                 hover_disable=False)
+
+g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
+
+# Graph 7 - Altenratives - FRENCH
+data7_file = "data/" + data7_name + "_fr.csv"
+df_data_7 = pd.read_csv(data7_file)
+
+g7 = pb.make_matrix_alternatives(df_data_7, 
+                                 max_len_col=11,
+                                 width=None, 
+                                 height=None,
+                                 hover_disable=False)
+
+g7.write_html("pinkbombs/graphs/test_html/alternatives_7_fr.html")
