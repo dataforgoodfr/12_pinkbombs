@@ -9,10 +9,11 @@ MAPPING = {
         "arguments": [
             "Year",
             "Tons of wild salmon catch in Atlantic waters",
-            "Wild Altantic salmon collapse",
+            "Tonnes of wild salmon catch in Atlantic waters",
             [
                 '#151c97'
             ],
+            True,
         ],
     },
     "hyper-growth": {
@@ -23,19 +24,22 @@ MAPPING = {
             "Year",
             "Tonnes - live weight",
             "Country",
-            "Hyper-growth in salmon farming",
+            "Farmed salmon production by country",
+            "Tonnes of farmed salmon produced",
+            1975,
+            True,
             True,
         ],
-    },    
+    },
     "hyper-growth-grouped": {
-        "filename": "hyper_growth_salmon_farming_1.2.csv",
-        "function": pb.make_area_order_chart_grouped,
+        "filename": "numbers_salmons_farmed_1.0.csv",
+        "function": pb.make_area_chart_options,
         "parser": pd.read_csv,
         "arguments": [
             "Year",
-            "Tonnes - live weight",
-            "Hyper-growth in salmon farming",
-            "#fd442f",
+            "Number of salmons (5kg each)",
+            "Production of farmed salmons",
+            "Number of salmons produced every year",
         ],
     },
     "top-10": {
@@ -47,13 +51,14 @@ MAPPING = {
             "Country",
             "Flag",
             "% of total",
-            "Top 10 countries producing salmon (2021)",
-            "Tonnes of farmed salmon produced",
-            "Country",
+            "Top 10 countries producing salmon by tonnes (2021)",
+            None,
+            None,
             [
                 '#151c97', 
                 '#ff4530'
-            ]
+            ],
+            True,
         ],
     },
     "evolution-map": {
@@ -66,6 +71,10 @@ MAPPING = {
             "Year",
             "Tonnes - live weight",
             "Evolution of salmon farming by country",
+            1980,
+            [
+                '#151c97',
+            ],
         ],
     },
     "top-comp": {
@@ -87,10 +96,11 @@ MAPPING = {
                 "Employees 2022",
                 "Note",
             ],
-            "Top 10 companies producing salmon",
-            "Volume of salmon produced in tonnes (2022)",
-            "Company",
+            "Top 10 companies producing salmon by tonnes (2022)",
+            None,
+            None,
             "#151c97",
+            True,
         ],
     },
     "top-land": {
@@ -108,44 +118,12 @@ MAPPING = {
                 "Countries of projects",
                 "Note",
             ],
-            "Top 10 RAS companies producing salmon",
+            "Top 10 land-based salmon productors (ambitions)",
             "Company ambition for salmon production in tonnes",
-            "Company",
+            None,
             "#151c97",
+            True,
             False,
-        ],
-    },
-    "antibiotic-conso": {
-        "filename": "antibiotic_consumption_chile_4.2.csv",
-        "function": pb.make_color_bar_chart2,
-        "parser": pd.read_csv,
-        "arguments": [
-            "year",
-            "consom_atb_ton",
-            "biomass_harvested_ton",
-            {
-                "consom_atb_ton": "Antibiotics usage (tonnes)",
-                "biomass_harvested_ton": "Harvested biomass (tonnes)",
-            },
-            "Antibiotic usage in Chile (2007-2021)",
-            "Antibiotics usage (tonnes)",
-            [
-                '#151c97', 
-                '#ff4530',
-            ] 
-        ],
-    },
-    "escapes-rates": {
-        "filename": "escapes_marine_cages_3.5.csv",
-        "function": pb.make_treemap_chart,
-        "parser": pd.read_csv,
-        "arguments": [
-            "n_escape", 
-            "n_salmon_produced",
-            "escape_rate", 
-            "production (t)",
-            "Company",
-            "More than 4 millions fish escaped since 2018",
         ],
     },
     "mortality-rates": {
@@ -155,36 +133,22 @@ MAPPING = {
         "arguments": [
             "Company",
             "Mortality_rate",
-            "Mortality rate by Companies",
-            "Company",
-        ],
-    },
-    "carbon-bomb": {
-        "filename": "carbon_bombs_pie_chart_5.1.csv",
-        "function": pb.make_simple_pie_chart,
-        "parser": pd.read_csv,
-        "arguments": [
-            "Scopes",
-            "Emissions (tons CO2eq)",
-            "Distribution of Emissions",
-            {
-                'Emissions (tons CO2eq)': ':,.0f'
-            },
-            [
-                '#f4e8d7', 
-                '#151c97', 
-                '#f8ef50'
-            ]
+            "Mortality rates of farmed salmons by company (2014-2022)",
+            None,
+            "Mortality Rate (%)",
+            True,
         ],
     },
     "alternatives": {
-        "filename": "carbon_bombs_pie_chart_5.1.csv",
+        "filename": "alternatives_text_7.csv",
         "function": pb.make_matrix_alternatives,
         "parser": pd.read_csv,
         "arguments": [
-            900,
-            500,
-            True,
+            60,
+            11,
+            None,
+            None,
+            False
         ],
     },
 }
@@ -194,6 +158,171 @@ MAPS = {
         "filename": "ras_projects_for_map_2.4.csv",
         "function": pb.make_ras_bubble_map,
         "parser": pd.read_csv,
-        "arguments": [],
+        "arguments": [
+            True
+        ],
+    },
+}
+
+MAPPINGFR = {
+    "salmon-collapse": {
+        "filename": "discrease_wild_salmon_1.1_fr.csv",
+        "function": pb.make_area_single_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Année",
+            "Saumon pêché dans l'Atlantique en tonnes",
+            "Saumon pêché dans l'Atlantique en tonnes",
+            [
+                '#151c97'
+            ],
+            True,
+        ],
+    },
+    "hyper-growth": {
+        "filename": "hyper_growth_salmon_farming_1.2_fr.csv",
+        "function": pb.make_area_order_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Année",
+            "Tonnes de saumon produit en élevage",
+            "Pays",
+            "Production de saumon d'élevage par pays",
+            "Tonnes de saumon produit en élevage",
+            1975,
+            True,
+            True,
+        ],
+    },
+    "hyper-growth-grouped": {
+        "filename": "numbers_salmons_farmed_1.0_fr.csv",
+        "function": pb.make_area_chart_options,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Année",
+            "Nombre de saumons (5kg chacun)",
+            "Production de saumons d'élevage",
+            "Nombre de saumons produits chaque année",
+        ],
+    },   
+    "top-10": {
+        "filename": "top_10_countries_producing_1.3_fr.csv",
+        "function": pb.make_color_bar_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Tonnes de saumon",
+            "Pays",
+            "Drapeau",
+            "% du total",
+            "Top 10 pays producteurs de saumon par tonnes (2021)",
+            None,
+            None,
+            [
+                '#151c97', 
+                '#ff4530'
+            ],
+            True,
+        ],
+    },
+    "evolution-map": {
+        "filename": "evolution_salmon_farming_country_iso_1.4_fr.csv",
+        "function": pb.make_animated_bubble_map,
+        "parser": pd.read_csv,
+        "arguments": [
+            "alpha-3",
+            "Pays",
+            "Année",
+            "Tonnes de saumon",
+            "Evolution de l'élevage du saumon par pays",
+            1980,
+            [
+                '#151c97',
+            ],
+        ],
+    },
+    "top-comp": {
+        "filename": "top_10_companies_producing_2.1_fr.csv",
+        "function": pb.make_simple_bar_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Tonnes de saumon 2022",
+            "Producteur",
+            "Drapeau",
+            "Revenus 2022",
+            "Employés 2022",
+            [
+                "Nom commercial",
+                "Date de création",
+                "Siège",
+                "Site internet",
+                "Revenus 2022",
+                "Employés 2022",
+                "Note",
+            ],
+            "Top 10 producteurs de saumon par tonnes (2022)",
+            None,
+            None,
+            "#151c97",
+            True,
+        ],
+    },
+    "top-land": {
+        "filename": "top_10_ras_companies_2.3_fr.csv",
+        "function": pb.make_simple_bar_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Production en tonnes",
+            "Producteur",
+            "Drapeau",
+            "Revenus 2022 dollars",
+            "Employés 2022",
+            [
+                "Nombre de projets",
+                "Pays des projets",
+                "Note",
+            ],
+            "Top 10 producteurs de saumon d'élevage terrestre (ambitions)",
+            "Ambitions des producteurs pour la production de saumon en tonnes",
+            None,
+            "#151c97",
+            True,
+            False,
+        ],
+    },
+    "mortality-rates": {
+        "filename": "mortality_rates_4.4_fr.csv",
+        "function": pb.make_simple_box_chart,
+        "parser": pd.read_csv,
+        "arguments": [
+            "Producteur",
+            "Taux de mortalité",
+            "Taux de mortalité des saumons d'élevage par producteur (2014-2022)",
+            None,
+            "Taux de mortalité (%)",
+            True,
+        ],
+    },
+    "alternatives": {
+        "filename": "alternatives_text_7_fr.csv",
+        "function": pb.make_matrix_alternatives,
+        "parser": pd.read_csv,
+        "arguments": [
+            60,
+            11,
+            None,
+            None,
+            False
+        ],
+    },
+}
+
+MAPSFR = {
+    "ras-map": {
+        "filename": "ras_projects_for_map_2.4.csv",
+        "function": pb.make_ras_bubble_map,
+        "parser": pd.read_csv,
+        "arguments": [
+            True
+        ],
     },
 }

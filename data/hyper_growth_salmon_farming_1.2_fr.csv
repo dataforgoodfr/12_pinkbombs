@@ -1,0 +1,901 @@
+,Année,Tonnes de saumon produit en élevage,Pays
+0,1950,0,Royaume-Uni
+1,1950,0,Suède
+2,1950,0,Norvège
+3,1950,0,République Populaire Démocratique de Corée
+4,1950,0,Irlande
+5,1950,0,Finlande
+6,1950,0,Canada
+7,1951,0,Royaume-Uni
+8,1951,0,Suède
+9,1951,0,Norvège
+10,1951,0,République Populaire Démocratique de Corée
+11,1951,0,Irlande
+12,1951,0,Finlande
+13,1951,0,Canada
+14,1952,0,Royaume-Uni
+15,1952,0,Suède
+16,1952,0,Norvège
+17,1952,0,République Populaire Démocratique de Corée
+18,1952,0,Irlande
+19,1952,0,Finlande
+20,1952,0,Canada
+21,1953,0,Royaume-Uni
+22,1953,0,Suède
+23,1953,0,Norvège
+24,1953,0,République Populaire Démocratique de Corée
+25,1953,0,Irlande
+26,1953,0,Finlande
+27,1953,0,Canada
+28,1954,0,Royaume-Uni
+29,1954,0,Suède
+30,1954,0,Norvège
+31,1954,0,République Populaire Démocratique de Corée
+32,1954,0,Irlande
+33,1954,0,Finlande
+34,1954,0,Canada
+35,1955,0,Royaume-Uni
+36,1955,0,Suède
+37,1955,0,Norvège
+38,1955,0,République Populaire Démocratique de Corée
+39,1955,0,Irlande
+40,1955,0,Finlande
+41,1955,0,Canada
+42,1956,0,Royaume-Uni
+43,1956,0,Suède
+44,1956,0,Norvège
+45,1956,0,République Populaire Démocratique de Corée
+46,1956,0,Irlande
+47,1956,0,Finlande
+48,1956,0,Canada
+49,1957,0,Royaume-Uni
+50,1957,0,Suède
+51,1957,0,Norvège
+52,1957,0,République Populaire Démocratique de Corée
+53,1957,0,Irlande
+54,1957,0,Finlande
+55,1957,0,Canada
+56,1958,0,Royaume-Uni
+57,1958,0,Suède
+58,1958,0,Norvège
+59,1958,0,République Populaire Démocratique de Corée
+60,1958,0,Irlande
+61,1958,0,Finlande
+62,1958,0,Canada
+63,1959,0,Royaume-Uni
+64,1959,0,Suède
+65,1959,0,Norvège
+66,1959,0,République Populaire Démocratique de Corée
+67,1959,0,Irlande
+68,1959,0,Finlande
+69,1959,0,Canada
+70,1960,0,Royaume-Uni
+71,1960,0,Suède
+72,1960,0,Norvège
+73,1960,0,République Populaire Démocratique de Corée
+74,1960,0,Irlande
+75,1960,0,Finlande
+76,1960,0,Canada
+77,1961,0,Royaume-Uni
+78,1961,0,Suède
+79,1961,0,Norvège
+80,1961,0,République Populaire Démocratique de Corée
+81,1961,0,Irlande
+82,1961,0,Finlande
+83,1961,0,Canada
+84,1962,0,Royaume-Uni
+85,1962,0,Suède
+86,1962,0,Norvège
+87,1962,0,République Populaire Démocratique de Corée
+88,1962,0,Irlande
+89,1962,0,Finlande
+90,1962,0,Canada
+91,1963,0,Royaume-Uni
+92,1963,0,Suède
+93,1963,0,Norvège
+94,1963,0,République Populaire Démocratique de Corée
+95,1963,0,Irlande
+96,1963,0,Finlande
+97,1963,0,Canada
+98,1964,0,Royaume-Uni
+99,1964,0,Suède
+100,1964,1,Norvège
+101,1964,0,République Populaire Démocratique de Corée
+102,1964,0,Irlande
+103,1964,0,Finlande
+104,1964,0,Canada
+105,1965,0,Royaume-Uni
+106,1965,0,Suède
+107,1965,2,Norvège
+108,1965,0,République Populaire Démocratique de Corée
+109,1965,0,Irlande
+110,1965,0,Finlande
+111,1965,0,Canada
+112,1966,0,Royaume-Uni
+113,1966,0,Suède
+114,1966,4,Norvège
+115,1966,0,République Populaire Démocratique de Corée
+116,1966,0,Irlande
+117,1966,0,Finlande
+118,1966,0,Canada
+119,1967,0,Royaume-Uni
+120,1967,0,Suède
+121,1967,8,Norvège
+122,1967,0,République Populaire Démocratique de Corée
+123,1967,0,Irlande
+124,1967,0,Finlande
+125,1967,0,Canada
+126,1968,0,Royaume-Uni
+127,1968,0,Suède
+128,1968,15,Norvège
+129,1968,0,République Populaire Démocratique de Corée
+130,1968,0,Irlande
+131,1968,0,Finlande
+132,1968,0,Canada
+133,1969,0,Royaume-Uni
+134,1969,0,Suède
+135,1969,27,Norvège
+136,1969,0,République Populaire Démocratique de Corée
+137,1969,0,Irlande
+138,1969,0,Finlande
+139,1969,0,Canada
+140,1970,244,Royaume-Uni
+141,1970,0,Suède
+142,1970,50,Norvège
+143,1970,0,République Populaire Démocratique de Corée
+144,1970,0,Irlande
+145,1970,0,Islande
+146,1970,0,Finlande
+147,1970,0,Chili
+148,1970,0,Canada
+149,1971,216,Royaume-Uni
+150,1971,0,Suède
+151,1971,98,Norvège
+152,1971,0,République Populaire Démocratique de Corée
+153,1971,0,Irlande
+154,1971,0,Islande
+155,1971,0,Finlande
+156,1971,0,Chili
+157,1971,0,Canada
+158,1972,213,Royaume-Uni
+159,1972,0,Suède
+160,1972,146,Norvège
+161,1972,0,République Populaire Démocratique de Corée
+162,1972,0,Irlande
+163,1972,0,Islande
+164,1972,0,Finlande
+165,1972,0,Chili
+166,1972,0,Canada
+167,1973,401,Royaume-Uni
+168,1973,0,Suède
+169,1973,171,Norvège
+170,1973,0,République Populaire Démocratique de Corée
+171,1973,0,Irlande
+172,1973,0,Islande
+173,1973,0,Finlande
+174,1973,0,Chili
+175,1973,0,Canada
+176,1974,372,Royaume-Uni
+177,1974,0,Suède
+178,1974,601,Norvège
+179,1974,0,République Populaire Démocratique de Corée
+180,1974,1,Irlande
+181,1974,0,Islande
+182,1974,0,Finlande
+183,1974,0,Chili
+184,1974,0,Canada
+185,1975,393,Royaume-Uni
+186,1975,0,Suède
+187,1975,862,Norvège
+188,1975,0,République Populaire Démocratique de Corée
+189,1975,2,Irlande
+190,1975,1,Islande
+191,1975,0,Finlande
+192,1975,0,Chili
+193,1975,0,Canada
+194,1976,209,Royaume-Uni
+195,1976,0,Suède
+196,1976,1431,Norvège
+197,1976,0,République Populaire Démocratique de Corée
+198,1976,5,Irlande
+199,1976,5,Islande
+200,1976,0,Finlande
+201,1976,1,Îles Féroé
+202,1976,0,Chili
+203,1976,0,Canada
+204,1977,115,Royaume-Uni
+205,1977,5,Suède
+206,1977,2137,Norvège
+207,1977,0,République Populaire Démocratique de Corée
+208,1977,10,Irlande
+209,1977,8,Islande
+210,1977,0,Finlande
+211,1977,2,Îles Féroé
+212,1977,0,Chili
+213,1977,0,Canada
+214,1978,378,Royaume-Uni
+215,1978,10,Suède
+216,1978,3540,Norvège
+217,1978,0,République Populaire Démocratique de Corée
+218,1978,10,Irlande
+219,1978,13,Islande
+220,1978,0,Finlande
+221,1978,5,Îles Féroé
+222,1978,0,Chili
+223,1978,0,Canada
+224,1979,520,Royaume-Uni
+225,1979,15,Suède
+226,1979,4389,Norvège
+227,1979,0,République Populaire Démocratique de Corée
+228,1979,13,Irlande
+229,1979,19,Islande
+230,1979,0,Finlande
+231,1979,0,Chili
+232,1979,5,Canada
+233,1980,598,Royaume-Uni
+234,1980,30,Suède
+235,1980,4312,Norvège
+236,1980,0,République Populaire Démocratique de Corée
+237,1980,21,Irlande
+238,1980,27,Islande
+239,1980,251,Finlande
+240,1980,22,Îles Féroé
+241,1980,0,Chili
+242,1980,27,Canada
+243,1981,1133,Royaume-Uni
+244,1981,0,Turquie
+245,1981,50,Suède
+246,1981,8418,Norvège
+247,1981,0,République Populaire Démocratique de Corée
+248,1981,35,Irlande
+249,1981,39,Islande
+250,1981,312,Finlande
+251,1981,45,Îles Féroé
+252,1981,0,Chili
+253,1981,76,Canada
+254,1982,2152,Royaume-Uni
+255,1982,0,Turquie
+256,1982,50,Suède
+257,1982,10695,Norvège
+258,1982,0,République Populaire Démocratique de Corée
+259,1982,100,Irlande
+260,1982,56,Islande
+261,1982,9,Finlande
+262,1982,60,Îles Féroé
+263,1982,0,Chili
+264,1982,143,Canada
+265,1983,2536,Royaume-Uni
+266,1983,0,Turquie
+267,1983,75,Suède
+268,1983,17298,Norvège
+269,1983,0,République Populaire Démocratique de Corée
+270,1983,257,Irlande
+271,1983,79,Islande
+272,1983,235,Finlande
+273,1983,90,Îles Féroé
+274,1983,0,Chili
+275,1983,68,Canada
+276,1984,3912,Royaume-Uni
+277,1984,0,Turquie
+278,1984,118,Suède
+279,1984,150,Espagne
+280,1984,21881,Norvège
+281,1984,0,République Populaire Démocratique de Corée
+282,1984,385,Irlande
+283,1984,107,Islande
+284,1984,93,Finlande
+285,1984,117,Îles Féroé
+286,1984,0,Chili
+287,1984,222,Canada
+288,1985,6921,Royaume-Uni
+289,1985,0,Turquie
+290,1985,81,Suède
+291,1985,150,Espagne
+292,1985,29473,Norvège
+293,1985,0,République Populaire Démocratique de Corée
+294,1985,700,Irlande
+295,1985,91,Islande
+296,1985,92,Finlande
+297,1985,940,Îles Féroé
+298,1985,0,Chili
+299,1985,349,Canada
+300,1986,8,États-Unis
+301,1986,10337,Royaume-Uni
+302,1986,0,Turquie
+303,1986,160,Suède
+304,1986,150,Espagne
+305,1986,44831,Norvège
+306,1986,0,République Populaire Démocratique de Corée
+307,1986,1215,Irlande
+308,1986,123,Islande
+309,1986,93,Finlande
+310,1986,1370,Îles Féroé
+311,1986,0,Chili
+312,1986,682,Canada
+313,1986,10,Australie
+314,1987,113,États-Unis
+315,1987,12721,Royaume-Uni
+316,1987,0,Turquie
+317,1987,224,Suède
+318,1987,150,Espagne
+319,1987,46453,Norvège
+320,1987,0,République Populaire Démocratique de Corée
+321,1987,2300,Irlande
+322,1987,490,Islande
+323,1987,3,Grèce
+324,1987,11,Finlande
+325,1987,3193,Îles Féroé
+326,1987,41,Chili
+327,1987,1385,Canada
+328,1987,62,Australie
+329,1988,898,États-Unis
+330,1988,17951,Royaume-Uni
+331,1988,0,Turquie
+332,1988,363,Suède
+333,1988,150,Espagne
+334,1988,0,Portugal
+335,1988,78744,Norvège
+336,1988,0,République Populaire Démocratique de Corée
+337,1988,4075,Irlande
+338,1988,1053,Islande
+339,1988,11,Grèce
+340,1988,117,Finlande
+341,1988,3400,Îles Féroé
+342,1988,165,Chili
+343,1988,3431,Canada
+344,1988,240,Australie
+345,1989,2554,États-Unis
+346,1989,28603,Royaume-Uni
+347,1989,0,Turquie
+348,1989,771,Suède
+349,1989,150,Espagne
+350,1989,100,Portugal
+351,1989,111337,Norvège
+352,1989,0,République Populaire Démocratique de Corée
+353,1989,5500,Irlande
+354,1989,1480,Islande
+355,1989,19,Grèce
+356,1989,71,Finlande
+357,1989,7901,Îles Féroé
+358,1989,1860,Chili
+359,1989,5967,Canada
+360,1989,1750,Australie
+361,1990,3185,États-Unis
+362,1990,32004,Royaume-Uni
+363,1990,300,Turquie
+364,1990,602,Suède
+365,1990,355,Espagne
+366,1990,120,Portugal
+367,1990,145990,Norvège
+368,1990,0,République Populaire Démocratique de Corée
+369,1990,6323,Irlande
+370,1990,2716,Islande
+371,1990,12,Grèce
+372,1990,157,Finlande
+373,1990,13025,Îles Féroé
+374,1990,9478,Chili
+375,1990,9625,Canada
+376,1990,1750,Australie
+377,1991,6661,États-Unis
+378,1991,40657,Royaume-Uni
+379,1991,1500,Turquie
+380,1991,270,Suède
+381,1991,553,Espagne
+382,1991,100,Portugal
+383,1991,154900,Norvège
+384,1991,0,République Populaire Démocratique de Corée
+385,1991,9300,Irlande
+386,1991,2566,Islande
+387,1991,33,Grèce
+388,1991,574,France
+389,1991,146,Finlande
+390,1991,17914,Îles Féroé
+391,1991,14957,Chili
+392,1991,13499,Canada
+393,1991,2653,Australie
+394,1992,10028,États-Unis
+395,1992,36302,Royaume-Uni
+396,1992,680,Turquie
+397,1992,388,Suède
+398,1992,782,Espagne
+399,1992,0,Fédération de Russie
+400,1992,0,Portugal
+401,1992,124138,Norvège
+402,1992,0,République Populaire Démocratique de Corée
+403,1992,9696,Irlande
+404,1992,2125,Islande
+405,1992,20,Grèce
+406,1992,600,France
+407,1992,85,Finlande
+408,1992,18364,Îles Féroé
+409,1992,23715,Chili
+410,1992,17305,Canada
+411,1992,3300,Australie
+412,1993,10750,États-Unis
+413,1993,48791,Royaume-Uni
+414,1993,791,Turquie
+415,1993,4,Suède
+416,1993,562,Espagne
+417,1993,0,Fédération de Russie
+418,1993,0,Portugal
+419,1993,155581,Norvège
+420,1993,0,République Populaire Démocratique de Corée
+421,1993,12366,Irlande
+422,1993,2348,Islande
+423,1993,30,Grèce
+424,1993,564,France
+425,1993,0,Finlande
+426,1993,17660,Îles Féroé
+427,1993,29180,Chili
+428,1993,23483,Canada
+429,1993,3500,Australie
+430,1994,10906,États-Unis
+431,1994,64266,Royaume-Uni
+432,1994,434,Turquie
+433,1994,7,Suède
+434,1994,909,Espagne
+435,1994,0,Fédération de Russie
+436,1994,0,Portugal
+437,1994,202459,Norvège
+438,1994,0,République Populaire Démocratique de Corée
+439,1994,11616,Irlande
+440,1994,2588,Islande
+441,1994,74,Grèce
+442,1994,856,France
+443,1994,0,Finlande
+444,1994,14868,Îles Féroé
+445,1994,34175,Chili
+446,1994,27773,Canada
+447,1994,4000,Australie
+448,1995,14075,États-Unis
+449,1995,70322,Royaume-Uni
+450,1995,654,Turquie
+451,1995,19,Suède
+452,1995,695,Espagne
+453,1995,0,Fédération de Russie
+454,1995,0,Portugal
+455,1995,261522,Norvège
+456,1995,0,République Populaire Démocratique de Corée
+457,1995,11811,Irlande
+458,1995,2591,Islande
+459,1995,7,Grèce
+460,1995,894,France
+461,1995,0,Finlande
+462,1995,8539,Îles Féroé
+463,1995,54250,Chili
+464,1995,33674,Canada
+465,1995,6192,Australie
+466,1996,13906,États-Unis
+467,1996,83344,Royaume-Uni
+468,1996,193,Turquie
+469,1996,12,Suède
+470,1996,726,Espagne
+471,1996,0,Fédération de Russie
+472,1996,4,Portugal
+473,1996,297557,Norvège
+474,1996,0,République Populaire Démocratique de Corée
+475,1996,14025,Irlande
+476,1996,2832,Islande
+477,1996,9,Grèce
+478,1996,800,France
+479,1996,0,Finlande
+480,1996,17049,Îles Féroé
+481,1996,77327,Chili
+482,1996,36475,Canada
+483,1996,7647,Australie
+484,1997,18005,États-Unis
+485,1997,99422,Royaume-Uni
+486,1997,50,Turquie
+487,1997,0,Suède
+488,1997,851,Espagne
+489,1997,0,Fédération de Russie
+490,1997,250,Portugal
+491,1997,332581,Norvège
+492,1997,0,République Populaire Démocratique de Corée
+493,1997,15441,Irlande
+494,1997,2513,Islande
+495,1997,12,Grèce
+496,1997,950,France
+497,1997,0,Finlande
+498,1997,21103,Îles Féroé
+499,1997,96675,Chili
+500,1997,51015,Canada
+501,1997,7648,Australie
+502,1998,14507,États-Unis
+503,1998,110917,Royaume-Uni
+504,1998,40,Turquie
+505,1998,0,Suède
+506,1998,798,Espagne
+507,1998,0,Fédération de Russie
+508,1998,360806,Norvège
+509,1998,0,République Populaire Démocratique de Corée
+510,1998,14860,Irlande
+511,1998,2742,Islande
+512,1998,11,Grèce
+513,1998,760,France
+514,1998,0,Finlande
+515,1998,19176,Îles Féroé
+516,1998,107066,Chili
+517,1998,49475,Canada
+518,1998,7069,Australie
+519,1999,17739,États-Unis
+520,1999,126686,Royaume-Uni
+521,1999,0,Turquie
+522,1999,0,Suède
+523,1999,618,Espagne
+524,1999,5,Fédération de Russie
+525,1999,425154,Norvège
+526,1999,0,République Populaire Démocratique de Corée
+527,1999,18076,Irlande
+528,1999,2900,Islande
+529,1999,9,Grèce
+530,1999,750,France
+531,1999,0,Finlande
+532,1999,39252,Îles Féroé
+533,1999,103242,Chili
+534,1999,61990,Canada
+535,1999,9195,Australie
+536,2000,22395,États-Unis
+537,2000,128959,Royaume-Uni
+538,2000,0,Turquie
+539,2000,0,Suède
+540,2000,226,Espagne
+541,2000,0,Fédération de Russie
+542,2000,440061,Norvège
+543,2000,0,République Populaire Démocratique de Corée
+544,2000,17648,Irlande
+545,2000,2593,Islande
+546,2000,17,Grèce
+547,2000,102,France
+548,2000,0,Finlande
+549,2000,33508,Îles Féroé
+550,2000,166897,Chili
+551,2000,72495,Canada
+552,2000,10907,Australie
+553,2001,20769,États-Unis
+554,2001,138519,Royaume-Uni
+555,2001,0,Turquie
+556,2001,0,Suède
+557,2001,323,Espagne
+558,2001,0,Fédération de Russie
+559,2001,436103,Norvège
+560,2001,0,République Populaire Démocratique de Corée
+561,2001,23312,Irlande
+562,2001,2645,Islande
+563,2001,23,Grèce
+564,2001,90,France
+565,2001,0,Finlande
+566,2001,46041,Îles Féroé
+567,2001,253850,Chili
+568,2001,95606,Canada
+569,2001,12724,Australie
+570,2002,12734,États-Unis
+571,2002,145609,Royaume-Uni
+572,2002,0,Turquie
+573,2002,0,Suède
+574,2002,152,Espagne
+575,2002,0,Fédération de Russie
+576,2002,462495,Norvège
+577,2002,0,République Populaire Démocratique de Corée
+578,2002,23231,Irlande
+579,2002,1471,Islande
+580,2002,28,Grèce
+581,2002,443,France
+582,2002,0,Finlande
+583,2002,44953,Îles Féroé
+584,2002,15,Danemark
+585,2002,265726,Chili
+586,2002,114921,Canada
+587,2002,14356,Australie
+588,2003,16315,États-Unis
+589,2003,145609,Royaume-Uni
+590,2003,0,Turquie
+591,2003,0,Suède
+592,2003,27,Espagne
+593,2003,300,Fédération de Russie
+594,2003,509544,Norvège
+595,2003,0,République Populaire Démocratique de Corée
+596,2003,16347,Irlande
+597,2003,3708,Islande
+598,2003,9,Grèce
+599,2003,544,France
+600,2003,0,Finlande
+601,2003,52526,Îles Féroé
+602,2003,16,Danemark
+603,2003,280301,Chili
+604,2003,107228,Canada
+605,2003,15208,Australie
+606,2004,15127,États-Unis
+607,2004,158099,Royaume-Uni
+608,2004,0,Turquie
+609,2004,0,Suède
+610,2004,15,Espagne
+611,2004,203,Fédération de Russie
+612,2004,563815,Norvège
+613,2004,0,République Populaire Démocratique de Corée
+614,2004,14067,Irlande
+615,2004,6624,Islande
+616,2004,7,Grèce
+617,2004,735,France
+618,2004,0,Finlande
+619,2004,40985,Îles Féroé
+620,2004,16,Danemark
+621,2004,348983,Chili
+622,2004,96774,Canada
+623,2004,16476,Australie
+624,2005,9401,États-Unis
+625,2005,129823,Royaume-Uni
+626,2005,0,Turquie
+627,2005,0,Suède
+628,2005,0,Espagne
+629,2005,204,Fédération de Russie
+630,2005,586512,Norvège
+631,2005,0,République Populaire Démocratique de Corée
+632,2005,13764,Irlande
+633,2005,6488,Islande
+634,2005,6,Grèce
+635,2005,1190,France
+636,2005,0,Finlande
+637,2005,18962,Îles Féroé
+638,2005,18,Danemark
+639,2005,385779,Chili
+640,2005,98370,Canada
+641,2005,16780,Australie
+642,2006,10485,États-Unis
+643,2006,131973,Royaume-Uni
+644,2006,0,Turquie
+645,2006,0,Suède
+646,2006,2,Espagne
+647,2006,229,Fédération de Russie
+648,2006,629888,Norvège
+649,2006,0,République Populaire Démocratique de Corée
+650,2006,11174,Irlande
+651,2006,5224,Islande
+652,2006,11,Grèce
+653,2006,1391,France
+654,2006,0,Finlande
+655,2006,13078,Îles Féroé
+656,2006,18,Danemark
+657,2006,376476,Chili
+658,2006,118061,Canada
+659,2006,20710,Australie
+660,2007,11001,États-Unis
+661,2007,130104,Royaume-Uni
+662,2007,0,Turquie
+663,2007,0,Suède
+664,2007,0,Espagne
+665,2007,111,Fédération de Russie
+666,2007,744222,Norvège
+667,2007,0,République Populaire Démocratique de Corée
+668,2007,9923,Irlande
+669,2007,1197,Islande
+670,2007,8,Grèce
+671,2007,1100,France
+672,2007,0,Finlande
+673,2007,22305,Îles Féroé
+674,2007,16,Danemark
+675,2007,331042,Chili
+676,2007,102509,Canada
+677,2007,25336,Australie
+678,2008,16714,États-Unis
+679,2008,128744,Royaume-Uni
+680,2008,0,Turquie
+681,2008,10,Suède
+682,2008,0,Espagne
+683,2008,51,Fédération de Russie
+684,2008,737694,Norvège
+685,2008,9217,Irlande
+686,2008,330,Islande
+687,2008,8,Grèce
+688,2008,1335,France
+689,2008,0,Finlande
+690,2008,38494,Îles Féroé
+691,2008,11,Danemark
+692,2008,388847,Chili
+693,2008,104075,Canada
+694,2008,"25736,9",Australie
+695,2009,14074,États-Unis
+696,2009,144663,Royaume-Uni
+697,2009,0,Turquie
+698,2009,0,Suède
+699,2009,110,Espagne
+700,2009,2126,Fédération de Russie
+701,2009,"862907,7",Norvège
+702,2009,10,République Populaire Démocratique de Corée
+703,2009,12210,Irlande
+704,2009,714,Islande
+705,2009,22,Grèce
+706,2009,0,Finlande
+707,2009,51383,Îles Féroé
+708,2009,"1,9",Danemark
+709,2009,233308,Chili
+710,2009,100212,Canada
+711,2009,"0,33",Bulgarie
+712,2009,29893,Australie
+713,2010,19535,États-Unis
+714,2010,154633,Royaume-Uni
+715,2010,0,Turquie
+716,2010,0,Suède
+717,2010,"79,2",Espagne
+718,2010,4500,Fédération de Russie
+719,2010,939536,Norvège
+720,2010,10,République Populaire Démocratique de Corée
+721,2010,15691,Irlande
+722,2010,1068,Islande
+723,2010,10,Grèce
+724,2010,0,Finlande
+725,2010,45391,Îles Féroé
+726,2010,15,Danemark
+727,2010,123233,Chili
+728,2010,101544,Canada
+729,2010,"31806,79",Australie
+730,2011,18595,États-Unis
+731,2011,"158309,5",Royaume-Uni
+732,2011,0,Turquie
+733,2011,0,Suède
+734,2011,0,Espagne
+735,2011,8500,Fédération de Russie
+736,2011,1064868,Norvège
+737,2011,15,République Populaire Démocratique de Corée
+738,2011,12196,Irlande
+739,2011,1083,Islande
+740,2011,0,Grèce
+741,2011,0,Finlande
+742,2011,60473,Îles Féroé
+743,2011,10,Danemark
+744,2011,264349,Chili
+745,2011,110328,Canada
+746,2011,"36662,04",Australie
+747,2012,19295,États-Unis
+748,2012,162547,Royaume-Uni
+749,2012,0,Turquie
+750,2012,0,Suède
+751,2012,4,Espagne
+752,2012,8754,Fédération de Russie
+753,2012,"1232094,9",Norvège
+754,2012,15,République Populaire Démocratique de Corée
+755,2012,12440,Irlande
+756,2012,2923,Islande
+757,2012,0,Grèce
+758,2012,0,Finlande
+759,2012,76564,Îles Féroé
+760,2012,"0,2",Danemark
+761,2012,399678,Chili
+762,2012,116101,Canada
+763,2012,43982,Australie
+764,2013,18866,États-Unis
+765,2013,163240,Royaume-Uni
+766,2013,0,Turquie
+767,2013,6,Suède
+768,2013,0,Espagne
+769,2013,22500,Fédération de Russie
+770,2013,1168324,Norvège
+771,2013,15,République Populaire Démocratique de Corée
+772,2013,"9124,9",Irlande
+773,2013,3018,Islande
+774,2013,0,Grèce
+775,2013,0,Finlande
+776,2013,75821,Îles Féroé
+777,2013,10,Danemark
+778,2013,492329,Chili
+779,2013,97629,Canada
+780,2013,"42825,01",Australie
+781,2014,18719,États-Unis
+782,2014,179028,Royaume-Uni
+783,2014,8,Suède
+784,2014,"3,8",Espagne
+785,2014,18675,Fédération de Russie
+786,2014,"1258355,9",Norvège
+787,2014,20,République Populaire Démocratique de Corée
+788,2014,"9367,6",Irlande
+789,2014,3965,Islande
+790,2014,0,Grèce
+791,2014,0,Finlande
+792,2014,86454,Îles Féroé
+793,2014,405,Danemark
+794,2014,644459,Chili
+795,2014,86347,Canada
+796,2014,"41590,66",Australie
+797,2015,18719,États-Unis
+798,2015,171731,Royaume-Uni
+799,2015,"7,785",Espagne
+800,2015,10834,Fédération de Russie
+801,2015,"1303345,8",Norvège
+802,2015,20,République Populaire Démocratique de Corée
+803,2015,13116,Irlande
+804,2015,3260,Islande
+805,2015,0,Grèce
+806,2015,0,Finlande
+807,2015,80600,Îles Féroé
+808,2015,428,Danemark
+809,2015,608546,Chili
+810,2015,121926,Canada
+811,2015,"48330,56",Australie
+812,2016,16185,États-Unis
+813,2016,162820,Royaume-Uni
+814,2016,1,Suède
+815,2016,"5,162",Espagne
+816,2016,12857,Fédération de Russie
+817,2016,"1233619,2",Norvège
+818,2016,20,République Populaire Démocratique de Corée
+819,2016,16300,Irlande
+820,2016,8420,Islande
+821,2016,0,Grèce
+822,2016,0,Finlande
+823,2016,83300,Îles Féroé
+824,2016,1289,Danemark
+825,2016,532225,Chili
+826,2016,123522,Canada
+827,2016,"56115,197",Australie
+828,2017,14685,États-Unis
+829,2017,189707,Royaume-Uni
+830,2017,"24,39",Espagne
+831,2017,13016,Fédération de Russie
+832,2017,1236353,Norvège
+833,2017,50,République Populaire Démocratique de Corée
+834,2017,18342,Irlande
+835,2017,11265,Islande
+836,2017,0,Grèce
+837,2017,0,Finlande
+838,2017,86800,Îles Féroé
+839,2017,807,Danemark
+840,2017,"614180,46",Chili
+841,2017,120553,Canada
+842,2017,"52580,2",Australie
+843,2018,16107,États-Unis
+844,2018,156025,Royaume-Uni
+845,2018,100,Suisse
+846,2018,20566,Fédération de Russie
+847,2018,"1282003,2",Norvège
+848,2018,60,République Populaire Démocratique de Corée
+849,2018,11984,Irlande
+850,2018,13448,Islande
+851,2018,0,Finlande
+852,2018,78900,Îles Féroé
+853,2018,1030,Danemark
+854,2018,"661138,39",Chili
+855,2018,123184,Canada
+856,2018,61227,Australie
+857,2019,"16490,52",États-Unis
+858,2019,203881,Royaume-Uni
+859,2019,"159,4",Suisse
+860,2019,"11,606",Espagne
+861,2019,32343,Fédération de Russie
+862,2019,"1364042,038",Norvège
+863,2019,60,République Populaire Démocratique de Corée
+864,2019,11333,Irlande
+865,2019,26957,Islande
+866,2019,0,Finlande
+867,2019,95000,Îles Féroé
+868,2019,"1462,53",Danemark
+869,2019,701984,Chili
+870,2019,118630,Canada
+871,2019,"56989,34",Australie
+872,2020,"16490,52",États-Unis
+873,2020,192129,Royaume-Uni
+874,2020,300,Émirats Arabes Unis
+875,2020,"159,4",Suisse
+876,2020,10855,Fédération de Russie
+877,2020,"1388433,84",Norvège
+878,2020,60,République Populaire Démocratique de Corée
+879,2020,12870,Irlande
+880,2020,34341,Islande
+881,2020,88950,Îles Féroé
+882,2020,1940,Danemark
+883,2020,787131,Chili
+884,2020,120427,Canada
+885,2020,"66918,495",Australie
+886,2021,"16490,52",États-Unis
+887,2021,205000,Royaume-Uni
+888,2021,180,Émirats Arabes Unis
+889,2021,160,Suisse
+890,2021,14959,Fédération de Russie
+891,2021,"1562415,01",Norvège
+892,2021,60,République Populaire Démocratique de Corée
+893,2021,12844,Irlande
+894,2021,46458,Islande
+895,2021,115650,Îles Féroé
+896,2021,1668,Danemark
+897,2021,725280,Chili
+898,2021,120186,Canada
+899,2021,"84045,234",Australie

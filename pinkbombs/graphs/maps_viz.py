@@ -234,7 +234,8 @@ def make_legend_for_map():
     <body>
 
     <div id='maplegend' class='maplegend' 
-    style='position: absolute; z-index:9999; border:2px solid grey; background-color:rgba(255, 255, 255, 0.8);
+    style='position: absolute; z-index:9999; border:2px solid grey; 
+     background-color:rgba(255, 255, 255, 0.8);
      border-radius:6px; padding: 10px; font-size:14px; left: 20px; bottom: 20px;'>
 
     <div class='legend-subtitle'>Land-based Farms by Status</div>

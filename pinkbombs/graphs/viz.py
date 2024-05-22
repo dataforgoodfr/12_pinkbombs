@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from plotly.graph_objects import Figure, Scatter, Heatmap
+import textwrap
 
 
 def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figure:
@@ -18,7 +19,14 @@ def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figur
 
 
 def make_area_single_chart(
-    input_df, input_x, input_y, title, palette=px.colors.qualitative.Pastel1, theme="simple_white"
+    input_df,
+    input_x,
+    input_y,
+    title,
+    palette=px.colors.qualitative.Pastel1,
+    theme="simple_white",
+    source_text="",
+    block_zoom=False,
 ) -> Figure:
     """Returns plotly express object as area chart with a single line
     Parameters:
@@ -28,6 +36,8 @@ def make_area_single_chart(
             title (str): chart title
             palette (px.object): plotly discrete palette, default is Pastel1
             theme (str): plotly chart theme, default is 'simple_white'
+            source_text (string): Text to display as source at the bottom. Default is empty.
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
     Returns:
             area (plotly object): output chart object
     """
@@ -37,8 +47,30 @@ def make_area_single_chart(
         y=input_y,
         color_discrete_sequence=palette,
     )
-    area.update_layout(template=theme, title=title)
+    area.update_layout(template=theme, title=title, hoverlabel=dict(bgcolor="white"))
     area.update_yaxes(exponentformat="none")
+    area.update_xaxes(title=None)
+
+    if source_text != "":
+        area.update_layout(margin=dict(l=50, r=50, t=60, b=80))
+        area.update_layout(
+            annotations=[
+                dict(
+                    text=source_text,
+                    font=dict(size=12),
+                    showarrow=False,
+                    xref="paper",
+                    x=0,
+                    yref="paper",
+                    y=-0.15,
+                )
+            ]
+        )
+
+    if block_zoom:
+        area.layout.xaxis.fixedrange = True
+        area.layout.yaxis.fixedrange = True
+
     return area
 
 
@@ -57,15 +89,19 @@ def make_area_order_chart_grouped(
             input_y (str): name of the field for the y axis
             input_col (str): name of the field for the colors
             title (str): chart title
-            reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False
+            reorder (boolean): if true, dataframe is reodered by the input_col field, 
+                default is False
             palette (px.object): plotly discrete palette, default is Dark24
             theme (str): plotly chart theme, default is 'simple_white'
     Returns:
             area (plotly object): output chart object
     """
-    # Data cleaning - TO REMOVE
-    input_df[input_y] = input_df[input_y].str.replace(",", ".")
-    input_df[input_y] = input_df[input_y].astype(float)
+    # Data cleaning
+    try:
+        input_df[input_y] = input_df[input_y].str.replace(",", ".")
+        input_df[input_y] = input_df[input_y].astype(float)
+    except Exception as e:
+        print("Input is not in string format")
 
     input_df = input_df.groupby(input_x)[input_y].sum().reset_index()
     input_df["color"] = color
@@ -92,7 +128,10 @@ def make_area_order_chart(
     input_y,
     input_col,
     title,
+    y_title,
+    min_date,
     reorder=False,
+    hide_zoom=False,
     palette=px.colors.qualitative.Dark24,
     theme="simple_white",
 ) -> Figure:
@@ -103,7 +142,11 @@ def make_area_order_chart(
             input_y (str): name of the field for the y axis
             input_col (str): name of the field for the colors
             title (str): chart title
-            reorder (boolean): if true, dataframe is reodered by the input_col field, defauls is False
+            y_title (str): y axis title
+            min_date (int): minimum year to be shown on plot initially
+            reorder (boolean): if true, dataframe is reodered by the input_col field, 
+                default is False
+            hide_zoom (boolean): to hide the zoom in top right corner
             palette (px.object): plotly discrete palette, default is Dark24
             theme (str): plotly chart theme, default is 'simple_white'
     Returns:
@@ -126,8 +169,9 @@ def make_area_order_chart(
         color=input_col,
         color_discrete_sequence=palette,
     )
-    area.update_layout(template=theme, title=title)
+    area.update_layout(template=theme, title=title, yaxis_title=y_title)
     area.update_yaxes(exponentformat="none")
+    area.update_xaxes(title=None, range=[min_date, input_df[input_x].max()])
 
     # Ability to select/deselect all
     area.update_layout(
@@ -157,7 +201,91 @@ def make_area_order_chart(
         )
     )
 
+    # Remove zoom
+    if hide_zoom:
+        area.update_layout(modebar_remove=["zoom", "zoomIn", "zoomOut"])
+
     return area
+
+
+def make_area_chart_options(
+    input_df,
+    input_x,
+    input_y,
+    title,
+    legend_title,
+    color_area="#fd442f",
+    color_axis="white",
+    theme="simple_white",
+) -> Figure:
+    """Returns plotly express object as area chart with single lines
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualised
+            input_x (str): name of the field for the x axis
+            input_y (str): name of the field for the y axis
+            title (str): chart title
+            legend_title (str): legend title
+            color_area (str): color for the single area
+            color_axis (str): color of the axis, lines and font over transparent background, 
+                default is white
+            theme (str): plotly chart theme, default is 'simple_white'
+    Returns:
+            area (plotly object): output chart object
+    """
+    # Data cleaning
+    try:
+        input_df[input_y] = input_df[input_y].str.replace(",", ".")
+        input_df[input_y] = input_df[input_y].astype(float)
+    except Exception as e:
+        print("Input is not in string format")
+
+    fig = px.area(
+        input_df,
+        x=input_x,
+        y=input_y,
+        color_discrete_sequence=[color_area],
+        line_shape="spline",
+    )
+
+    fig.update_layout(template=theme, title=title, yaxis_title=None, xaxis_title=None)
+
+    fig.update_yaxes(
+        exponentformat="none",
+        tickformat="~s",
+        # showgrid=True,
+        color=color_axis,
+        linecolor=color_axis,
+    )
+    fig.update_xaxes(color=color_axis, linecolor=color_axis)
+
+    # Remove hover functionality
+    fig.update_traces(hovertemplate=None, hoverinfo="skip")
+
+    # Set area with single color
+    fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+
+    # Set up legend
+    fig.update_traces(showlegend=True)
+    fig.for_each_trace(lambda trace: trace.update(name=legend_title))
+    fig.update_layout(legend=dict(yanchor="top", y=1, xanchor="left", x=0.01))
+
+    # Block zoom
+    fig.layout.xaxis.fixedrange = True
+    fig.layout.yaxis.fixedrange = True
+
+    # Set background to transparent and axes in white
+    fig.update_layout(
+        {
+            "plot_bgcolor": "rgba(0, 0, 0, 0)",
+            "paper_bgcolor": "rgba(0, 0, 0, 0)",
+        },
+        font_color=color_axis,
+    )
+    fig.layout.yaxis.color = color_axis
+    fig.layout.legend.font.color = color_axis
+    # fig.layout.yaxis.gridcolor = color_axis
+
+    return fig
 
 
 def make_color_bar_chart(
@@ -170,6 +298,7 @@ def make_color_bar_chart(
     xtitle,
     ytitle,
     palette=px.colors.sequential.Burg,
+    block_zoom=False,
     theme="simple_white",
 ) -> Figure:
     """Returns plotly express object as bar chart - specific to graph 1.3 ATM!!!
@@ -183,13 +312,17 @@ def make_color_bar_chart(
             xtitle (str): x-axis title
             ytitle (str): y-axis title
             palette (px.object): plotly discrete palette, default is Burg
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
             theme (str): plotly chart theme, default is 'simple_white'
     Returns:
             bar (plotly object): output chart object
     """
     # Sort out number format
-    input_df[input_x] = input_df[input_x].str.replace(",", ".")
-    input_df[input_x] = input_df[input_x].astype(float)
+    try:
+        input_df[input_x] = input_df[input_x].str.replace(",", ".")
+        input_df[input_x] = input_df[input_x].astype(float)
+    except Exception as e:
+        print("Input is not in string format")
 
     # Recalculate %
     input_df[input_col] = input_df[input_x] / input_df[input_x].sum()
@@ -223,10 +356,16 @@ def make_color_bar_chart(
         xaxis_title=xtitle,
         yaxis_title=ytitle,
         yaxis=dict(tickfont=dict(size=13)),
+        hoverlabel=dict(bgcolor="white"),
     )
     bar.update_xaxes(exponentformat="none", range=[0, 2000000])
     bar.update_yaxes(ticks="")
     bar.update_coloraxes(colorbar_tickformat="0%")
+
+    if block_zoom:
+        bar.layout.xaxis.fixedrange = True
+        bar.layout.yaxis.fixedrange = True
+        bar.update_layout(modebar_remove=["zoom", "pan", "lasso2d", "select2d"])
 
     return bar
 
@@ -297,6 +436,7 @@ def make_simple_bar_chart(
     xtitle,
     ytitle,
     mycolor,
+    block_zoom=False,
     fix_approx=True,
     palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
@@ -316,6 +456,7 @@ def make_simple_bar_chart(
             mycolor (str): name of the color code for the bars
             palette (px.object): Plotly discrete palette, default is Pastel1
             theme (str): Plotly chart theme, default is 'simple_white'
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
             fix_approx (boolean): if data has "~" symbol (to remove from this function!)
     Returns:
             bar (Plotly object): output chart object
@@ -379,9 +520,15 @@ def make_simple_bar_chart(
         xaxis_title=xtitle,
         yaxis_title=ytitle,
         yaxis=dict(tickfont=dict(size=13)),
+        hoverlabel=dict(bgcolor="white"),
     )
     bar.update_xaxes(exponentformat="none")
     bar.update_yaxes(ticks="")
+
+    if block_zoom:
+        bar.layout.xaxis.fixedrange = True
+        bar.layout.yaxis.fixedrange = True
+        bar.update_layout(modebar_remove=["zoom", "pan", "lasso2d", "select2d"])
 
     return bar
 
@@ -444,9 +591,12 @@ def make_animated_bubble_map(
     input_time,
     input_size,
     title,
+    min_year=1950,
     size_max=50,
+    last_frame=True,
     palette=px.colors.qualitative.Prism,
     theme="simple_white",
+    reverse=False,
 ) -> Figure:
     """Returns plotly express object as Bubbles map with animation
     Parameters:
@@ -455,14 +605,20 @@ def make_animated_bubble_map(
             input_hover (str): name of the field to show on hover
             input_time (str): name of the time field for the animation
             input_size (str): name of the field for the size of the bubbles
+            min_year (int): year to start the animation, default=1950
             title (str): chart title
             size_max (int): size of the maximum bubble radius, default=50
             palette (px.object): plotly discrete palette, default is Prism
             theme (str): plotly chart theme, default is 'simple_white'
+            last_frame (boolean): to add last frame as first
     Returns:
             area (plotly object): output chart object
     """
-    input_df = input_df.sort_values(by=input_time, ascending=False)
+    # if reverse:
+    #    input_df = input_df.sort_values(by=input_time, ascending=False)
+    if min_year > 1950:
+        input_df = input_df.loc[input_df[input_time] >= min_year,]
+
     map = px.scatter_geo(
         input_df,
         locations=input_loc,
@@ -477,7 +633,18 @@ def make_animated_bubble_map(
     )
     map.update_geos(showcountries=True)
 
-    return map
+    if last_frame:
+        map2 = Figure()
+        for tr in map.frames[-1].data:
+            map2.add_trace(tr)
+        map2.layout = map.layout
+        map2.frames = map.frames
+        map2.layout["sliders"][0]["active"] = len(map.frames) - 1
+
+    # Remove lasso and select
+    map2.update_layout(modebar_remove=["lasso2d", "select2d"])
+
+    return map2
 
 
 def make_treemap_chart(
@@ -615,6 +782,8 @@ def make_simple_box_chart(
     input_y,
     title,
     xtitle,
+    ytitle,
+    block_zoom=False,
     palette=px.colors.qualitative.Pastel1,
     theme="simple_white",
 ) -> Figure:
@@ -625,6 +794,8 @@ def make_simple_box_chart(
             input_y (str): name of the field for the y-axis
             title (str): chart title
             xtitle (str): x-axis title
+            ytitle (str): y-axis title
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
             palette (px.object): Plotly discrete palette, default is Pastel1
             theme (str): Plotly chart theme, default is 'simple_white'
     Returns:
@@ -634,86 +805,125 @@ def make_simple_box_chart(
     input_df = input_df.sort_values(input_x, ascending=False)
 
     # Transform the input_y data
-    input_df[input_y] = input_df[input_y].str.replace(",", ".")
-    input_df[input_y] = input_df[input_y].astype(float)
+    try:
+        input_df[input_y] = input_df[input_y].str.replace(",", ".")
+        input_df[input_y] = input_df[input_y].astype(float)
+    except Exception as e:
+        print("Input is not in string format")
+
+    # List of order and color
+    my_order = input_df.groupby(input_x)[input_y].median().sort_values().index.tolist()
+    my_col = ["#151c97"] * (len(my_order) - 1)
+    my_col.append("#ff4530")
 
     # Create the box plot
     box = px.box(
         input_df,
         y=input_y,  # Use the input_y field for the y-axis
         x=input_x,
+        color=input_x,
         title=title,
-        category_orders={
-            input_x: input_df.groupby(input_x)[input_y].median().sort_values().index.tolist()
-        },  # Update category orders accordingly
-        color_discrete_sequence=palette,  # Set color palette
+        category_orders={input_x: my_order},  # Update category orders accordingly
+        color_discrete_sequence=my_col,
         hover_name=input_x,  # Update hover_name accordingly
     )
 
-    box.update_layout(template=theme, xaxis_title=xtitle, yaxis_title="Mortality Rate (%)")
+    box.update_layout(template=theme, xaxis_title=xtitle, yaxis_title=ytitle, showlegend=False)
     box.update_xaxes(exponentformat="none")
     box.update_coloraxes(colorbar_tickformat="0%")
+    box.update_traces(boxpoints=False)  # remove outliers
+
+    # Remove hover
+    box.update_traces(hovertemplate=None, hoverinfo="skip")
+
+    if block_zoom:
+        box.layout.xaxis.fixedrange = True
+        box.layout.yaxis.fixedrange = True
 
     return box
 
 
-def make_matrix_alternatives(df_dummy, width=900, height=500, hover_disable=False):
-    """Returns a waffle plot with 4 colors, with or without hover"""
+def make_matrix_alternatives(
+    input_df, max_len=60, max_len_col=11, width=900, height=500, hover_disable=False
+) -> Figure:
+    """Returns a Plotly Express object as a Heatmap for the matrix of altenatives
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualized
+            title (str): chart title
+            max_len (int): Number of characters for text wrapping, Default is 60.
+            max_len_col (int): Number of characters for wrapping of columns names, Default is 11.
+            width (int): Dimension of the figure, Default is 900.
+            height (int): Dimension of the figure, Default is 500.
+            hover_disable (boolean): Decide if disable the hover. Default is False.
+    Returns:
+            box (Plotly object): output chart object
+    """
 
-    # Define size of matrix
-    m = 5
-    n = 8
-    data = np.zeros((m, n))
+    # Extract columns and rows names from the dataframe
+    col = input_df.columns.values.tolist()
+    col.pop(0)
+    row = input_df["Unnamed: 0"].tolist()[0:6]
 
-    # Original data
-    data_original = np.matrix([
-            [2,2,3,2,0,0,0,0],
-            [1,1,0,1,2,2,4,4],
-            [0,0,1,1,1,1,4,1],
-            [4,2,1,2,2,2,0,0],
-            [4,3,2,2,0,0,0,0]])
+    n_col = len(col)
+    n_row = len(row)
 
-    # Change data to have only one green   
-    for i in range(m):
-        for j in range(n):
-            if data_original[i,j] == 0 or data_original[i,j] == 1:
-                data[i,j] = 0
-            else : 
-                data[i,j] = data_original[i,j] - 1
-    
-    # Extra information to display on each cell
-    extra_info = [['Extra information to provide on this cell' for c in range(n)] for r in range(m)]
+    # Read the text into a matrix
+    customdata = input_df[col].to_numpy()
+    mat_col = input_df[col].to_numpy()
+
+    for i in range(n_row):
+        for j in range(n_col):
+            mat_col[i, j] = int(customdata[i, j][0])  # Take color code
+            customdata[i, j] = textwrap.fill(customdata[i, j][4:], max_len).replace("\n", "<br>")
 
     # Define colorscale and axes
-    colorscale = [
-                  #"#aaed99",  # light green
-                  "#6ecb57",  # dark green
-                  "#ffd336",  # yellow
-                  "#ff7e36",  # orange
-                  "#f34620"]  # red
+    mycolorscale = [
+        "#bfcee1",  # light grey - NEW
+        "#6ecb57",  # dark green - Paul
+        "#aaed99",  # light green - Paul
+        "#ffd336",  # yellow - Paul
+        "#ff7e36",  # orange - Paul
+        "#f34620",  # red - Paul
+        "#cc0100",  # dark red - NEW
+    ]
 
-    xlabels = ['Saumon<br>Elevage<br>terrestre',
-              'Saumon<br>Elevage<br>en mer' ,
-              'Pélagiques:<br>maquereaux/<br>sardines',
-              "Mollusques &<br>Coquillages",
-              "Algue", 'Graine de lin<br>ou noix', "Huile de<br>Colza",
-              "Legumineuse<br>ou soja local"]
-    ylabels = ['Metaux lourds', 'Apport en Omegas', 'Apport en proteines', 'Empreinte Carbone',
-              'Impacts sociaux'] 
+    # Wrap column names
+    if max_len_col is not None:
+        col = [textwrap.fill(el, max_len_col).replace("\n", "<br>") for el in col]
 
-    fig = Figure(Heatmap(x=xlabels, y = ylabels, z=data,
-                              customdata=extra_info, xgap=4, ygap=4,
-                              colorscale=colorscale, 
-                              showscale=False,
-                              hovertemplate="(%{y}, %{x}): %{customdata}<extra></extra>"))
-    fig.update_layout(width=width, height=height, 
-                      yaxis_autorange='reversed',
-                      paper_bgcolor="rgba(0,0,0,0)", 
-                      plot_bgcolor="rgba(0,0,0,0)") #, template='simple_white')
-    fig.update_xaxes(side='top') #visible=False, showticklabels=True)
+    fig = Figure(
+        Heatmap(
+            x=col,
+            y=row,
+            z=mat_col,
+            customdata=customdata,
+            xgap=4,
+            ygap=4,
+            colorscale=mycolorscale,
+            showscale=False,
+            hovertemplate="%{customdata}<extra></extra>",
+            hoverlabel=dict(bgcolor="white"),
+        )
+    )
+
+    # Transparent background and x-axis on top
+    fig.update_layout(
+        yaxis_autorange="reversed",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False),
+    )
+    fig.update_xaxes(side="top")
+
+    # Block zoom
+    fig.layout.xaxis.fixedrange = True
+    fig.layout.yaxis.fixedrange = True
+
+    if width is not None:
+        fig.update_layout(width=width, height=height)
 
     if hover_disable:
-        fig.update_traces(hovertemplate = None, hoverinfo = "skip")
+        fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
-    return fig  
-
+    return fig
