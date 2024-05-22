@@ -1,5 +1,6 @@
-import pinkbombs as pb
 import pandas as pd
+import graphs as pb
+
 
 MAPPING = {
     "salmon-collapse": {
