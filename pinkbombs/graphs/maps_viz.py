@@ -118,21 +118,21 @@ def create_elements_popups(input_df):
 
     # Create hyperlink for Location
     input_df["Location source link2"] = input_df["Location source"].apply(
-        lambda x: f"<a href={x}>"
-    ) + input_df["Location"].apply(lambda x: f"{str(x)}</a>")
+        lambda x: f'<a href="{x}" target="_blank" rel="noopener noreferrer">'
+    ) + input_df["Location"].apply(lambda x: f'{str(x)}</a>')
 
     # Create hyperlink for info/latest update
     input_df["Latest update2"] = input_df["Link info (no text)"].apply(
-        lambda x: f"<a href={x}>"
+        lambda x: f'<a href="{x}" target="_blank" rel="noopener noreferrer">'
     ) + input_df["Latest update"].apply(
-        lambda x: "NAN</a>" if np.isnan(x) else f"{str(int(x))}</a>"
+        lambda x: f'NAN</a>' if np.isnan(x) else f'{str(int(x))}</a>'
     )
 
     # Create hyperlink for the Carbon Electricity by country
     carbon_intensity_link = "https://ourworldindata.org/grapher/carbon-intensity-electricity"
     input_df["Country carbon intensity of electricity link"] = input_df[
         "Country carbon intensity of electricity"
-    ].apply(lambda x: f"<a href={carbon_intensity_link}>{x}</a>")
+    ].apply(lambda x: f'<a href="{carbon_intensity_link}" target="_blank" rel="noopener noreferrer">{x}</a>')
 
     # Define colors indeces
     input_df["Status_col"] = np.where(
@@ -258,7 +258,8 @@ def make_legend_for_map():
     
     <li><a >Size depends on farm production, estimated</a></li>
     <li><a >electricity consumption and carbon footprint</a></li>
-    <li><a >see the Methodology section.</a></li>
+    <li><a href='https://pinkbombs.org/about'>see Methodology</a></li>
+
        </ul>
     </div>
     </div>
@@ -342,7 +343,8 @@ def make_ras_bubble_map(input_df, add_title_legend=False):
 
     # Map centered on World - limit max zoom to avoid too much scrutiny
     map = folium.Map(
-        location=(0, 0), maxZoom=12, zoom_start=2, zoom_control=True, tiles="cartodb positron"
+        location=(0, 0), maxZoom=12, minZoom=2,
+        zoom_start=2, zoom_control=True, tiles="cartodb positron"
     )
 
     ## Apply to the 2 modalities - Electricity / Carbon
@@ -371,6 +373,9 @@ def make_ras_bubble_map(input_df, add_title_legend=False):
         exclusive_groups=True,
         collapsed=False,
     ).add_to(map)
+
+    # Add scrollzoom toggler
+    folium.plugins.ScrollZoomToggler().add_to(map)
 
     if add_title_legend:
         map_title = "The future of land-based salmon farming"
