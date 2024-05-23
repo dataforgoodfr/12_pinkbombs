@@ -287,10 +287,37 @@ data2_4_name = "ras_projects_for_map_2.4"
 data2_4_file = "data/" + data2_4_name + ".csv"
 df_data2_4 = pd.read_csv(data2_4_file)
 
-g2_4 = pb.make_ras_bubble_map(df_data2_4, add_title_legend=True)
+g2_4 = pb.make_ras_bubble_map(
+    df_data2_4, 
+    title_layer1="Electricity consumption",
+    title_layer2="Carbon footprint",
+    legend_title="Farms represented by estimated:",
+    title="The future of land-based salmon farming",
+    add_title_legend=True,
+    french=False,
+    )
 
 #g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
 func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html","w") 
+func.write(g2_4) 
+func.close()
+
+# Graph 2.4 - Map of RAS projects - FRENCH
+data2_4_file = "data/" + data2_4_name + "_fr.csv"
+df_data2_4 = pd.read_csv(data2_4_file)
+
+g2_4 = pb.make_ras_bubble_map(
+    df_data2_4, 
+    title_layer1="Consommation d'électricité",
+    title_layer2="Empreinte carbone",
+    legend_title="Fermes représentées par leur:",
+    title="Le futur des fermes aquacoles terrestres",
+    add_title_legend=True,
+    french=True,
+    )
+
+#g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html")
+func = open("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html","w") 
 func.write(g2_4) 
 func.close()
 
