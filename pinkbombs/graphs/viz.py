@@ -874,7 +874,7 @@ def make_matrix_alternatives(
     for i in range(n_row):
         for j in range(n_col):
             mat_col[i, j] = int(customdata[i, j][0])  # Take color code
-            customdata[i, j] = textwrap.fill(customdata[i, j][4:], max_len).replace("\n", "<br>")
+            customdata[i, j] = textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
 
     # Define colorscale and axes
     mycolorscale = [
