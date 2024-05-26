@@ -432,6 +432,8 @@ g7 = pb.make_matrix_alternatives(df_data_7,
                                  max_len_col=None, #11
                                  width=None, 
                                  height=None,
+                                 legend_green="Positive impact",
+                                 legend_red="Negative impact",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
@@ -445,6 +447,8 @@ g7 = pb.make_matrix_alternatives(df_data_7,
                                  max_len_col=None, #11
                                  width=None, 
                                  height=None,
+                                 legend_green="Impact positif",
+                                 legend_red="Impact négatif",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7_fr.html")

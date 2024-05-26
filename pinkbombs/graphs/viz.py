@@ -844,7 +844,8 @@ def make_simple_box_chart(
 
 
 def make_matrix_alternatives(
-    input_df, max_len=60, max_len_col=11, width=900, height=500, hover_disable=False
+    input_df, max_len=60, max_len_col=11, width=900, height=500, 
+    legend_green="", legend_red="", hover_disable=False
 ) -> Figure:
     """Returns a Plotly Express object as a Heatmap for the matrix of altenatives
     Parameters:
@@ -854,6 +855,8 @@ def make_matrix_alternatives(
             max_len_col (int): Number of characters for wrapping of columns names, Default is 11.
             width (int): Dimension of the figure, Default is 900.
             height (int): Dimension of the figure, Default is 500.
+            legend_green (str): Text to display next to the green in the legend.
+            legend_red (str): Text to display next to the red in the legend.
             hover_disable (boolean): Decide if disable the hover. Default is False.
     Returns:
             box (Plotly object): output chart object
@@ -867,25 +870,49 @@ def make_matrix_alternatives(
     n_col = len(col)
     n_row = len(row)
 
+    #### to fix in data - Reoder to have Colza a droite
+    col_reorder = [col[i] for i in [0,1,2,3,4,5,7,6]]
+
     # Read the text into a matrix
-    customdata = input_df[col].to_numpy()
-    mat_col = input_df[col].to_numpy()
+    customdata = input_df[col_reorder].to_numpy()
+    mat_col = input_df[col_reorder].to_numpy()
 
     for i in range(n_row):
         for j in range(n_col):
             mat_col[i, j] = int(customdata[i, j][0])  # Take color code
             customdata[i, j] = textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
 
+    #####  Things to do from data remove grey
+    mat_col[1, 5] = 6  # ALgues Omega 3
+    mat_col[5, 5] = 1  # Algues Condition animal 
+    mat_col[5, 7] = 1  # Colza Condition animal
+    mat_col[3, 3] = 3  # Poissons empreinte carbone
+
+
+    
     # Define colorscale and axes
     mycolorscale = [
-        "#bfcee1",  # light grey - NEW
+        #"#bfcee1",  # light grey - NEW
         "#6ecb57",  # dark green - Paul
         "#aaed99",  # light green - Paul
         "#ffd336",  # yellow - Paul
-        "#ff7e36",  # orange - Paul
+        "#ffac3c",  # orange - Paul: #ff7e36. more yellow orange #ffac3c
         "#f34620",  # red - Paul
         "#cc0100",  # dark red - NEW
     ]
+
+    my_colorsc=[[0, mycolorscale[0]],
+            [0.16666666666666666, mycolorscale[0]],
+            [0.16666666666666666, mycolorscale[1]], 
+            [0.3333333333333333, mycolorscale[1]], 
+            [0.3333333333333333, mycolorscale[2]],
+            [0.5, mycolorscale[2]],
+            [0.5, mycolorscale[3]],
+            [0.6666666666666666, mycolorscale[3]],
+            [0.6666666666666666, mycolorscale[4]],
+            [0.8333333333333334, mycolorscale[4]],
+            [0.8333333333333334, mycolorscale[5]],
+            [1, mycolorscale[5]]]
 
     # Wrap column names
     if max_len_col is not None:
@@ -899,8 +926,8 @@ def make_matrix_alternatives(
             customdata=customdata,
             xgap=4,
             ygap=4,
-            colorscale=mycolorscale,
-            showscale=False,
+            colorscale=my_colorsc,
+            showscale=True,
             hovertemplate="%{customdata}<extra></extra>",
             hoverlabel=dict(bgcolor="white"),
         )
@@ -925,5 +952,12 @@ def make_matrix_alternatives(
 
     if hover_disable:
         fig.update_traces(hovertemplate=None, hoverinfo="skip")
+
+    tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.6]
+    ticktext = [legend_green, "", "", "", "", legend_red]
+    fig.update_traces(showscale=True, 
+                      colorbar = dict(thickness=25, 
+                                      tickvals=tickvals, 
+                                      ticktext=ticktext))
 
     return fig

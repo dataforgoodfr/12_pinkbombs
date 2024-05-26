@@ -148,7 +148,9 @@ MAPPING = {
             11,
             None,
             None,
-            False
+            "Positive impact",
+            "Negative impact",
+            False,
         ],
     },
 }
@@ -316,7 +318,9 @@ MAPPINGFR = {
             11,
             None,
             None,
-            False
+            "Impact positif",
+            "Impact négatif",
+            False,
         ],
     },
 }
