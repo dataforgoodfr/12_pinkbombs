@@ -327,7 +327,6 @@ def make_legend_for_map(french=False):
     template_gen2 = """
        </ul>
     </div>
-    </div>
      
     </body>
     </html>
