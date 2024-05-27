@@ -249,7 +249,8 @@ g2_3 = pb.make_simple_bar_chart(
     input_y2='Flag',
     input_n1='Revenues 2022 dollars',
     input_n2='Employees 2022',
-    input_other=['Number of projects', 'Countries of projects', 'Note'],
+    input_other=['Number of projects', 'Countries of projects', "Headquarters",
+                 "Website",'Note'],
     title="Top 10 land-based salmon productors (ambitions)",
     xtitle='Company ambition for salmon production in tonnes',
     ytitle=None,
@@ -271,7 +272,8 @@ g2_3 = pb.make_simple_bar_chart(
     input_y2='Drapeau',
     input_n1='Revenus 2022 dollars',
     input_n2='Employés 2022',
-    input_other=['Nombre de projets', 'Pays des projets', 'Note'],
+    input_other=['Nombre de projets', 'Pays des projets', "Siège",
+                 "Site internet",'Note'],
     title="Top 10 producteurs de saumon d'élevage terrestre (ambitions)",
     xtitle='Ambitions des producteurs pour la production de saumon en tonnes',
     ytitle=None,
@@ -287,10 +289,37 @@ data2_4_name = "ras_projects_for_map_2.4"
 data2_4_file = "data/" + data2_4_name + ".csv"
 df_data2_4 = pd.read_csv(data2_4_file)
 
-g2_4 = pb.make_ras_bubble_map(df_data2_4, add_title_legend=True)
+g2_4 = pb.make_ras_bubble_map(
+    df_data2_4, 
+    title_layer1="Electricity consumption",
+    title_layer2="Carbon footprint",
+    legend_title="Farms represented by estimated:",
+    title="The future of land-based salmon farming",
+    add_title_legend=True,
+    french=False,
+    )
 
 #g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
 func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html","w") 
+func.write(g2_4) 
+func.close()
+
+# Graph 2.4 - Map of RAS projects - FRENCH
+data2_4_file = "data/" + data2_4_name + "_fr.csv"
+df_data2_4 = pd.read_csv(data2_4_file)
+
+g2_4 = pb.make_ras_bubble_map(
+    df_data2_4, 
+    title_layer1="Consommation d'électricité",
+    title_layer2="Empreinte carbone",
+    legend_title="Fermes représentées par leur:",
+    title="Le futur des fermes aquacoles terrestres",
+    add_title_legend=True,
+    french=True,
+    )
+
+#g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html")
+func = open("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html","w") 
 func.write(g2_4) 
 func.close()
 
@@ -403,6 +432,8 @@ g7 = pb.make_matrix_alternatives(df_data_7,
                                  max_len_col=None, #11
                                  width=None, 
                                  height=None,
+                                 legend_green="Positive impact",
+                                 legend_red="Negative impact",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
@@ -416,6 +447,8 @@ g7 = pb.make_matrix_alternatives(df_data_7,
                                  max_len_col=None, #11
                                  width=None, 
                                  height=None,
+                                 legend_green="Impact positif",
+                                 legend_red="Impact négatif",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7_fr.html")
