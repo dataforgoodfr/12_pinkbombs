@@ -14,6 +14,8 @@ MAPPING = {
             [
                 '#151c97'
             ],
+            "simple_white",
+            "",
             True,
         ],
     },
@@ -186,6 +188,8 @@ MAPPINGFR = {
             [
                 '#151c97'
             ],
+            "simple_white",
+            "",
             True,
         ],
     },
@@ -245,6 +249,8 @@ MAPPINGFR = {
             "Tonnes de saumon",
             "Evolution de l'élevage du saumon par pays",
             1980,
+            50,
+            True,
             [
                 '#151c97',
             ],
