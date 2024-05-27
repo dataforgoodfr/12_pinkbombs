@@ -14,8 +14,6 @@ MAPPING = {
             [
                 '#151c97'
             ],
-            "simple_white",
-            "",
             True,
         ],
     },
@@ -153,7 +151,9 @@ MAPPING = {
             11,
             None,
             None,
-            False
+            "Positive impact",
+            "Negative impact",
+            False,
         ],
     },
 }
@@ -164,7 +164,12 @@ MAPS = {
         "function": pb.make_ras_bubble_map,
         "parser": pd.read_csv,
         "arguments": [
-            True
+            "Electricity consumption",
+            "Carbon footprint",
+            "Farms represented by estimated:",
+            "The future of land-based salmon farming",
+            True,
+            False,
         ],
     },
 }
@@ -181,8 +186,6 @@ MAPPINGFR = {
             [
                 '#151c97'
             ],
-            "simple_white",
-            "",
             True,
         ],
     },
@@ -242,8 +245,6 @@ MAPPINGFR = {
             "Tonnes de saumon",
             "Evolution de l'élevage du saumon par pays",
             1980,
-            50,
-            True,
             [
                 '#151c97',
             ],
@@ -320,17 +321,24 @@ MAPPINGFR = {
             11,
             None,
             None,
-            False
+            "Impact positif",
+            "Impact négatif",
+            False,
         ],
     },
 }
 
 MAPSFR = {
     "ras-map": {
-        "filename": "ras_projects_for_map_2.4.csv",
+        "filename": "ras_projects_for_map_2.4_fr.csv",
         "function": pb.make_ras_bubble_map,
         "parser": pd.read_csv,
         "arguments": [
+            "Consommation d'électricité",
+            "Empreinte carbone",
+            "Fermes représentées par leur:",
+            "Le futur des fermes aquacoles terrestres",
+            True,
             True
         ],
     },
