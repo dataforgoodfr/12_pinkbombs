@@ -8,11 +8,6 @@ def generate_graph(graph_name, mapping):
         "data/" + mapping[graph_name]["filename"],
     )
     chart_obj = mapping[graph_name]["function"](df, *mapping[graph_name]["arguments"])
-    chart_obj.update_layout(
-        hoverlabel=dict(
-            bgcolor="white",
-        )
-    )
     return chart_obj.to_json()
 
 
