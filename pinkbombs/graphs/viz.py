@@ -870,25 +870,14 @@ def make_matrix_alternatives(
     n_col = len(col)
     n_row = len(row)
 
-    #### to fix in data - Reoder to have Colza a droite
-    col_reorder = [col[i] for i in [0,1,2,3,4,5,7,6]]
-
     # Read the text into a matrix
-    customdata = input_df[col_reorder].to_numpy()
-    mat_col = input_df[col_reorder].to_numpy()
+    customdata = input_df[col].to_numpy()
+    mat_col = input_df[col].to_numpy()
 
     for i in range(n_row):
         for j in range(n_col):
             mat_col[i, j] = int(customdata[i, j][0])  # Take color code
             customdata[i, j] = textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
-
-    #####  Things to do from data remove grey
-    mat_col[1, 5] = 6  # ALgues Omega 3
-    mat_col[5, 5] = 1  # Algues Condition animal 
-    mat_col[5, 7] = 1  # Colza Condition animal
-    mat_col[3, 3] = 3  # Poissons empreinte carbone
-
-
     
     # Define colorscale and axes
     mycolorscale = [
