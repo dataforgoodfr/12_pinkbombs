@@ -170,7 +170,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_hover="Pays",
     input_time="Année",
     input_size="Tonnes de saumon",
-    title="Evolution de l'élevage du saumon par pays",
+    title="Evolution de l'élevage de saumons par pays",
     min_year=1980,
     palette=['#151c97'],
 )
@@ -228,7 +228,7 @@ g2_1 = pb.make_simple_bar_chart(
         "Employés 2022",
         "Note",
     ],
-    title="Top 10 producteurs de saumon par tonnes (2022)",
+    title="Top 10 des producteurs de saumons par tonnes (2022)",
     xtitle=None,
     ytitle=None,
     mycolor="#151c97",  # Seastemik dark blue
@@ -312,7 +312,7 @@ g2_4 = pb.make_ras_bubble_map(
     df_data2_4, 
     title_layer1="Consommation d'électricité",
     title_layer2="Empreinte carbone",
-    legend_title="Fermes représentées par leur:",
+    legend_title="Fermes-usines représentées par:",
     title=None,
     add_title_legend=True,
     french=True,

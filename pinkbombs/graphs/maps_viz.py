@@ -275,7 +275,7 @@ def make_legend_for_map(french=False):
     if french : 
         template_lang = """
 
-        <div class='legend-subtitle'>Fermes par état d'avancement</div>
+        <div class='legend-subtitle'>Fermes-usines par état d'avancement</div>
         
         <div class='legend-title'>Consommation d'électricité</div>
         
@@ -285,7 +285,7 @@ def make_legend_for_map(french=False):
             <li><span style='background:#FA8072;opacity:0.7;'></span>En construction</li>
             <li><span style='background:#FEA993;opacity:0.7;'></span>En projet</li>
         
-        <div class='legend-title'>Carbon footprint</div>
+        <div class='legend-title'>Empreinte carbone</div>
         
         <div class='legend-scale'>
         <ul class='legend-labels'>
@@ -293,9 +293,9 @@ def make_legend_for_map(french=False):
             <li><span style='background:#6e4546;opacity:0.7;'></span>En construction</li>
             <li><span style='background:#ac7b7d;opacity:0.7;'></span>En projet</li>
         
-        <li><a >La taille dépend de la production de la</a></li>
-        <li><a >ferme, de la consommation d'électricité</a></li>
-        <li><a >et de l'empreinte carbone estimées.</a></li>
+        <li><a >La taille dépend de la production de chaque</a></li>
+        <li><a >ferme-usine, de sa consommation d'électricité</a></li>
+        <li><a >estimée et de son empreinte carbone estimée.</a></li>
         """
     else:
         template_lang = """
