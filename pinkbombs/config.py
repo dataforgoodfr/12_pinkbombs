@@ -145,7 +145,7 @@ MAPPING = {
         "parser": pd.read_csv,
         "arguments": [
             60,
-            11,
+            None,
             None,
             None,
             "Positive impact",
@@ -315,7 +315,7 @@ MAPPINGFR = {
         "parser": pd.read_csv,
         "arguments": [
             60,
-            11,
+            None,
             None,
             None,
             "Impact positif",
