@@ -331,6 +331,9 @@ def make_color_bar_chart(
     input_y = input_y1 + "_" + input_y2
     input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
+    # Make figures in tonnes priettier
+    input_df['Production'] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(" tonnes")
+
     bar = px.bar(
         input_df,
         y=input_y,
@@ -342,7 +345,7 @@ def make_color_bar_chart(
         title=title,
         color_continuous_scale=palette,
         hover_name=input_y,
-        hover_data={input_x: ":,.0f", input_y: False, input_col: ":.1%"},
+        hover_data={input_x: False, input_y: False, 'Production': True, input_col: ":.1%"},
     )
 
     bar.update_traces(
