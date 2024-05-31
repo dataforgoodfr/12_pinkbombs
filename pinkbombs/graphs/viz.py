@@ -952,7 +952,10 @@ def make_matrix_alternatives(
         fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
     tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.6]
-    ticktext = [legend_green, "", "", "", "", legend_red]
+    ticktext = [textwrap.fill(legend_green, 7).replace("\n", "<br>"), 
+                "", "", "", "", 
+                textwrap.fill(legend_red, 7).replace("\n", "<br>")]
+
     fig.update_traces(showscale=True, 
                       colorbar = dict(thickness=25, 
                                       tickvals=tickvals, 
