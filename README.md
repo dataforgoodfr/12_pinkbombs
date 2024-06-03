@@ -51,3 +51,13 @@ and check your browser !
 ## Utiliser Tox pour tester votre code
 
     tox -vv
+
+## Python scripts for testing locally (outside API)
+To run the plotly graphs and the folium map locally and generate html files, you can use the script:
+
+    python3 pinkbombs/graphs/test_graphs.py 
+
+To translate the data and zip the csv files for download, run locally: 
+
+    python3 pinkbombs/graphs/translate_data.py
+    python3 pinkbombs/graphs/zip_data.py

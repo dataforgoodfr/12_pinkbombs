@@ -93,8 +93,8 @@ g1_2 = pb.make_area_order_chart(
     "Année", 
     "Tonnes de saumon produit en élevage", 
     "Pays",
-    title="Production de saumon d'élevage par pays",
-    y_title="Tonnes de saumon produit en élevage", 
+    title="Production de saumons atlantique d'élevage par pays",
+    y_title="Tonnes de saumons atlantique", 
     min_date = 1975,
     reorder=True,
     hide_zoom=True,
@@ -170,7 +170,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_hover="Pays",
     input_time="Année",
     input_size="Tonnes de saumon",
-    title="Evolution de l'élevage du saumon par pays",
+    title="Evolution de l'élevage de saumons par pays",
     min_year=1980,
     palette=['#151c97'],
 )
@@ -195,8 +195,8 @@ g2_1 = pb.make_simple_bar_chart(
         "Creation date",
         "Headquarters",
         "Website",
-        "Revenues 2022",
-        "Employees 2022",
+        "Revenues",
+        "Employees",
         "Note",
     ],
     title="Top 10 companies producing salmon by tonnes (2022)",
@@ -224,11 +224,11 @@ g2_1 = pb.make_simple_bar_chart(
         "Date de création",
         "Siège",
         "Site internet",
-        "Revenus 2022",
-        "Employés 2022",
+        "Revenus",
+        "Employés",
         "Note",
     ],
-    title="Top 10 producteurs de saumon par tonnes (2022)",
+    title="Top 10 des producteurs de saumons par tonnes (2022)",
     xtitle=None,
     ytitle=None,
     mycolor="#151c97",  # Seastemik dark blue
@@ -294,7 +294,7 @@ g2_4 = pb.make_ras_bubble_map(
     title_layer1="Electricity consumption",
     title_layer2="Carbon footprint",
     legend_title="Farms represented by estimated:",
-    title="The future of land-based salmon farming",
+    title=None,
     add_title_legend=True,
     french=False,
     )
@@ -312,8 +312,8 @@ g2_4 = pb.make_ras_bubble_map(
     df_data2_4, 
     title_layer1="Consommation d'électricité",
     title_layer2="Empreinte carbone",
-    legend_title="Fermes représentées par leur:",
-    title="Le futur des fermes aquacoles terrestres",
+    legend_title="Fermes-usines représentées par:",
+    title=None,
     add_title_legend=True,
     french=True,
     )
@@ -422,7 +422,7 @@ g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")
 #gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
 
 
-# Graph 7 - Altenratives 
+# Graph 7 - Alternatives 
 data7_name = "alternatives_text_7"
 data7_file = "data/" + data7_name + ".csv"
 df_data_7 = pd.read_csv(data7_file)
@@ -432,13 +432,13 @@ g7 = pb.make_matrix_alternatives(df_data_7,
                                  max_len_col=None, #11
                                  width=None, 
                                  height=None,
-                                 legend_green="Positive impact",
-                                 legend_red="Negative impact",
+                                 legend_green="Very limited impact",
+                                 legend_red="Very high impact",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
 
-# Graph 7 - Altenratives - FRENCH
+# Graph 7 - Alternatives - FRENCH
 data7_file = "data/" + data7_name + "_fr.csv"
 df_data_7 = pd.read_csv(data7_file)
 
@@ -447,8 +447,8 @@ g7 = pb.make_matrix_alternatives(df_data_7,
                                  max_len_col=None, #11
                                  width=None, 
                                  height=None,
-                                 legend_green="Impact positif",
-                                 legend_red="Impact négatif",
+                                 legend_green="Impact très réduit",
+                                 legend_red="Impact très fort",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7_fr.html")
