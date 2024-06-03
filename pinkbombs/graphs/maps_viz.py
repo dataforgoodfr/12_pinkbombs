@@ -275,7 +275,7 @@ def make_legend_for_map(french=False):
     if french : 
         template_lang = """
 
-        <div class='legend-subtitle'>Fermes par état d'avancement</div>
+        <div class='legend-subtitle'>Fermes-usines par état d'avancement</div>
         
         <div class='legend-title'>Consommation d'électricité</div>
         
@@ -285,7 +285,7 @@ def make_legend_for_map(french=False):
             <li><span style='background:#FA8072;opacity:0.7;'></span>En construction</li>
             <li><span style='background:#FEA993;opacity:0.7;'></span>En projet</li>
         
-        <div class='legend-title'>Carbon footprint</div>
+        <div class='legend-title'>Empreinte carbone</div>
         
         <div class='legend-scale'>
         <ul class='legend-labels'>
@@ -293,10 +293,9 @@ def make_legend_for_map(french=False):
             <li><span style='background:#6e4546;opacity:0.7;'></span>En construction</li>
             <li><span style='background:#ac7b7d;opacity:0.7;'></span>En projet</li>
         
-        <li><a >La taille dépend de la production de la</a></li>
-        <li><a >ferme, de la consommation d'électricité</a></li>
-        <li><a >et de l'empreinte carbone estimées.</a></li>
-        <li><a href='https://pinkbombs.org/about'>voir la Méthodologie</a></li>
+        <li><a >La taille dépend de la production de chaque</a></li>
+        <li><a >ferme-usine, de sa consommation d'électricité</a></li>
+        <li><a >estimée et de son empreinte carbone estimée.</a></li>
         """
     else:
         template_lang = """
@@ -319,14 +318,13 @@ def make_legend_for_map(french=False):
             <li><span style='background:#6e4546;opacity:0.7;'></span>In construction</li>
             <li><span style='background:#ac7b7d;opacity:0.7;'></span>Project</li>
         
-        <li><a >Size depends on farm production, estimated</a></li>
-        <li><a >electricity consumption and carbon footprint</a></li>
-        <li><a href='https://pinkbombs.org/about'>see Methodology</a></li>
+        <li><a >Size depends on farm production,</a></li>
+        <li><a >estimated electricity consumption</a></li>
+        <li><a >and carbon footprint</a></li>
         """
 
     template_gen2 = """
        </ul>
-    </div>
     </div>
      
     </body>
@@ -458,10 +456,10 @@ def make_ras_bubble_map(
     # Add scrollzoom toggler
     folium.plugins.ScrollZoomToggler().add_to(map)
 
-    if add_title_legend:
-        map_title = title
-        map.get_root().html.add_child(folium.Element(make_title_html(map_title)))
+    if title is not None:
+        map.get_root().html.add_child(folium.Element(make_title_html(title)))
 
+    if add_title_legend:
         legend_temp = make_legend_for_map(french=french)
         macro = MacroElement()
         macro._template = Template(legend_temp)

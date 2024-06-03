@@ -331,6 +331,9 @@ def make_color_bar_chart(
     input_y = input_y1 + "_" + input_y2
     input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
+    # Make figures in tonnes priettier
+    input_df['Production'] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(" tonnes")
+
     bar = px.bar(
         input_df,
         y=input_y,
@@ -342,7 +345,7 @@ def make_color_bar_chart(
         title=title,
         color_continuous_scale=palette,
         hover_name=input_y,
-        hover_data={input_x: ":,.0f", input_y: False, input_col: ":.1%"},
+        hover_data={input_x: False, input_y: False, 'Production': True, input_col: ":.1%"},
     )
 
     bar.update_traces(
@@ -468,11 +471,6 @@ def make_simple_bar_chart(
     input_y = input_y1 + "_" + input_y2
     input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
-    # Get a list of all columns except input_x, input_y1, and input_y2
-    hover_data = {input_x: ":,.0f", input_y: False}
-    for column in input_other:
-        hover_data[column] = True
-
     if fix_approx:
         # Remove '~' characters from input_n1 and input_n2 and convert them to integers
         input_df[input_n1] = input_df[input_n1].str.replace("~", "")
@@ -484,11 +482,11 @@ def make_simple_bar_chart(
     input_df[input_n1] = input_df[input_n1] / 1000000
     # Format the values with "$" symbol preceding and add "M" for millions and "B" for billions
     input_df[input_n1] = input_df[input_n1].map(
-        lambda x: f"${x:.1f}M" if x < 1000 else f"${x/1000:.1f}B"
+        lambda x: f"${x:.1f}M (2022)" if x < 1000 else f"${x/1000:.1f}B (2022)"
     )
 
     # Format the values in input_n2 with commas for thousand separators
-    input_df[input_n2] = input_df[input_n2].apply(lambda x: f"{x:,.0f}")
+    input_df[input_n2] = input_df[input_n2].apply(lambda x: f"{x:,.0f}") + str(" (2022)")
 
     # Loop through the DataFrame and update values for the company "Cooke"
     for index, row in input_df.iterrows():
@@ -498,6 +496,17 @@ def make_simple_bar_chart(
 
     # Replace NaN values with an empty string in all columns
     input_df = input_df.fillna("")
+
+    # Make figures in tonnes priettier
+    input_df['Production'] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(" tonnes")
+
+    # Replace revenues 2022 with revenues 
+    input_df = input_df.rename(columns={input_n1:input_n1[:-5], input_n2: input_n2[:-5]})
+
+    # Get a list of all columns except input_x, input_y1, and input_y2
+    hover_data = {input_x: False, input_y: False, 'Production':True}
+    for column in input_other:
+        hover_data[column] = True
 
     bar = px.bar(
         input_df,
@@ -943,7 +952,10 @@ def make_matrix_alternatives(
         fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
     tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.6]
-    ticktext = [legend_green, "", "", "", "", legend_red]
+    ticktext = [textwrap.fill(legend_green, 7).replace("\n", "<br>"), 
+                "", "", "", "", 
+                textwrap.fill(legend_red, 7).replace("\n", "<br>")]
+
     fig.update_traces(showscale=True, 
                       colorbar = dict(thickness=25, 
                                       tickvals=tickvals, 

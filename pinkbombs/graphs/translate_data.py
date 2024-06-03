@@ -39,6 +39,9 @@ df_data1_2.loc[df_data1_2.Country == "Korea, Dem. People's Rep",
 df_data1_2.loc[df_data1_2.Country == "Türkiye", "Country"]	= "Turkey"
 df_data1_2 = df_data1_2.merge(df_pays, left_on='Country', right_on='name_eng', how = 'left')
 
+df_data1_2.loc[df_data1_2.name_fr == "République Populaire Démocratique de Corée", 
+               "name_fr"]	= "Corée du Nord"
+
 df_data1_2_fr = df_data1_2.rename(columns = {
     'Year':"Année",
     'Tonnes - live weight': "Tonnes de saumon produit en élevage",
