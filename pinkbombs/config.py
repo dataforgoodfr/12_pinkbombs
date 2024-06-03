@@ -1,5 +1,6 @@
-import pinkbombs as pb
 import pandas as pd
+import graphs as pb
+
 
 MAPPING = {
     "salmon-collapse": {
@@ -13,6 +14,8 @@ MAPPING = {
             [
                 '#151c97'
             ],
+            "simple_white",
+            "",
             True,
         ],
     },
@@ -72,6 +75,8 @@ MAPPING = {
             "Tonnes - live weight",
             "Evolution of salmon farming by country",
             1980,
+            50,
+            True,
             [
                 '#151c97',
             ],
@@ -183,6 +188,8 @@ MAPPINGFR = {
             [
                 '#151c97'
             ],
+            "simple_white",
+            "",
             True,
         ],
     },
@@ -242,6 +249,8 @@ MAPPINGFR = {
             "Tonnes de saumon",
             "Evolution de l'élevage de saumons par pays",
             1980,
+            50,
+            True,
             [
                 '#151c97',
             ],

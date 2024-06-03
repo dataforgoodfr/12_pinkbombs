@@ -33,7 +33,6 @@ async def generate_graphs_fr(graph_name, connection: bool = Depends(verify_token
         "data/" + MAPPINGFR[graph_name]["filename"],
     )
     chart_obj = MAPPINGFR[graph_name]["function"](df, *MAPPINGFR[graph_name]["arguments"])
-
     return {
         "graph_name": graph_name,
         "graph": chart_obj.to_json(),

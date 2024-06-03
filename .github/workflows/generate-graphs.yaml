@@ -1,0 +1,59 @@
+name: Build Graphs
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #   - main
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+    - name: cache poetry install
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-1.8.2-0
+    - uses: snok/install-poetry@v1
+      with:
+        version: 1.8.2
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    - name: cache deps
+      id: cache-deps
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: pydeps-${{ hashFiles('**/poetry.lock') }}
+    - run: poetry install --no-interaction --no-root
+      if: steps.cache-deps.outputs.cache-hit != 'true'
+    - run: poetry install --no-interaction
+    - run: poetry run python 12_pinkbombs_app/generate.py
+    - id: files
+      uses: jitterbit/get-changed-files@v1
+      with:
+        format: 'csv'
+    
+
+
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 12_pinkbombs_app
+          ref: 'main'
+          token:  ${{ secrets.D4GTECH_TOKEN }}
+          path: './12_pinkbombs_app'
+      - name: setup git config
+        run: |
+          git config user.name "Pinkbombs Bot"
+          git config user.email "<>"
+      - run : git add .
+      - run: git commit -m "bot: update data"
+      - run: git push origin main
