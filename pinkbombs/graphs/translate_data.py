@@ -88,6 +88,23 @@ data1_4_file_out = "data/" + data1_4_name + "_fr.csv"
 col_1_4_fr = ["Année", "Pays", "Tonnes de saumon", "alpha-3"]
 df_data1_4_fr[col_1_4_fr].to_csv(data1_4_file_out)
 
+# Data for Graph 1.5
+data1_5_name = 'top_15_countries_consuming_1.5'
+data1_5_file = "data/"+data1_5_name+".csv"
+df_data1_5 = pd.read_csv(data1_5_file)
+
+df_data1_5 = df_data1_5.merge(df_pays, left_on='Country', right_on='name_eng', how = 'left')
+
+df_data1_5_fr = df_data1_5.rename(columns={
+    "name_fr": "Pays",
+    "Flag": "Drapeau",
+    "Apparent consumption":'Consommation apparente',
+    "Apparent consumption per capita": "Consommation apparente par habitant"})
+
+data1_5_file_out = "data/" + data1_5_name + "_fr.csv"
+col_1_3_fr = ["Pays", "Drapeau", 'Consommation apparente', "Consommation apparente par habitant",
+"Production (Capture + Aquaculture)","Export","Import"]
+df_data1_5_fr[col_1_3_fr].to_csv(data1_5_file_out)
 
 # Data for Graph 2.1 
 data2_1_name = "top_10_companies_producing_2.1"

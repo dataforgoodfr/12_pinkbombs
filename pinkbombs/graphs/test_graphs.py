@@ -178,6 +178,62 @@ g1_4 = pb.make_animated_bubble_map(
 g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html",
                 auto_play=False)
 
+# Graph 1.5 - Top 15 countries consuming salmon
+data1_5_name = 'top_15_countries_consuming_1.5'
+data1_5_file = "data/"+data1_5_name+".csv"
+df_data1_5 = pd.read_csv(data1_5_file)
+
+g1_5=pb.make_double_yaxis_bar_chart(
+    df_data1_5,
+    input_x1="Country",
+    input_x2="Flag",
+    input_y1="Apparent consumption",
+    input_y2="Apparent consumption per capita",
+    input_other=[
+            "Production (Capture + Aquaculture)",
+            "Export",
+            "Import"],
+    title="Top 15 countries consuming salmon",
+    mycolor_bar='#151c97',
+    bar_hover_legend="Consumption",
+    mycolor_point="#FF4530",
+    point_hover_legend="Consumption per capita",
+    xtitle="Country",
+    ytitle1="Apparent consumption in tonnes (2019)",
+    ytitle2="Apparent consumption per capita in kilos (2019)",
+    block_zoom=True
+)
+
+g1_5.write_html("pinkbombs/graphs/test_html/" + data1_5_name + ".html")
+
+# Graph 1.5 - Top 15 countries consuming salmon - FRENCH
+data1_5_name = 'top_15_countries_consuming_1.5'
+data1_5_file = "data/"+data1_5_name+"_fr.csv"
+df_data1_5 = pd.read_csv(data1_5_file)
+
+g1_5=pb.make_double_yaxis_bar_chart(
+    df_data1_5,
+    input_x1="Pays",
+    input_x2="Drapeau",
+    input_y1="Consommation apparente",
+    input_y2="Consommation apparente par habitant",
+    input_other=[
+            "Production (Capture + Aquaculture)",
+            "Export",
+            "Import"],
+    title="Top 15 des pays consommateurs de saumon",
+    mycolor_bar='#151c97',
+    bar_hover_legend="Consommation",
+    mycolor_point="#FF4530",
+    point_hover_legend="Consommation par habitant",
+    xtitle="Pays",
+    ytitle1="Consommation apparente en tonnes (2019)",
+    ytitle2="Consommation apparente par habitant en kilos (2019)",
+    block_zoom=True
+)
+
+g1_5.write_html("pinkbombs/graphs/test_html/" + data1_5_name + "_fr.html")
+
 # Graph 2.1 -  Top 10 companies producing salmon
 data2_1_name = "top_10_companies_producing_2.1"
 data2_1_file = "data/" + data2_1_name + ".csv"
@@ -254,7 +310,7 @@ g2_3 = pb.make_simple_bar_chart(
     title="Top 10 land-based salmon productors (ambitions)",
     xtitle='Company ambition for salmon production in tonnes',
     ytitle=None,
-    mycolor='#151c97', 
+    mycolor='#151c97',
     block_zoom=True,
     fix_approx=False,
     )

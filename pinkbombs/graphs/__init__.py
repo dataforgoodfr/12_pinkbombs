@@ -4,4 +4,5 @@ from .viz import make_color_bar_chart, make_color_bar_chart2
 from .viz import make_animated_bubble_map, make_treemap_chart
 from .viz import make_simple_bar_chart, make_simple_pie_chart
 from .viz import make_simple_box_chart, make_matrix_alternatives
+from .viz import make_double_yaxis_bar_chart
 from .maps_viz import make_ras_bubble_map

@@ -3,6 +3,7 @@ import numpy as np
 import plotly.express as px
 from plotly.graph_objects import Figure, Scatter, Heatmap
 import textwrap
+from plotly.subplots import make_subplots
 
 
 def make_area_chart(input_df: pd.DataFrame, input_x: str, input_y: str) -> Figure:
@@ -962,3 +963,114 @@ def make_matrix_alternatives(
                                       ticktext=ticktext))
 
     return fig
+
+def make_double_yaxis_bar_chart(
+    input_df,
+    input_x1,
+    input_x2,
+    input_y1,
+    input_y2,
+    input_other,
+    title,
+    xtitle,
+    ytitle1,
+    ytitle2,
+    mycolor_bar,
+    bar_hover_legend,
+    mycolor_point,
+    point_hover_legend,
+    block_zoom=False,
+    theme="simple_white",
+) -> Figure:
+    """Returns a Plotly Express object as a bar chart with only 1 color
+    Parameters:
+            input_df (pd.DataFrame): dataframe with data to be visualized
+            input_x (str): name of the field for the x-axis
+            input_y1 (str): name of the field for the first part of the y-axis
+            input_y2 (str): name of the field for the second part of the y-axis
+            input_n1 (str): name of field for revenues in $
+            input_n2 (str): name of field for employees
+            input_other (List[str]): names of other fields to display on hover
+            title (str): chart title
+            xtitle (str): x-axis title
+            ytitle (str): y-axis title
+            mycolor (str): name of the color code for the bars
+            palette (px.object): Plotly discrete palette, default is Pastel1
+            theme (str): Plotly chart theme, default is 'simple_white'
+            block_zoom (boolean): Decide if plotly should block the zoom. Default is False.
+            fix_approx (boolean): if data has "~" symbol (to remove from this function!)
+    Returns:
+            bar (Plotly object): output chart object
+    """
+    # Reorder the dataframe
+    input_df = input_df.sort_values(input_y1, ascending=False)
+
+    # Concatenate input_y1 and input_y2 to form input_y
+    input_x = input_x1 + "_" + input_x2
+    input_df[input_x] = input_df[input_x1] + " " + input_df[input_x2]
+
+    input_df[input_y1] = np.round(input_df[input_y1] / 1000, 0) * 1000
+    input_df[input_y2] = np.round(input_df[input_y2], 2)
+    input_df[input_other[0]] = np.round(input_df[input_other[0]] / 1000, 0) * 1000
+    input_df[input_other[1]] = np.round(input_df[input_other[1]] / 1000, 0) * 1000
+    input_df[input_other[2]] = np.round(input_df[input_other[2]] / 1000, 0) * 1000
+
+    input_df[input_other[0]] = input_df[input_other[0]].apply(lambda x: f"{x:,.0f}")
+    input_df[input_other[1]] = input_df[input_other[1]].apply(lambda x: f"{x:,.0f}")
+    input_df[input_other[2]] = input_df[input_other[2]].apply(lambda x: f"{x:,.0f}")
+    # Get a list of all columns except input_x, input_y1, and input_y2
+    hover_data = {input_x: False, input_y1: True, input_y2: True}
+    for column in input_other:
+        hover_data[column] = True
+
+    # figure setup with multiple axes
+    bar_point = make_subplots(specs=[[{"secondary_y": True}]])
+
+    bar = px.bar(
+        input_df,
+        x=input_x,
+        y=input_y1,
+        orientation='v',
+        category_orders={input_y1: input_df[input_y1].to_list()},
+        text_auto=',.0f', # add
+        # comma #'.2s' / '~s'
+        title=title,
+        hover_data=hover_data
+        )
+
+    bar.update_traces(marker_color=mycolor_bar,textfont_size=12, textangle=0, textposition="outside", cliponaxis=False,
+                         hovertemplate = "<b>" + bar_hover_legend +': %{y} tonnes</b><br>'+
+                                         "<i>- "+input_other[0] + ": %{customdata[1]} tonnes</i><br>"+
+                                         "<i>- "+input_other[1] + ": %{customdata[2]} tonnes</i><br>" +
+                                         "<i>- "+input_other[2] + ": %{customdata[3]} tonnes</i><br>")
+
+    point = px.scatter(
+        input_df,
+        x=input_x,
+        y=input_y2,
+        hover_data={input_x: False, input_y1: False, input_y2: True}
+        )
+
+    point.update_traces(marker_color=mycolor_point, marker=dict(size=10),yaxis="y2",
+                        hovertemplate = "<b>" + point_hover_legend +': %{y} kilos</b>')
+
+    bar_point.add_traces(bar.data + point.data)
+
+    bar_point.layout.xaxis.title = xtitle
+    bar_point.layout.yaxis.title = ytitle1
+    bar_point.layout.yaxis2.title = ytitle2
+    bar_point.layout.yaxis2.color = mycolor_point
+
+    bar_point.update_layout(template=theme,title=title,
+        yaxis=dict(tickfont=dict(size=13)),
+        hoverlabel=dict(bgcolor="white"))
+    bar_point.update_xaxes(exponentformat="none")
+    bar_point.update_coloraxes(colorbar_tickformat='0%')
+    bar_point.update_layout(hovermode="x unified",xaxis_title=None)
+
+    if block_zoom:
+        bar_point.layout.xaxis.fixedrange = True
+        bar_point.layout.yaxis.fixedrange = True
+        bar_point.update_layout(modebar_remove=["zoom", "pan", "lasso2d", "select2d"])
+
+    return bar_point
