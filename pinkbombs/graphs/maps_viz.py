@@ -20,7 +20,7 @@ def make_animated_bubble_map(
     palette=px.colors.qualitative.Prism,
     theme="simple_white",
     reverse=False,
-) -> Figure:
+) -> str:
     """Returns plotly express object as Bubbles map with animation
     Parameters:
             input_df (pd.DataFrame): dataframe with data to be visualised
@@ -35,7 +35,7 @@ def make_animated_bubble_map(
             theme (str): plotly chart theme, default is 'simple_white'
             last_frame (boolean): to add last frame as first
     Returns:
-            area (plotly object): output chart object
+            area (html): output chart object as html string.
     """
     # if reverse:
     #    input_df = input_df.sort_values(by=input_time, ascending=False)
