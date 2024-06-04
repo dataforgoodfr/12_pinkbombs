@@ -1009,11 +1009,11 @@ def make_double_yaxis_bar_chart(
     input_x = input_x1 + "_" + input_x2
     input_df[input_x] = input_df[input_x1] + " " + input_df[input_x2]
 
-    input_df[input_y1] = np.round(input_df[input_y1] / 1000, 0) * 1000
+    input_df[input_y1] = np.round(input_df[input_y1], 0)
     input_df[input_y2] = np.round(input_df[input_y2], 2)
-    input_df[input_other[0]] = np.round(input_df[input_other[0]] / 1000, 0) * 1000
-    input_df[input_other[1]] = np.round(input_df[input_other[1]] / 1000, 0) * 1000
-    input_df[input_other[2]] = np.round(input_df[input_other[2]] / 1000, 0) * 1000
+    input_df[input_other[0]] = np.round(input_df[input_other[0]], 0)
+    input_df[input_other[1]] = np.round(input_df[input_other[1]], 0)
+    input_df[input_other[2]] = np.round(input_df[input_other[2]], 0)
 
     input_df[input_other[0]] = input_df[input_other[0]].apply(lambda x: f"{x:,.0f}")
     input_df[input_other[1]] = input_df[input_other[1]].apply(lambda x: f"{x:,.0f}")
@@ -1061,12 +1061,25 @@ def make_double_yaxis_bar_chart(
     bar_point.layout.yaxis2.title = ytitle2
     bar_point.layout.yaxis2.color = mycolor_point
 
+    # We adjust the zeros to start at the same level
+    y1_min, y1_max = input_df[input_y1].min(), input_df[input_y1].max()
+    y1_padding = (y1_max - y1_min) / 16
+    y1_range = [y1_min - y1_padding, y1_max + y1_padding]
+    y1_relative_zero = (0 - y1_range[0]) / (y1_range[1] - y1_range[0])
+
+    y2_min, y2_max = input_df[input_y2].min(), input_df[input_y2].max()
+    y2_padding = (y1_relative_zero * (y2_max - y2_min) + y2_min) / (1 - 2 * y1_relative_zero)
+    y2_range = [y2_min - y2_padding, y2_max + y2_padding]
+
+    bar_point.update_yaxes(range=y1_range, secondary_y=False)
+    bar_point.update_yaxes(range=y2_range, secondary_y=True)
     bar_point.update_layout(template=theme,title=title,
         yaxis=dict(tickfont=dict(size=13)),
         hoverlabel=dict(bgcolor="white"))
     bar_point.update_xaxes(exponentformat="none")
     bar_point.update_coloraxes(colorbar_tickformat='0%')
     bar_point.update_layout(hovermode="x unified",xaxis_title=None)
+    bar_point.update_xaxes(ticks="")
 
     if block_zoom:
         bar_point.layout.xaxis.fixedrange = True
