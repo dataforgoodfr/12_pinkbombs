@@ -157,8 +157,9 @@ g1_4 = pb.make_animated_bubble_map(
     palette=['#151c97'],
 )
 
-g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + ".html",
-                auto_play=False)
+func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + ".html","w") 
+func1_4.write(g1_4) 
+func1_4.close()
 
 # Graph 1.4 -  Evolution of salmon farming by country - FRENCH
 data1_4_file = "data/" + data1_4_name + "_fr.csv"
@@ -175,8 +176,9 @@ g1_4 = pb.make_animated_bubble_map(
     palette=['#151c97'],
 )
 
-g1_4.write_html("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html",
-                auto_play=False)
+func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html","w") 
+func1_4.write(g1_4) 
+func1_4.close()
 
 # Graph 2.1 -  Top 10 companies producing salmon
 data2_1_name = "top_10_companies_producing_2.1"

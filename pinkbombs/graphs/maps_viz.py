@@ -67,7 +67,7 @@ def make_animated_bubble_map(
     # Remove lasso and select
     map2.update_layout(modebar_remove=["lasso2d", "select2d"])
 
-    return map2.to_html()
+    return map2.to_html(auto_play=False)
 
 
 def get_transfo_param(df, col, min_rad=2.5, max_rad=60):
