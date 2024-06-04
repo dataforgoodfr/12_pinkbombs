@@ -64,24 +64,6 @@ MAPPING = {
             True,
         ],
     },
-    "evolution-map": {
-        "filename": "evolution_salmon_farming_country_iso_1.4.csv",
-        "function": pb.make_animated_bubble_map,
-        "parser": pd.read_csv,
-        "arguments": [
-            "alpha-3",
-            "Country",
-            "Year",
-            "Tonnes - live weight",
-            "Evolution of salmon farming by country",
-            1980,
-            50,
-            True,
-            [
-                '#151c97',
-            ],
-        ],
-    },
     "top-comp": {
         "filename": "top_10_companies_producing_2.1.csv",
         "function": pb.make_simple_bar_chart,
@@ -174,6 +156,24 @@ MAPS = {
             False,
         ],
     },
+    "evolution-map": {
+        "filename": "evolution_salmon_farming_country_iso_1.4.csv",
+        "function": pb.make_animated_bubble_map,
+        "parser": pd.read_csv,
+        "arguments": [
+            "alpha-3",
+            "Country",
+            "Year",
+            "Tonnes - live weight",
+            "Evolution of salmon farming by country",
+            1980,
+            50,
+            True,
+            [
+                '#151c97',
+            ],
+        ],
+    },
 }
 
 MAPPINGFR = {
@@ -236,24 +236,6 @@ MAPPINGFR = {
                 '#ff4530'
             ],
             True,
-        ],
-    },
-    "evolution-map": {
-        "filename": "evolution_salmon_farming_country_iso_1.4_fr.csv",
-        "function": pb.make_animated_bubble_map,
-        "parser": pd.read_csv,
-        "arguments": [
-            "alpha-3",
-            "Pays",
-            "Année",
-            "Tonnes de saumon",
-            "Evolution de l'élevage de saumons par pays",
-            1980,
-            50,
-            True,
-            [
-                '#151c97',
-            ],
         ],
     },
     "top-comp": {
@@ -346,6 +328,24 @@ MAPSFR = {
             None,
             True,
             True
+        ],
+    },
+    "evolution-map": {
+        "filename": "evolution_salmon_farming_country_iso_1.4_fr.csv",
+        "function": pb.make_animated_bubble_map,
+        "parser": pd.read_csv,
+        "arguments": [
+            "alpha-3",
+            "Pays",
+            "Année",
+            "Tonnes de saumon",
+            "Evolution de l'élevage de saumons par pays",
+            1980,
+            50,
+            True,
+            [
+                '#151c97',
+            ],
         ],
     },
 }
