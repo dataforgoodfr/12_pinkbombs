@@ -823,8 +823,16 @@ def make_matrix_alternatives(
 
     for i in range(n_row):
         for j in range(n_col):
-            mat_col[i, j] = int(customdata[i, j][0])  # Take color code
-            customdata[i, j] = textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
+            pair = textwrap.fill(col[j] + " - " + row[i], max_len).replace("\n", "<br>")
+
+            if j == 0:
+                mat_col[i, j] = 7
+                customdata[i, j] = f"<b>{row[i]}</b><br>" + \
+                textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
+            else:
+                mat_col[i, j] = int(customdata[i, j][0])  # Take color code
+                customdata[i, j] = f"<b>{pair}</b><br>" + \
+                textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
     
     # Define colorscale and axes
     mycolorscale = [
@@ -835,20 +843,24 @@ def make_matrix_alternatives(
         "#ffac3c",  # orange - Paul: #ff7e36. more yellow orange #ffac3c
         "#f34620",  # red - Paul
         "#cc0100",  # dark red - NEW
+        "rgba(0,0,0,0)",  # transparent for the first column
     ]
 
+    n=len(mycolorscale)
     my_colorsc=[[0, mycolorscale[0]],
-            [0.16666666666666666, mycolorscale[0]],
-            [0.16666666666666666, mycolorscale[1]], 
-            [0.3333333333333333, mycolorscale[1]], 
-            [0.3333333333333333, mycolorscale[2]],
-            [0.5, mycolorscale[2]],
-            [0.5, mycolorscale[3]],
-            [0.6666666666666666, mycolorscale[3]],
-            [0.6666666666666666, mycolorscale[4]],
-            [0.8333333333333334, mycolorscale[4]],
-            [0.8333333333333334, mycolorscale[5]],
-            [1, mycolorscale[5]]]
+            [1/n, mycolorscale[0]],
+            [1/n, mycolorscale[1]],
+            [2/n, mycolorscale[1]],
+            [2/n, mycolorscale[2]],
+            [3/n, mycolorscale[2]],
+            [3/n, mycolorscale[3]],
+            [4/n, mycolorscale[3]],
+            [4/n, mycolorscale[4]],
+            [5/n, mycolorscale[4]],
+            [5/n, mycolorscale[5]],
+            [6/n, mycolorscale[5]],
+            [6/n, mycolorscale[6]],
+            [1, mycolorscale[6]]]
 
     # Wrap column names
     if max_len_col is not None:
@@ -889,7 +901,7 @@ def make_matrix_alternatives(
     if hover_disable:
         fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
-    tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.6]
+    tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.7]
     ticktext = [textwrap.fill(legend_green, 7).replace("\n", "<br>"), 
                 "", "", "", "", 
                 textwrap.fill(legend_red, 7).replace("\n", "<br>")]
@@ -898,6 +910,9 @@ def make_matrix_alternatives(
                       colorbar = dict(thickness=25, 
                                       tickvals=tickvals, 
                                       ticktext=ticktext))
+    
+    # Reduce range to see only a small section of the transparent cells (first col)
+    fig.update_layout(xaxis_range=[0.3, 8.5])
 
     return fig
 
