@@ -1084,6 +1084,7 @@ def make_double_yaxis_bar_chart(
     if block_zoom:
         bar_point.layout.xaxis.fixedrange = True
         bar_point.layout.yaxis.fixedrange = True
+        bar_point.layout.yaxis2.fixedrange = True
         bar_point.update_layout(modebar_remove=["zoom", "pan", "lasso2d", "select2d"])
 
     return bar_point
