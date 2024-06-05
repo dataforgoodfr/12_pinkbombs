@@ -594,69 +594,6 @@ def make_bar_chart(
     return bar
 
 
-def make_animated_bubble_map(
-    input_df,
-    input_loc,
-    input_hover,
-    input_time,
-    input_size,
-    title,
-    min_year=1950,
-    size_max=50,
-    last_frame=True,
-    palette=px.colors.qualitative.Prism,
-    theme="simple_white",
-    reverse=False,
-) -> Figure:
-    """Returns plotly express object as Bubbles map with animation
-    Parameters:
-            input_df (pd.DataFrame): dataframe with data to be visualised
-            input_loc (str): name of the field with the iso alpha3 codes
-            input_hover (str): name of the field to show on hover
-            input_time (str): name of the time field for the animation
-            input_size (str): name of the field for the size of the bubbles
-            min_year (int): year to start the animation, default=1950
-            title (str): chart title
-            size_max (int): size of the maximum bubble radius, default=50
-            palette (px.object): plotly discrete palette, default is Prism
-            theme (str): plotly chart theme, default is 'simple_white'
-            last_frame (boolean): to add last frame as first
-    Returns:
-            area (plotly object): output chart object
-    """
-    # if reverse:
-    #    input_df = input_df.sort_values(by=input_time, ascending=False)
-    if min_year > 1950:
-        input_df = input_df.loc[input_df[input_time] >= min_year,]
-
-    map = px.scatter_geo(
-        input_df,
-        locations=input_loc,
-        size=input_size,
-        animation_frame=input_time,
-        projection="natural earth",
-        size_max=size_max,
-        hover_name=input_hover,
-        hover_data={input_size: ":,.0f", input_time: True, input_hover: False, input_loc: False},
-        color_discrete_sequence=palette,
-        title=title,
-    )
-    map.update_geos(showcountries=True)
-
-    if last_frame:
-        map2 = Figure()
-        for tr in map.frames[-1].data:
-            map2.add_trace(tr)
-        map2.layout = map.layout
-        map2.frames = map.frames
-        map2.layout["sliders"][0]["active"] = len(map.frames) - 1
-
-    # Remove lasso and select
-    map2.update_layout(modebar_remove=["lasso2d", "select2d"])
-
-    return map2
-
-
 def make_treemap_chart(
     input_df, input_x1, input_x2, input_x3, input_y, input_n, title, height=400, width=500, top_x=6
 ) -> Figure:
