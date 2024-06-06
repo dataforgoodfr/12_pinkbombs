@@ -24,7 +24,7 @@ df_data1_1 = pd.read_csv(data1_1_file)
 
 df_data1_1_fr = df_data1_1.rename(columns = {
     'Year':"Année",
-    'Tons of wild salmon catch in Atlantic waters': "Saumon pêché dans l'Atlantique en tonnes"})
+    'Tons of wild salmon catch in Atlantic waters': "Saumons pêchés dans l'Atlantique en tonnes"})
 
 data1_1_file_out = "data/" + data1_1_name + "_fr.csv"
 df_data1_1_fr.to_csv(data1_1_file_out)
@@ -44,11 +44,11 @@ df_data1_2.loc[df_data1_2.name_fr == "République Populaire Démocratique de Cor
 
 df_data1_2_fr = df_data1_2.rename(columns = {
     'Year':"Année",
-    'Tonnes - live weight': "Tonnes de saumon produit en élevage",
+    'Tonnes - live weight': "Tonnes de saumons produits en élevage",
     'name_fr': "Pays"})
 
 data1_2_file_out = "data/" + data1_2_name + "_fr.csv"
-col_1_2_fr = ["Année", "Tonnes de saumon produit en élevage", "Pays"]
+col_1_2_fr = ["Année", "Tonnes de saumons produits en élevage", "Pays"]
 df_data1_2_fr[col_1_2_fr].to_csv(data1_2_file_out)
 
 # Data for Graph 1.3
@@ -82,10 +82,10 @@ df_data1_4 = df_data1_4.merge(df_pays, left_on='Country', right_on='name_eng', h
 df_data1_4_fr = df_data1_4.rename(columns={
     "Year": "Année",
     "name_fr": "Pays",
-    "Tonnes - live weight": "Tonnes de saumon"})
+    "Tonnes - live weight": "Tonnes de saumons"})
 
 data1_4_file_out = "data/" + data1_4_name + "_fr.csv"
-col_1_4_fr = ["Année", "Pays", "Tonnes de saumon", "alpha-3"]
+col_1_4_fr = ["Année", "Pays", "Tonnes de saumons", "alpha-3"]
 df_data1_4_fr[col_1_4_fr].to_csv(data1_4_file_out)
 
 # Data for Graph 1.5
