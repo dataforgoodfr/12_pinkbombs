@@ -56,8 +56,8 @@ df_data1_1 = pd.read_csv(data1_1_file)
 g1_1 = pb.make_area_single_chart(
     df_data1_1,
     "Année",
-    "Saumon pêché dans l'Atlantique en tonnes",
-    "Saumon pêché dans l'Atlantique en tonnes",
+    "Saumons pêchés dans l'Atlantique en tonnes",
+    "Saumons pêchés dans l'Atlantique en tonnes",
     palette=['#151c97'],
     block_zoom=True,
 )
@@ -91,10 +91,10 @@ df_data1_2 = pd.read_csv(data1_2_file)
 g1_2 = pb.make_area_order_chart(
     df_data1_2,
     "Année", 
-    "Tonnes de saumon produit en élevage", 
+    "Tonnes de saumons produits en élevage", 
     "Pays",
-    title="Production de saumons atlantique d'élevage par pays",
-    y_title="Tonnes de saumons atlantique", 
+    title="Production de saumons atlantiques d'élevage par pays",
+    y_title="Tonnes de saumons atlantiques", 
     min_date = 1975,
     reorder=True,
     hide_zoom=True,
@@ -132,7 +132,7 @@ g1_3 = pb.make_color_bar_chart(
     input_y1='Pays', 
     input_y2='Drapeau',
     input_col="% du total",
-    title='Top 10 pays producteurs de saumon par tonnes (2021)',
+    title='Top 10 pays producteurs de saumons par tonnes (2021)',
     xtitle=None,
     ytitle=None,
     palette = ['#151c97', '#ff4530'],
@@ -170,7 +170,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_loc="alpha-3",
     input_hover="Pays",
     input_time="Année",
-    input_size="Tonnes de saumon",
+    input_size="Tonnes de saumons",
     title="Evolution de l'élevage de saumons par pays",
     min_year=1980,
     palette=['#151c97'],
@@ -179,6 +179,62 @@ g1_4 = pb.make_animated_bubble_map(
 func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html","w") 
 func1_4.write(g1_4) 
 func1_4.close()
+
+# Graph 1.5 - Top 15 countries consuming salmon
+data1_5_name = 'top_15_countries_consuming_1.5'
+data1_5_file = "data/"+data1_5_name+".csv"
+df_data1_5 = pd.read_csv(data1_5_file)
+
+g1_5=pb.make_double_yaxis_bar_chart(
+    df_data1_5,
+    input_x1="Country",
+    input_x2="Flag",
+    input_y1="Apparent consumption",
+    input_y2="Apparent consumption per capita",
+    input_other=[
+            "Production (Capture + Aquaculture)",
+            "Export",
+            "Import"],
+    title="Top 15 countries consuming salmon",
+    mycolor_bar='#151c97',
+    bar_hover_legend="Consumption",
+    mycolor_point="#FF4530",
+    point_hover_legend="Consumption per capita",
+    xtitle="Country",
+    ytitle1="Apparent consumption in tonnes (2019)",
+    ytitle2="Apparent consumption per capita in kilos (2019)",
+    block_zoom=True
+)
+
+g1_5.write_html("pinkbombs/graphs/test_html/" + data1_5_name + ".html")
+
+# Graph 1.5 - Top 15 countries consuming salmon - FRENCH
+data1_5_name = 'top_15_countries_consuming_1.5'
+data1_5_file = "data/"+data1_5_name+"_fr.csv"
+df_data1_5 = pd.read_csv(data1_5_file)
+
+g1_5=pb.make_double_yaxis_bar_chart(
+    df_data1_5,
+    input_x1="Pays",
+    input_x2="Drapeau",
+    input_y1="Consommation apparente",
+    input_y2="Consommation apparente par habitant",
+    input_other=[
+            "Production (Capture + Aquaculture)",
+            "Export",
+            "Import"],
+    title="Top 15 des pays consommateurs de saumons",
+    mycolor_bar='#151c97',
+    bar_hover_legend="Consommation",
+    mycolor_point="#FF4530",
+    point_hover_legend="Consommation par habitant",
+    xtitle="Pays",
+    ytitle1="Consommation apparente en tonnes (2019)",
+    ytitle2="Consommation apparente par habitant en kilos (2019)",
+    block_zoom=True
+)
+
+g1_5.write_html("pinkbombs/graphs/test_html/" + data1_5_name + "_fr.html")
 
 # Graph 2.1 -  Top 10 companies producing salmon
 data2_1_name = "top_10_companies_producing_2.1"
@@ -256,7 +312,7 @@ g2_3 = pb.make_simple_bar_chart(
     title="Top 10 land-based salmon productors (ambitions)",
     xtitle='Company ambition for salmon production in tonnes',
     ytitle=None,
-    mycolor='#151c97', 
+    mycolor='#151c97',
     block_zoom=True,
     fix_approx=False,
     )
@@ -276,8 +332,8 @@ g2_3 = pb.make_simple_bar_chart(
     input_n2='Employés 2022',
     input_other=['Nombre de projets', 'Pays des projets', "Siège",
                  "Site internet",'Note'],
-    title="Top 10 producteurs de saumon d'élevage terrestre (ambitions)",
-    xtitle='Ambitions des producteurs pour la production de saumon en tonnes',
+    title="Top 10 producteurs de saumons d'élevage terrestre (ambitions)",
+    xtitle='Ambitions des producteurs pour la production de saumons en tonnes',
     ytitle=None,
     mycolor='#151c97', 
     block_zoom=True,
