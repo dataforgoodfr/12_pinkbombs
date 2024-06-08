@@ -152,7 +152,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_hover="Country",
     input_time="Year",
     input_size="Tonnes - live weight",
-    title="Evolution of salmon farming by country",
+    title=None,
     min_year=1980,
     palette=['#151c97'],
 )
@@ -171,7 +171,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_hover="Pays",
     input_time="Année",
     input_size="Tonnes de saumons",
-    title="Evolution de l'élevage de saumons par pays",
+    title=None,
     min_year=1980,
     palette=['#151c97'],
 )
