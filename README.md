@@ -99,12 +99,16 @@ The function needs to be added in the following dictionary entry format:
 
 Do not skip any argument to the function as these need to be in the correct order.
 
-## Python scripts for testing your visualizations
+## Temporary Python scripts for testing locally
 To run the plotly graphs locally and generate html files you can view in your browser, you can use the script:
 
     python3 pinkbombs/graphs/test_graphs.py 
+
+Note that the changes to the html files in this folder won't be included in git as the folder `pinkbombs/graphs/test_html/` is included in `.gitignore`.  
 
 To translate the data and zip the csv files for download, run locally: 
 
     python3 pinkbombs/graphs/translate_data.py
     python3 pinkbombs/graphs/zip_data.py
+
+Note that this will regenerate all files and may not be adapted
