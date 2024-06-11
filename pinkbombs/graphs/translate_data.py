@@ -157,3 +157,16 @@ df_data4_4_fr = df_data4_4.rename(columns={
 data4_4_file_out = "data/" + data4_4_name + "_fr.csv"
 col_4_4_fr = ["Année", "Producteur", "Région", "Taux de mortalité"]
 df_data4_4_fr[col_4_4_fr].to_csv(data4_4_file_out)
+
+# Data for Graph 4.4
+data5_1_name = "carbon_emissions_productors_5.1"
+data5_1_file = "data/" + data5_1_name + ".csv"
+df_data5_1 = pd.read_csv(data5_1_file)
+
+df_data5_1_fr = df_data5_1.rename(columns={
+    "Producer":"Producteur",
+    "Year": "Année"
+    })
+
+data5_1_file_out = "data/" + data5_1_name + "_fr.csv"
+df_data5_1_fr.to_csv(data5_1_file_out)
