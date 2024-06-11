@@ -457,7 +457,7 @@ df_data_7 = pd.read_csv(data7_file)
 
 g7 = pb.make_matrix_alternatives(df_data_7, 
                                  max_len=60,
-                                 max_len_col=None, #11
+                                 max_len_col=11, #11
                                  width=None, 
                                  height=None,
                                  legend_green="Very limited impact",
@@ -472,7 +472,7 @@ df_data_7 = pd.read_csv(data7_file)
 
 g7 = pb.make_matrix_alternatives(df_data_7, 
                                  max_len=60,
-                                 max_len_col=None, #11
+                                 max_len_col=11, #11
                                  width=None, 
                                  height=None,
                                  legend_green="Impact très réduit",
