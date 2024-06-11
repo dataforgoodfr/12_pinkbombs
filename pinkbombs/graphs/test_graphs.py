@@ -426,7 +426,7 @@ g4_4 = pb.make_simple_box_chart(
     input_x="Company",
     input_y="Mortality_rate",
     title="Mortality rates of farmed salmons by producers*",
-    xtitle="*selected years between 2012-2022 where available",
+    xtitle="*selected years between 2011-2022 where available",
     ytitle="Mortality Rate (%)",
     block_zoom=True,
 )
@@ -442,7 +442,7 @@ g4_4 = pb.make_simple_box_chart(
     input_x="Producteur",
     input_y="Taux de mortalité",
     title="Taux de mortalité des saumons d'élevage par producteurs*",
-    xtitle="*années sélectionnées entre 2012-2022, lorsque disponibles",
+    xtitle="*années sélectionnées entre 2011-2022, lorsque disponibles",
     ytitle="Taux de mortalité (%)",
     block_zoom=True,
 )
