@@ -14,8 +14,8 @@ g1_0 = pb.make_area_chart_options(
     df_data1_0,
     input_x="Year",
     input_y="Number of salmons (5kg each)",
-    title="Production of farmed salmons",
-    legend_title="Number of salmons produced every year",
+    title="Farmed salmon production",
+    legend_title="Number of salmon produced every year",
 )
 
 g1_0.write_html("pinkbombs/graphs/test_html/" + data1_0_name + ".html")
@@ -113,7 +113,7 @@ g1_3 = pb.make_color_bar_chart(
     input_y1="Country",
     input_y2="Flag",
     input_col="% of total",
-    title="Top 10 countries producing salmon by tonnes (2021)",
+    title="Top 10 salmon producing countries by tonnes (2021)",
     xtitle=None,
     ytitle=None,
     palette=['#151c97', '#ff4530'],

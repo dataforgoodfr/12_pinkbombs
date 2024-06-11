@@ -41,8 +41,8 @@ MAPPING = {
         "arguments": [
             "Year",
             "Number of salmons (5kg each)",
-            "Production of farmed salmons",
-            "Number of salmons produced every year",
+            "Farmed salmon production",
+            "Number of salmon produced every year",
         ],
     },
     "top-10": {
@@ -54,7 +54,7 @@ MAPPING = {
             "Country",
             "Flag",
             "% of total",
-            "Top 10 countries producing salmon by tonnes (2021)",
+            "Top 10 salmon producing countries by tonnes (2021)",
             None,
             None,
             [
