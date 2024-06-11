@@ -145,7 +145,7 @@ MAPPING = {
         "arguments": [
             "Company",
             "Mortality_rate",
-            "Mortality rates of farmed salmons by company (2014-2022)",
+            "Mortality rates of farmed salmons by producers*",
             None,
             "Mortality Rate (%)",
             True,
@@ -344,8 +344,8 @@ MAPPINGFR = {
         "arguments": [
             "Producteur",
             "Taux de mortalité",
-            "Taux de mortalité des saumons d'élevage par producteur (2014-2022)",
-            None,
+            "Taux de mortalité des saumons d'élevage par producteurs*",
+            "*années sélectionnées entre 2012-2022, lorsque disponibles",
             "Taux de mortalité (%)",
             True,
         ],
