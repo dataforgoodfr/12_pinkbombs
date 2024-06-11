@@ -1,126 +1,126 @@
-,Année,Producteur,Région,Taux de mortalité
-0,2022,Bakkafrost,Faroes,"4,91"
-1,2021,Bakkafrost,Faroes,"8,24"
-2,2020,Bakkafrost,Faroes,"10,29"
-3,2019,Bakkafrost,Faroes,"4,57"
-4,2018,Bakkafrost,Faroes,"11,56"
-5,2017,Bakkafrost,Faroes,"8,96"
-6,2022,Bakkafrost,Ecosse,"23,16"
-7,2021,Bakkafrost,Ecosse,"21,71"
-8,2020,Bakkafrost,Ecosse,"11,43"
-9,2022,Grieg Seafood,Rogaland,8
-10,2021,Grieg Seafood,Rogaland,8
-11,2020,Grieg Seafood,Rogaland,10
-12,2019,Grieg Seafood,Rogaland,7
-13,2018,Grieg Seafood,Rogaland,8
-14,2017,Grieg Seafood,Rogaland,9
-15,2016,Grieg Seafood,Rogaland,7
-16,2022,Grieg Seafood,Finnmark,9
-17,2021,Grieg Seafood,Finnmark,5
-18,2020,Grieg Seafood,Finnmark,8
-19,2019,Grieg Seafood,Finnmark,4
-20,2018,Grieg Seafood,Finnmark,4
-21,2017,Grieg Seafood,Finnmark,5
-22,2016,Grieg Seafood,Finnmark,6
-23,2022,Grieg Seafood,British Columbia,9
-24,2021,Grieg Seafood,British Columbia,10
-25,2020,Grieg Seafood,British Columbia,8
-26,2019,Grieg Seafood,British Columbia,12
-27,2018,Grieg Seafood,British Columbia,12
-28,2017,Grieg Seafood,British Columbia,7
-29,2016,Grieg Seafood,British Columbia,10
-30,2019,Grieg Seafood,Shetland,11
-31,2018,Grieg Seafood,Shetland,17
-32,2017,Grieg Seafood,Shetland,11
-33,2016,Grieg Seafood,Shetland,17
-34,2019,Multiexport,,"10,8"
-35,2018,Multiexport,,"9,7"
-36,2017,Multiexport,,"8,3"
-37,2022,Blumar,,"7,26"
-38,2021,Blumar,,"2,73"
-39,2020,Blumar,,"7,44"
-40,2019,Blumar,,"3,34"
-41,2018,Blumar,,"3,95"
-42,2017,Blumar,,4
-43,2016,Blumar,,"7,13"
-44,2015,Blumar,,5
-45,2014,Blumar,,"4,18"
-46,2022,Cermaq,,"6,2"
-47,2021,Cermaq,,"5,2"
-48,2020,Cermaq,,"5,7"
-49,2019,Cermaq,,0
-50,2018,Cermaq,,"5,5"
-51,2017,Cermaq,,"5,3"
-52,2016,Cermaq,,7
-53,2015,Cermaq,,"6,3"
-54,2014,Cermaq,,"6,8"
-55,2013,Cermaq,,"6,4"
-56,2012,Cermaq,,"7,3"
-57,2011,Cermaq,,"8,4"
-58,2022,Camanchaca,,"4,6"
-59,2021,Camanchaca,,"15,7"
-60,2020,Camanchaca,,"8,6"
-61,2019,Camanchaca,,"4,8"
-62,2018,Camanchaca,,"2,8"
-63,2017,Camanchaca,,"3,2"
-64,2016,Camanchaca,,"17,8"
-65,2015,Camanchaca,,"6,6"
-66,2014,Camanchaca,,"3,1"
-67,2013,Camanchaca,,"4,7"
-68,2022,Nova Sea,,"4,18"
-69,2021,Nova Sea,,"2,74"
-70,2020,Nova Sea,,"2,65"
-71,2019,Nova Sea,,"2,95"
-72,2018,Nova Sea,,"3,91"
-73,2017,Nova Sea,,"2,8"
-74,2016,Nova Sea,,"2,9"
-75,2015,Nova Sea,,"3,21"
-76,2022,Salmones Austral,,"5,73"
-77,2021,Salmones Austral,,"2,55"
-78,2020,Salmones Austral,,"2,67"
-79,2019,Salmones Austral,,"2,1"
-80,2018,Salmones Austral,,"1,8"
-81,2022,Australis Seafood,,"3,23"
-82,2021,Australis Seafood,,"3,13"
-83,2020,Australis Seafood,,"2,93"
-84,2019,Australis Seafood,,"3,62"
-85,2018,Australis Seafood,,"3,98"
-86,2017,Australis Seafood,,"3,5"
-87,2016,Australis Seafood,,"4,16"
-88,2022,AquaChile,,"6,74"
-89,2021,AquaChile,,"9,2"
-90,2020,AquaChile,,"9,29"
-91,2022,MOWI,,"9,1886638"
-92,2021,MOWI,,"9,1886638"
-93,2020,MOWI,,"14,5315492"
-94,2019,MOWI,,"16,5868032"
-95,2018,MOWI,,"14,5315492"
-96,2017,MOWI,,"18,596662"
-97,2016,MOWI,,"19,5848542"
-98,2015,MOWI,,"15,5649083"
-99,2014,MOWI,,"11,3615128"
-100,2013,MOWI,,"9,1886638"
-101,2012,MOWI,,"9,1886638"
-102,2022,Salmar,Norvège,"5,4"
-103,2021,Salmar,Norvège,5
-104,2020,Salmar,Norvège,"4,4"
-105,2019,Salmar,Norvège,"4,7"
-106,2018,Salmar,Norvège,"5,9"
-107,2017,Salmar,Norvège,"6,2"
-108,2016,Salmar,Norvège,"11,8"
-109,2015,Salmar,Norvège,"10,8"
-110,2014,Salmar,Norvège,"10,1"
-111,2013,Salmar,Norvège,"12,9"
-112,2022,Salmar,Islande,"10,3"
-113,2021,Salmar,Islande,"6,7"
-114,2020,Salmar,Islande,"9,5"
-115,2019,Salmar,Islande,"8,8"
-116,2022,Leroy Seafood,,"7,5"
-117,2021,Leroy Seafood,,"7,5"
-118,2020,Leroy Seafood,,"7,8"
-119,2019,Leroy Seafood,,"6,6"
-120,2018,Leroy Seafood,,"6,1"
-121,2017,Leroy Seafood,,"8,2"
-122,2016,Leroy Seafood,,"7,8"
-123,2015,Leroy Seafood,,7
-124,2014,Leroy Seafood,,"7,4"
+Année,Producteur,Région,Taux de mortalité
+2022,Bakkafrost,Faroes,"4,91"
+2021,Bakkafrost,Faroes,"8,24"
+2020,Bakkafrost,Faroes,"10,29"
+2019,Bakkafrost,Faroes,"4,57"
+2018,Bakkafrost,Faroes,"11,56"
+2017,Bakkafrost,Faroes,"8,96"
+2022,Bakkafrost,Ecosse,"23,16"
+2021,Bakkafrost,Ecosse,"21,71"
+2020,Bakkafrost,Ecosse,"11,43"
+2022,Grieg Seafood,Rogaland,8
+2021,Grieg Seafood,Rogaland,8
+2020,Grieg Seafood,Rogaland,10
+2019,Grieg Seafood,Rogaland,7
+2018,Grieg Seafood,Rogaland,8
+2017,Grieg Seafood,Rogaland,9
+2016,Grieg Seafood,Rogaland,7
+2022,Grieg Seafood,Finnmark,9
+2021,Grieg Seafood,Finnmark,5
+2020,Grieg Seafood,Finnmark,8
+2019,Grieg Seafood,Finnmark,4
+2018,Grieg Seafood,Finnmark,4
+2017,Grieg Seafood,Finnmark,5
+2016,Grieg Seafood,Finnmark,6
+2022,Grieg Seafood,British Columbia,9
+2021,Grieg Seafood,British Columbia,10
+2020,Grieg Seafood,British Columbia,8
+2019,Grieg Seafood,British Columbia,12
+2018,Grieg Seafood,British Columbia,12
+2017,Grieg Seafood,British Columbia,7
+2016,Grieg Seafood,British Columbia,10
+2019,Grieg Seafood,Shetland,11
+2018,Grieg Seafood,Shetland,17
+2017,Grieg Seafood,Shetland,11
+2016,Grieg Seafood,Shetland,17
+2019,Multiexport,,"10,8"
+2018,Multiexport,,"9,7"
+2017,Multiexport,,"8,3"
+2022,Blumar,,"7,26"
+2021,Blumar,,"2,73"
+2020,Blumar,,"7,44"
+2019,Blumar,,"3,34"
+2018,Blumar,,"3,95"
+2017,Blumar,,4
+2016,Blumar,,"7,13"
+2015,Blumar,,5
+2014,Blumar,,"4,18"
+2022,Cermaq,,"6,2"
+2021,Cermaq,,"5,2"
+2020,Cermaq,,"5,7"
+2019,Cermaq,,0
+2018,Cermaq,,"5,5"
+2017,Cermaq,,"5,3"
+2016,Cermaq,,7
+2015,Cermaq,,"6,3"
+2014,Cermaq,,"6,8"
+2013,Cermaq,,"6,4"
+2012,Cermaq,,"7,3"
+2011,Cermaq,,"8,4"
+2022,Camanchaca,,"4,6"
+2021,Camanchaca,,"15,7"
+2020,Camanchaca,,"8,6"
+2019,Camanchaca,,"4,8"
+2018,Camanchaca,,"2,8"
+2017,Camanchaca,,"3,2"
+2016,Camanchaca,,"17,8"
+2015,Camanchaca,,"6,6"
+2014,Camanchaca,,"3,1"
+2013,Camanchaca,,"4,7"
+2022,Nova Sea,,"4,18"
+2021,Nova Sea,,"2,74"
+2020,Nova Sea,,"2,65"
+2019,Nova Sea,,"2,95"
+2018,Nova Sea,,"3,91"
+2017,Nova Sea,,"2,8"
+2016,Nova Sea,,"2,9"
+2015,Nova Sea,,"3,21"
+2022,Salmones Austral,,"5,73"
+2021,Salmones Austral,,"2,55"
+2020,Salmones Austral,,"2,67"
+2019,Salmones Austral,,"2,1"
+2018,Salmones Austral,,"1,8"
+2022,Australis Seafood,,"3,23"
+2021,Australis Seafood,,"3,13"
+2020,Australis Seafood,,"2,93"
+2019,Australis Seafood,,"3,62"
+2018,Australis Seafood,,"3,98"
+2017,Australis Seafood,,"3,5"
+2016,Australis Seafood,,"4,16"
+2022,AquaChile,,"6,74"
+2021,AquaChile,,"9,2"
+2020,AquaChile,,"9,29"
+2022,MOWI,,"9,1886638"
+2021,MOWI,,"9,1886638"
+2020,MOWI,,"14,5315492"
+2019,MOWI,,"16,5868032"
+2018,MOWI,,"14,5315492"
+2017,MOWI,,"18,596662"
+2016,MOWI,,"19,5848542"
+2015,MOWI,,"15,5649083"
+2014,MOWI,,"11,3615128"
+2013,MOWI,,"9,1886638"
+2012,MOWI,,"9,1886638"
+2022,Salmar,Norvège,"5,4"
+2021,Salmar,Norvège,5
+2020,Salmar,Norvège,"4,4"
+2019,Salmar,Norvège,"4,7"
+2018,Salmar,Norvège,"5,9"
+2017,Salmar,Norvège,"6,2"
+2016,Salmar,Norvège,"11,8"
+2015,Salmar,Norvège,"10,8"
+2014,Salmar,Norvège,"10,1"
+2013,Salmar,Norvège,"12,9"
+2022,Salmar,Islande,"10,3"
+2021,Salmar,Islande,"6,7"
+2020,Salmar,Islande,"9,5"
+2019,Salmar,Islande,"8,8"
+2022,Leroy Seafood,,"7,5"
+2021,Leroy Seafood,,"7,5"
+2020,Leroy Seafood,,"7,8"
+2019,Leroy Seafood,,"6,6"
+2018,Leroy Seafood,,"6,1"
+2017,Leroy Seafood,,"8,2"
+2016,Leroy Seafood,,"7,8"
+2015,Leroy Seafood,,7
+2014,Leroy Seafood,,"7,4"

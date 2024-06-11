@@ -449,36 +449,6 @@ g4_4 = pb.make_simple_box_chart(
 
 g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + "_fr.html")
 
-# Graph 5.1 - Carbon bombs
-data5_1_name = "carbon_bombs_pie_chart_5.1"
-data5_1_file = "data/" + data5_1_name + ".csv"
-df_data5_1 = pd.read_csv(data5_1_file)
-
-g5_1 = pb.make_simple_pie_chart(
-    input_df=df_data5_1,
-    names='Scopes',
-    values='Emissions (tons CO2eq)',
-    title='Distribution of Emissions',
-    hover_data={'Emissions (tons CO2eq)': ':,.0f'},
-    color_discrete_sequence=['#f4e8d7', '#151c97', '#f8ef50']
-    )
-
-g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")
-
-
-# Graph xx - Croissance 1ere page
-#datax_x_name = "hyper_growth_salmon_farming_1.2"
-#datax_x_file = "data/" + datax_x_name + ".csv"
-#df_datax_x = pd.read_csv(datax_x_file)
-
-#gx_x = pb.make_area_order_chart_grouped(
-#    df_datax_x,
-#    "Year",
-#    "Tonnes - live weight",
-#    title="Hyper-growth in salmon farming",
-#)
-#gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
-
 
 # Graph 7 - Alternatives 
 data7_name = "alternatives_text_7"

@@ -13,9 +13,11 @@ df_data1_0_fr = df_data1_0.rename(columns = {
     "Year":"Année",
     "Tonnes - live weight": "Tonnes de saumon produit en élevage",
     "Number of salmons (5kg each)": "Nombre de saumons (5kg chacun)"})
+df_data1_0_fr.reset_index()
 
+col_1_0_fr = ["Année", "Tonnes de saumon produit en élevage", "Nombre de saumons (5kg chacun)"]
 data1_0_file_out = "data/" + data1_0_name + "_fr.csv"
-df_data1_0_fr.to_csv(data1_0_file_out)
+df_data1_0_fr[col_1_0_fr].to_csv(data1_0_file_out, index=False)
 
 # Data for Graph 1.1
 data1_1_name = "discrease_wild_salmon_1.1"
@@ -25,9 +27,10 @@ df_data1_1 = pd.read_csv(data1_1_file)
 df_data1_1_fr = df_data1_1.rename(columns = {
     'Year':"Année",
     'Tons of wild salmon catch in Atlantic waters': "Saumons pêchés dans l'Atlantique en tonnes"})
+df_data1_1_fr.reset_index()
 
 data1_1_file_out = "data/" + data1_1_name + "_fr.csv"
-df_data1_1_fr.to_csv(data1_1_file_out)
+df_data1_1_fr.to_csv(data1_1_file_out, index=False)
 
 # Data for Graph 1.2
 data1_2_name = "hyper_growth_salmon_farming_1.2"
@@ -46,10 +49,11 @@ df_data1_2_fr = df_data1_2.rename(columns = {
     'Year':"Année",
     'Tonnes - live weight': "Tonnes de saumons produits en élevage",
     'name_fr': "Pays"})
+df_data1_2_fr.reset_index()
 
 data1_2_file_out = "data/" + data1_2_name + "_fr.csv"
 col_1_2_fr = ["Année", "Tonnes de saumons produits en élevage", "Pays"]
-df_data1_2_fr[col_1_2_fr].to_csv(data1_2_file_out)
+df_data1_2_fr[col_1_2_fr].to_csv(data1_2_file_out, index=False)
 
 # Data for Graph 1.3
 data1_3_name = "top_10_countries_producing_1.3"
@@ -63,10 +67,11 @@ df_data1_3_fr = df_data1_3.rename(columns={
     "name_fr": "Pays",
     "Tons": "Tonnes de saumon",
     "% of total": "% du total"})
+df_data1_3_fr.reset_index()
 
 data1_3_file_out = "data/" + data1_3_name + "_fr.csv"
 col_1_3_fr = ["Drapeau", "Pays",	"Tonnes de saumon", "% du total"]
-df_data1_3_fr[col_1_3_fr].to_csv(data1_3_file_out)
+df_data1_3_fr[col_1_3_fr].to_csv(data1_3_file_out, index=False)
 
 
 # Data for Graph 1.4
@@ -83,10 +88,11 @@ df_data1_4_fr = df_data1_4.rename(columns={
     "Year": "Année",
     "name_fr": "Pays",
     "Tonnes - live weight": "Tonnes de saumons"})
+df_data1_4_fr.reset_index()
 
 data1_4_file_out = "data/" + data1_4_name + "_fr.csv"
 col_1_4_fr = ["Année", "Pays", "Tonnes de saumons", "alpha-3"]
-df_data1_4_fr[col_1_4_fr].to_csv(data1_4_file_out)
+df_data1_4_fr[col_1_4_fr].to_csv(data1_4_file_out, index=False)
 
 # Data for Graph 1.5
 data1_5_name = 'top_15_countries_consuming_1.5'
@@ -105,13 +111,12 @@ df_data1_5_fr = df_data1_5.rename(columns={
     "Apparent consumption per capita": "Consommation apparente par habitant"})
 
 df_data1_5_fr.loc[df_data1_5_fr.Pays == "Fédération de Russie", "Pays"]	= "Russie"
-
+df_data1_5_fr.reset_index()
 
 data1_5_file_out = "data/" + data1_5_name + "_fr.csv"
-
 col_1_5_fr = ["Pays", "Drapeau", 'Consommation apparente', "Consommation apparente par habitant",
 "Production (Capture + Aquaculture)","Export","Import"]
-df_data1_5_fr[col_1_5_fr].to_csv(data1_5_file_out)
+df_data1_5_fr[col_1_5_fr].to_csv(data1_5_file_out, index=False)
 
 # Data for Graph 2.1 
 data2_1_name = "top_10_companies_producing_2.1"
@@ -130,10 +135,10 @@ df_data2_1_fr = df_data2_1.rename(columns={
     "Creation date": "Date de création",
     "Headquarters": "Siège",
     })
+df_data2_1_fr.reset_index()
 
 data2_1_file_out = "data/" + data2_1_name + "_fr.csv"
-df_data2_1_fr.to_csv(data2_1_file_out)
-
+df_data2_1_fr.to_csv(data2_1_file_out, index=False)
 
 # Data for Graph 2.3 - translated in Google sheet
 
@@ -153,7 +158,8 @@ df_data4_4_fr = df_data4_4.rename(columns={
     "name_fr": "Région",
     "Mortality_rate": "Taux de mortalité"
     })
+df_data4_4_fr.reset_index()
 
 data4_4_file_out = "data/" + data4_4_name + "_fr.csv"
 col_4_4_fr = ["Année", "Producteur", "Région", "Taux de mortalité"]
-df_data4_4_fr[col_4_4_fr].to_csv(data4_4_file_out)
+df_data4_4_fr[col_4_4_fr].to_csv(data4_4_file_out, index=False)
