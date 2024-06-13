@@ -166,3 +166,6 @@ cython_debug/
 
 *.DS_Store
 .DS_Store
+
+# avoid committing changes to hmtl graphs produced for local checking
+pinkbombs/graphs/test_html/

@@ -775,10 +775,18 @@ def make_simple_box_chart(
         hover_name=input_x,  # Update hover_name accordingly
     )
 
-    box.update_layout(template=theme, xaxis_title=xtitle, yaxis_title=ytitle, showlegend=False)
+    box.update_layout(template=theme, yaxis_title=ytitle, showlegend=False)
     box.update_xaxes(exponentformat="none")
     box.update_coloraxes(colorbar_tickformat="0%")
     box.update_traces(boxpoints=False)  # remove outliers
+
+    if xtitle is not None:
+        box.update_layout(xaxis_title="<i>"+xtitle+"</i>", 
+                          xaxis={'side': 'right'})
+        box.update_xaxes(title_font_size=10)
+
+    else:
+        box.update_layout(xaxis_title=xtitle)
 
     # Remove hover
     box.update_traces(hovertemplate=None, hoverinfo="skip")
@@ -902,9 +910,9 @@ def make_matrix_alternatives(
         fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
     tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.7]
-    ticktext = [textwrap.fill(legend_green, 7).replace("\n", "<br>"), 
+    ticktext = [textwrap.fill(legend_green, 8).replace("\n", "<br>"), 
                 "", "", "", "", 
-                textwrap.fill(legend_red, 7).replace("\n", "<br>")]
+                textwrap.fill(legend_red, 8).replace("\n", "<br>")]
 
     fig.update_traces(showscale=True, 
                       colorbar = dict(thickness=25, 

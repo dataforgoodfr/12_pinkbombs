@@ -14,8 +14,8 @@ g1_0 = pb.make_area_chart_options(
     df_data1_0,
     input_x="Year",
     input_y="Number of salmons (5kg each)",
-    title="Production of farmed salmons",
-    legend_title="Number of salmons produced every year",
+    title="Farmed salmon production",
+    legend_title="Number of salmon produced every year",
 )
 
 g1_0.write_html("pinkbombs/graphs/test_html/" + data1_0_name + ".html")
@@ -113,7 +113,7 @@ g1_3 = pb.make_color_bar_chart(
     input_y1="Country",
     input_y2="Flag",
     input_col="% of total",
-    title="Top 10 countries producing salmon by tonnes (2021)",
+    title="Top 10 salmon producing countries by tonnes (2021)",
     xtitle=None,
     ytitle=None,
     palette=['#151c97', '#ff4530'],
@@ -152,7 +152,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_hover="Country",
     input_time="Year",
     input_size="Tonnes - live weight",
-    title="Evolution of salmon farming by country",
+    title=None,
     min_year=1980,
     palette=['#151c97'],
 )
@@ -171,7 +171,7 @@ g1_4 = pb.make_animated_bubble_map(
     input_hover="Pays",
     input_time="Année",
     input_size="Tonnes de saumons",
-    title="Evolution de l'élevage de saumons par pays",
+    title=None,
     min_year=1980,
     palette=['#151c97'],
 )
@@ -425,8 +425,8 @@ g4_4 = pb.make_simple_box_chart(
     input_df=df_data4_4,
     input_x="Company",
     input_y="Mortality_rate",
-    title="Mortality rates of farmed salmons by company (2014-2022)",
-    xtitle=None,
+    title="Mortality rates of farmed salmons by producers*",
+    xtitle="*selected years between 2011-2022 where available",
     ytitle="Mortality Rate (%)",
     block_zoom=True,
 )
@@ -441,43 +441,13 @@ g4_4 = pb.make_simple_box_chart(
     input_df=df_data4_4,
     input_x="Producteur",
     input_y="Taux de mortalité",
-    title="Taux de mortalité des saumons d'élevage par producteur (2014-2022)",
-    xtitle=None,
+    title="Taux de mortalité des saumons d'élevage par producteurs*",
+    xtitle="*années sélectionnées entre 2011-2022, lorsque disponibles",
     ytitle="Taux de mortalité (%)",
     block_zoom=True,
 )
 
 g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + "_fr.html")
-
-# Graph 5.1 - Carbon bombs
-data5_1_name = "carbon_bombs_pie_chart_5.1"
-data5_1_file = "data/" + data5_1_name + ".csv"
-df_data5_1 = pd.read_csv(data5_1_file)
-
-g5_1 = pb.make_simple_pie_chart(
-    input_df=df_data5_1,
-    names='Scopes',
-    values='Emissions (tons CO2eq)',
-    title='Distribution of Emissions',
-    hover_data={'Emissions (tons CO2eq)': ':,.0f'},
-    color_discrete_sequence=['#f4e8d7', '#151c97', '#f8ef50']
-    )
-
-g5_1.write_html("pinkbombs/graphs/test_html/" + data5_1_name + ".html")
-
-
-# Graph xx - Croissance 1ere page
-#datax_x_name = "hyper_growth_salmon_farming_1.2"
-#datax_x_file = "data/" + datax_x_name + ".csv"
-#df_datax_x = pd.read_csv(datax_x_file)
-
-#gx_x = pb.make_area_order_chart_grouped(
-#    df_datax_x,
-#    "Year",
-#    "Tonnes - live weight",
-#    title="Hyper-growth in salmon farming",
-#)
-#gx_x.write_html("pinkbombs/graphs/test_html/hyper-croissance-story.html")
 
 
 # Graph 7 - Alternatives 
@@ -487,11 +457,11 @@ df_data_7 = pd.read_csv(data7_file)
 
 g7 = pb.make_matrix_alternatives(df_data_7, 
                                  max_len=60,
-                                 max_len_col=None, #11
+                                 max_len_col=11, #11
                                  width=None, 
                                  height=None,
                                  legend_green="Very limited impact",
-                                 legend_red="Very high impact",
+                                 legend_red="Exces- sively high impact",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
@@ -502,11 +472,11 @@ df_data_7 = pd.read_csv(data7_file)
 
 g7 = pb.make_matrix_alternatives(df_data_7, 
                                  max_len=60,
-                                 max_len_col=None, #11
+                                 max_len_col=11, #11
                                  width=None, 
                                  height=None,
                                  legend_green="Impact très réduit",
-                                 legend_red="Impact très fort",
+                                 legend_red="Impact excessi- vement fort",
                                  hover_disable=False)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7_fr.html")

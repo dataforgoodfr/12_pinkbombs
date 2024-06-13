@@ -52,9 +52,38 @@ def make_animated_bubble_map(
         hover_name=input_hover,
         hover_data={input_size: ":,.0f", input_time: True, input_hover: False, input_loc: False},
         color_discrete_sequence=palette,
-        title=title,
     )
     map.update_geos(showcountries=True)
+    
+    if title is not None:
+        map.update_layout(title=title)
+
+    # try to reduce white space around the map
+    map.update_layout(
+        margin=dict(l=20, r=20, t=20, b=20), 
+        autosize=True,
+        updatemenus=[{
+            'direction': 'left',
+            'pad': {'r': 10, 't': 87},
+            'showactive': False,
+            'type': 'buttons',
+            'x': 0.1,
+            'xanchor': 'right',
+            'y': 0,
+            'yanchor': 'middle'
+            }],
+        sliders=[{
+            'active': 0,
+            'yanchor': 'middle',
+            'xanchor': 'left',
+            }]
+    )
+    #map.update_scenes(aspectratio_x=0.5) 
+    # Set the aspect ratio
+    #map.update_layout(
+    #    xaxis=dict(scaleanchor='y', scaleratio=0.3),
+    #    yaxis=dict(scaleanchor='x', scaleratio=1)
+    #    )
 
     if last_frame:
         map2 = Figure()
@@ -64,8 +93,8 @@ def make_animated_bubble_map(
         map2.frames = map.frames
         map2.layout["sliders"][0]["active"] = len(map.frames) - 1
 
-    # Remove lasso and select
-    map2.update_layout(modebar_remove=["lasso2d", "select2d"])
+    # Remove lasso and select + drag zoom
+    map2.update_layout(modebar_remove=["lasso2d", "select2d"], dragmode=False)
 
     return map2.to_html(auto_play=False)
 
