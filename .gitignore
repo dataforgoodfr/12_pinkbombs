@@ -169,3 +169,5 @@ cython_debug/
 
 # avoid committing changes to hmtl graphs produced for local checking
 pinkbombs/graphs/test_html/
+
+data/data_ras/
