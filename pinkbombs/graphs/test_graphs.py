@@ -201,8 +201,8 @@ g1_5=pb.make_double_yaxis_bar_chart(
     mycolor_point="#FF4530",
     point_hover_legend="Consumption per capita",
     xtitle="Country",
-    ytitle1="Apparent consumption in tonnes (2019)",
-    ytitle2="Apparent consumption per capita in kilos (2019)",
+    ytitle1="Apparent consumption in tonnes (2021)",
+    ytitle2="Apparent consumption per capita in kilos (2021)",
     block_zoom=True
 )
 
@@ -229,8 +229,8 @@ g1_5=pb.make_double_yaxis_bar_chart(
     mycolor_point="#FF4530",
     point_hover_legend="Consommation par habitant",
     xtitle="Pays",
-    ytitle1="Consommation apparente en tonnes (2019)",
-    ytitle2="Consommation apparente par habitant en kilos (2019)",
+    ytitle1="Consommation apparente en tonnes (2021)",
+    ytitle2="Consommation apparente par habitant en kilos (2021)",
     block_zoom=True
 )
 
