@@ -3,11 +3,10 @@
 
 import pinkbombs as pb
 import pandas as pd
-import plotly.express as px
 
 # Graph 1.0 - Page Story production of salmons
-data1_0_name = 'numbers_salmons_farmed_1.0'
-data1_0_file = "data/"+data1_0_name+".csv"
+data1_0_name = "numbers_salmons_farmed_1.0"
+data1_0_file = "data/" + data1_0_name + ".csv"
 df_data1_0 = pd.read_csv(data1_0_file)
 
 g1_0 = pb.make_area_chart_options(
@@ -21,7 +20,7 @@ g1_0 = pb.make_area_chart_options(
 g1_0.write_html("pinkbombs/graphs/test_html/" + data1_0_name + ".html")
 
 # Graph 1.0 - Page Story production of salmons - FRENCH
-data1_0_file = "data/"+data1_0_name+"_fr.csv"
+data1_0_file = "data/" + data1_0_name + "_fr.csv"
 df_data1_0 = pd.read_csv(data1_0_file)
 
 g1_0 = pb.make_area_chart_options(
@@ -44,7 +43,7 @@ g1_1 = pb.make_area_single_chart(
     "Year",
     "Tons of wild salmon catch in Atlantic waters",
     "Tonnes of wild salmon catch in Atlantic waters",
-    palette=['#151c97'],
+    palette=["#151c97"],
     block_zoom=True,
 )
 
@@ -58,7 +57,7 @@ g1_1 = pb.make_area_single_chart(
     "Année",
     "Saumons pêchés dans l'Atlantique en tonnes",
     "Saumons pêchés dans l'Atlantique en tonnes",
-    palette=['#151c97'],
+    palette=["#151c97"],
     block_zoom=True,
 )
 
@@ -76,8 +75,8 @@ g1_2 = pb.make_area_order_chart(
     "Tonnes - live weight",
     "Country",
     title="Farmed salmon production by country",
-    y_title="Tonnes of farmed salmon produced", 
-    min_date = 1975,
+    y_title="Tonnes of farmed salmon produced",
+    min_date=1975,
     reorder=True,
     hide_zoom=True,
 )
@@ -90,12 +89,12 @@ df_data1_2 = pd.read_csv(data1_2_file)
 
 g1_2 = pb.make_area_order_chart(
     df_data1_2,
-    "Année", 
-    "Tonnes de saumons produits en élevage", 
+    "Année",
+    "Tonnes de saumons produits en élevage",
     "Pays",
     title="Production de saumons atlantiques d'élevage par pays",
-    y_title="Tonnes de saumons atlantiques", 
-    min_date = 1975,
+    y_title="Tonnes de saumons atlantiques",
+    min_date=1975,
     reorder=True,
     hide_zoom=True,
 )
@@ -116,7 +115,7 @@ g1_3 = pb.make_color_bar_chart(
     title="Top 10 salmon producing countries by tonnes (2021)",
     xtitle=None,
     ytitle=None,
-    palette=['#151c97', '#ff4530'],
+    palette=["#151c97", "#ff4530"],
     block_zoom=True,
 )
 
@@ -128,14 +127,14 @@ df_data1_3 = pd.read_csv(data1_3_file)
 
 g1_3 = pb.make_color_bar_chart(
     df_data1_3,
-    input_x="Tonnes de saumon", 
-    input_y1='Pays', 
-    input_y2='Drapeau',
+    input_x="Tonnes de saumon",
+    input_y1="Pays",
+    input_y2="Drapeau",
     input_col="% du total",
-    title='Top 10 pays producteurs de saumons par tonnes (2021)',
+    title="Top 10 pays producteurs de saumons par tonnes (2021)",
     xtitle=None,
     ytitle=None,
-    palette = ['#151c97', '#ff4530'],
+    palette=["#151c97", "#ff4530"],
     block_zoom=True,
 )
 
@@ -154,11 +153,11 @@ g1_4 = pb.make_animated_bubble_map(
     input_size="Tonnes - live weight",
     title=None,
     min_year=1980,
-    palette=['#151c97'],
+    palette=["#151c97"],
 )
 
-func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + ".html","w") 
-func1_4.write(g1_4) 
+func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + ".html", "w")
+func1_4.write(g1_4)
 func1_4.close()
 
 # Graph 1.4 -  Evolution of salmon farming by country - FRENCH
@@ -173,65 +172,59 @@ g1_4 = pb.make_animated_bubble_map(
     input_size="Tonnes de saumons",
     title=None,
     min_year=1980,
-    palette=['#151c97'],
+    palette=["#151c97"],
 )
 
-func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html","w") 
-func1_4.write(g1_4) 
+func1_4 = open("pinkbombs/graphs/test_html/" + data1_4_name + "_fr.html", "w")
+func1_4.write(g1_4)
 func1_4.close()
 
 # Graph 1.5 - Top 15 countries consuming salmon
-data1_5_name = 'top_15_countries_consuming_1.5'
-data1_5_file = "data/"+data1_5_name+".csv"
+data1_5_name = "top_15_countries_consuming_1.5"
+data1_5_file = "data/" + data1_5_name + ".csv"
 df_data1_5 = pd.read_csv(data1_5_file)
 
-g1_5=pb.make_double_yaxis_bar_chart(
+g1_5 = pb.make_double_yaxis_bar_chart(
     df_data1_5,
     input_x1="Country",
     input_x2="Flag",
     input_y1="Apparent consumption",
     input_y2="Apparent consumption per capita",
-    input_other=[
-            "Production (Capture + Aquaculture)",
-            "Export",
-            "Import"],
+    input_other=["Production (Capture + Aquaculture)", "Export", "Import"],
     title="Top 15 countries consuming salmon",
-    mycolor_bar='#151c97',
+    mycolor_bar="#151c97",
     bar_hover_legend="Consumption",
     mycolor_point="#FF4530",
     point_hover_legend="Consumption per capita",
     xtitle="Country",
     ytitle1="Apparent consumption in tonnes (2021)",
     ytitle2="Apparent consumption per capita in kilos (2021)",
-    block_zoom=True
+    block_zoom=True,
 )
 
 g1_5.write_html("pinkbombs/graphs/test_html/" + data1_5_name + ".html")
 
 # Graph 1.5 - Top 15 countries consuming salmon - FRENCH
-data1_5_name = 'top_15_countries_consuming_1.5'
-data1_5_file = "data/"+data1_5_name+"_fr.csv"
+data1_5_name = "top_15_countries_consuming_1.5"
+data1_5_file = "data/" + data1_5_name + "_fr.csv"
 df_data1_5 = pd.read_csv(data1_5_file)
 
-g1_5=pb.make_double_yaxis_bar_chart(
+g1_5 = pb.make_double_yaxis_bar_chart(
     df_data1_5,
     input_x1="Pays",
     input_x2="Drapeau",
     input_y1="Consommation apparente",
     input_y2="Consommation apparente par habitant",
-    input_other=[
-            "Production (Capture + Aquaculture)",
-            "Export",
-            "Import"],
+    input_other=["Production (Capture + Aquaculture)", "Export", "Import"],
     title="Top 15 des pays consommateurs de saumons",
-    mycolor_bar='#151c97',
+    mycolor_bar="#151c97",
     bar_hover_legend="Consommation",
     mycolor_point="#FF4530",
     point_hover_legend="Consommation par habitant",
     xtitle="Pays",
     ytitle1="Consommation apparente en tonnes (2021)",
     ytitle2="Consommation apparente par habitant en kilos (2021)",
-    block_zoom=True
+    block_zoom=True,
 )
 
 g1_5.write_html("pinkbombs/graphs/test_html/" + data1_5_name + "_fr.html")
@@ -302,20 +295,25 @@ df_data2_3 = pd.read_csv(data2_3_file)
 
 g2_3 = pb.make_simple_bar_chart(
     df_data2_3,
-    input_x='Production in tonnes',
-    input_y1='Parent company',
-    input_y2='Flag',
-    input_n1='Revenues 2022 dollars',
-    input_n2='Employees 2022',
-    input_other=['Number of projects', 'Countries of projects', "Headquarters",
-                 "Website",'Note'],
+    input_x="Production in tonnes",
+    input_y1="Parent company",
+    input_y2="Flag",
+    input_n1="Revenues 2022 dollars",
+    input_n2="Employees 2022",
+    input_other=[
+        "Number of projects",
+        "Countries of projects",
+        "Headquarters",
+        "Website",
+        "Note",
+    ],
     title="Top 10 land-based salmon productors (ambitions)",
-    xtitle='Company ambition for salmon production in tonnes',
+    xtitle="Company ambition for salmon production in tonnes",
     ytitle=None,
-    mycolor='#151c97',
+    mycolor="#151c97",
     block_zoom=True,
     fix_approx=False,
-    )
+)
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + ".html")
 
@@ -325,20 +323,25 @@ df_data2_3 = pd.read_csv(data2_3_file)
 
 g2_3 = pb.make_simple_bar_chart(
     df_data2_3,
-    input_x='Production en tonnes',
-    input_y1='Producteur',
-    input_y2='Drapeau',
-    input_n1='Revenus 2022 dollars',
-    input_n2='Employés 2022',
-    input_other=['Nombre de projets', 'Pays des projets', "Siège",
-                 "Site internet",'Note'],
+    input_x="Production en tonnes",
+    input_y1="Producteur",
+    input_y2="Drapeau",
+    input_n1="Revenus 2022 dollars",
+    input_n2="Employés 2022",
+    input_other=[
+        "Nombre de projets",
+        "Pays des projets",
+        "Siège",
+        "Site internet",
+        "Note",
+    ],
     title="Top 10 producteurs de saumons d'élevage terrestre (ambitions)",
-    xtitle='Ambitions des producteurs pour la production de saumons en tonnes',
+    xtitle="Ambitions des producteurs pour la production de saumons en tonnes",
     ytitle=None,
-    mycolor='#151c97', 
+    mycolor="#151c97",
     block_zoom=True,
-    fix_approx=False
-    )
+    fix_approx=False,
+)
 
 g2_3.write_html("pinkbombs/graphs/test_html/" + data2_3_name + "_fr.html")
 
@@ -348,18 +351,18 @@ data2_4_file = "data/" + data2_4_name + ".csv"
 df_data2_4 = pd.read_csv(data2_4_file)
 
 g2_4 = pb.make_ras_bubble_map(
-    df_data2_4, 
+    df_data2_4,
     title_layer1="Electricity consumption",
     title_layer2="Carbon footprint",
     legend_title="Farms represented by estimated:",
     title=None,
     add_title_legend=True,
     french=False,
-    )
+)
 
-#g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
-func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html","w") 
-func.write(g2_4) 
+# g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + ".html")
+func = open("pinkbombs/graphs/test_html/" + data2_4_name + ".html", "w")
+func.write(g2_4)
 func.close()
 
 # Graph 2.4 - Map of RAS projects - FRENCH
@@ -367,18 +370,18 @@ data2_4_file = "data/" + data2_4_name + "_fr.csv"
 df_data2_4 = pd.read_csv(data2_4_file)
 
 g2_4 = pb.make_ras_bubble_map(
-    df_data2_4, 
+    df_data2_4,
     title_layer1="Consommation d'électricité",
     title_layer2="Empreinte carbone",
     legend_title="Fermes-usines représentées par:",
     title=None,
     add_title_legend=True,
     french=True,
-    )
+)
 
-#g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html")
-func = open("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html","w") 
-func.write(g2_4) 
+# g2_4.save("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html")
+func = open("pinkbombs/graphs/test_html/" + data2_4_name + "_fr.html", "w")
+func.write(g2_4)
 func.close()
 
 # Graph 3.5 -  Escapes from marine cages
@@ -387,14 +390,14 @@ data3_5_file = "data/" + data3_5_name + ".csv"
 df_data3_5 = pd.read_csv(data3_5_file)
 
 g3_5 = pb.make_treemap_chart(
-    df_data3_5, 
-    input_x1='n_escape', 
-    input_x2='n_salmon_produced',
-    input_x3='escape_rate', 
-    input_y='production (t)',
-    input_n='Company',
-    title='More than 4 millions fish escaped since 2018'
-    )
+    df_data3_5,
+    input_x1="n_escape",
+    input_x2="n_salmon_produced",
+    input_x3="escape_rate",
+    input_y="production (t)",
+    input_n="Company",
+    title="More than 4 millions fish escaped since 2018",
+)
 
 g3_5.write_html("pinkbombs/graphs/test_html/" + data3_5_name + ".html")
 
@@ -405,14 +408,16 @@ df_data4_2 = pd.read_csv(data4_2_file)
 
 g4_2 = pb.make_color_bar_chart2(
     df_data4_2,
-    input_x='year',
-    input_y='consom_atb_ton',
-    input_col='biomass_harvested_ton', 
-    col_rename={'consom_atb_ton': 'Antibiotics usage (tonnes)',
-                'biomass_harvested_ton': 'Harvested biomass (tonnes)'},
+    input_x="year",
+    input_y="consom_atb_ton",
+    input_col="biomass_harvested_ton",
+    col_rename={
+        "consom_atb_ton": "Antibiotics usage (tonnes)",
+        "biomass_harvested_ton": "Harvested biomass (tonnes)",
+    },
     title="Antibiotic usage in Chile (2007-2021)",
-    ytitle='Antibiotics usage (tonnes)'
-    )
+    ytitle="Antibiotics usage (tonnes)",
+)
 
 g4_2.write_html("pinkbombs/graphs/test_html/" + data4_2_name + ".html")
 
@@ -450,19 +455,21 @@ g4_4 = pb.make_simple_box_chart(
 g4_4.write_html("pinkbombs/graphs/test_html/" + data4_4_name + "_fr.html")
 
 
-# Graph 7 - Alternatives 
+# Graph 7 - Alternatives
 data7_name = "alternatives_text_7"
 data7_file = "data/" + data7_name + ".csv"
 df_data_7 = pd.read_csv(data7_file)
 
-g7 = pb.make_matrix_alternatives(df_data_7, 
-                                 max_len=60,
-                                 max_len_col=11, #11
-                                 width=None, 
-                                 height=None,
-                                 legend_green="Very limited impact",
-                                 legend_red="Exces- sively high impact",
-                                 hover_disable=False)
+g7 = pb.make_matrix_alternatives(
+    df_data_7,
+    max_len=60,
+    max_len_col=11,  # 11
+    width=None,
+    height=None,
+    legend_green="Very limited impact",
+    legend_red="Exces- sively high impact",
+    hover_disable=False,
+)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
 
@@ -470,13 +477,15 @@ g7.write_html("pinkbombs/graphs/test_html/alternatives_7.html")
 data7_file = "data/" + data7_name + "_fr.csv"
 df_data_7 = pd.read_csv(data7_file)
 
-g7 = pb.make_matrix_alternatives(df_data_7, 
-                                 max_len=60,
-                                 max_len_col=11, #11
-                                 width=None, 
-                                 height=None,
-                                 legend_green="Impact très réduit",
-                                 legend_red="Impact excessi- vement fort",
-                                 hover_disable=False)
+g7 = pb.make_matrix_alternatives(
+    df_data_7,
+    max_len=60,
+    max_len_col=11,  # 11
+    width=None,
+    height=None,
+    legend_green="Impact très réduit",
+    legend_red="Impact excessi- vement fort",
+    hover_disable=False,
+)
 
 g7.write_html("pinkbombs/graphs/test_html/alternatives_7_fr.html")

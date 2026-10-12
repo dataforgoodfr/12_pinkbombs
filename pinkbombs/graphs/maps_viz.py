@@ -40,7 +40,9 @@ def make_animated_bubble_map(
     # if reverse:
     #    input_df = input_df.sort_values(by=input_time, ascending=False)
     if min_year > 1950:
-        input_df = input_df.loc[input_df[input_time] >= min_year,]
+        input_df = input_df.loc[
+            input_df[input_time] >= min_year,
+        ]
 
     map = px.scatter_geo(
         input_df,
@@ -50,37 +52,46 @@ def make_animated_bubble_map(
         projection="natural earth",
         size_max=size_max,
         hover_name=input_hover,
-        hover_data={input_size: ":,.0f", input_time: True, input_hover: False, input_loc: False},
+        hover_data={
+            input_size: ":,.0f",
+            input_time: True,
+            input_hover: False,
+            input_loc: False,
+        },
         color_discrete_sequence=palette,
     )
     map.update_geos(showcountries=True)
-    
+
     if title is not None:
         map.update_layout(title=title)
 
     # try to reduce white space around the map
     map.update_layout(
-        margin=dict(l=20, r=20, t=20, b=20), 
+        margin=dict(l=20, r=20, t=20, b=20),
         autosize=True,
-        updatemenus=[{
-            'direction': 'left',
-            'pad': {'r': 10, 't': 87},
-            'showactive': False,
-            'type': 'buttons',
-            'x': 0.1,
-            'xanchor': 'right',
-            'y': 0,
-            'yanchor': 'middle'
-            }],
-        sliders=[{
-            'active': 0,
-            'yanchor': 'middle',
-            'xanchor': 'left',
-            }]
+        updatemenus=[
+            {
+                "direction": "left",
+                "pad": {"r": 10, "t": 87},
+                "showactive": False,
+                "type": "buttons",
+                "x": 0.1,
+                "xanchor": "right",
+                "y": 0,
+                "yanchor": "middle",
+            }
+        ],
+        sliders=[
+            {
+                "active": 0,
+                "yanchor": "middle",
+                "xanchor": "left",
+            }
+        ],
     )
-    #map.update_scenes(aspectratio_x=0.5) 
+    # map.update_scenes(aspectratio_x=0.5)
     # Set the aspect ratio
-    #map.update_layout(
+    # map.update_layout(
     #    xaxis=dict(scaleanchor='y', scaleratio=0.3),
     #    yaxis=dict(scaleanchor='x', scaleratio=1)
     #    )
@@ -133,7 +144,12 @@ def make_geojson_layer(temp_geojson0, fields, aliases, mylistcol, modality, a, b
         temp_geojson0,
         control=False,
         marker=folium.CircleMarker(
-            radius=1, weight=2, color="black", fill_color="#000000", fill_opacity=0.6, opacity=0.8
+            radius=1,
+            weight=2,
+            color="black",
+            fill_color="#000000",
+            fill_opacity=0.6,
+            opacity=0.8,
         ),
         style_function=lambda x: {
             "fillColor": mylistcol[x["properties"]["Status_col"]],
@@ -174,11 +190,11 @@ def create_elements_popups(input_df, french=False):
     """
 
     if french:
-        status1="En fonctionnement"
-        status2="En construction"
+        status1 = "En fonctionnement"
+        status2 = "En construction"
     else:
-        status1="Operating"
-        status2="In construction"
+        status1 = "Operating"
+        status2 = "In construction"
 
     # Simplify elec conso and calculate mid points
     input_df["elec_conso_GWh_low"] = input_df["elec_conso_kWh_low"] / 1e6
@@ -186,7 +202,9 @@ def create_elements_popups(input_df, french=False):
     input_df["elec_conso_GWh_mid"] = (
         input_df["elec_conso_GWh_high"] + input_df["elec_conso_GWh_low"]
     ) / 2
-    input_df["carbon_kt_mid"] = (input_df["carbon_kt_high"] + input_df["carbon_kt_low"]) / 2
+    input_df["carbon_kt_mid"] = (
+        input_df["carbon_kt_high"] + input_df["carbon_kt_low"]
+    ) / 2
 
     # Create strings to display on box
     input_df["Production Capacity (annual)"] = (
@@ -205,7 +223,9 @@ def create_elements_popups(input_df, french=False):
         + " kilo tonnes C02"
     )
     input_df["Country carbon intensity of electricity"] = (
-        input_df["Carbon intensity of electricity - gCO2/kWh"].apply(lambda x: format(x, ".0f"))
+        input_df["Carbon intensity of electricity - gCO2/kWh"].apply(
+            lambda x: format(x, ".0f")
+        )
         + " gCO2/kWh"
         + input_df["Country"].apply(lambda x: " (" + x + ")")
     )
@@ -221,20 +241,27 @@ def create_elements_popups(input_df, french=False):
     # Create hyperlink for Location
     input_df["Location source link2"] = input_df["Location source"].apply(
         lambda x: f'<a href="{x}" target="_blank" rel="noopener noreferrer">'
-    ) + input_df["Location"].apply(lambda x: f'{str(x)}</a>')
+    ) + input_df["Location"].apply(lambda x: f"{str(x)}</a>")
 
     # Create hyperlink for info/latest update
     input_df["Latest update2"] = input_df["Link info (no text)"].apply(
         lambda x: f'<a href="{x}" target="_blank" rel="noopener noreferrer">'
     ) + input_df["Latest update"].apply(
-        lambda x: f'NAN</a>' if np.isnan(x) else f'{str(int(x))}</a>'
+        lambda x: "NAN</a>" if np.isnan(x) else f"{str(int(x))}</a>"
     )
 
     # Create hyperlink for the Carbon Electricity by country
-    carbon_intensity_link = "https://ourworldindata.org/grapher/carbon-intensity-electricity"
+    carbon_intensity_link = (
+        "https://ourworldindata.org/grapher/carbon-intensity-electricity"
+    )
     input_df["Country carbon intensity of electricity link"] = input_df[
         "Country carbon intensity of electricity"
-    ].apply(lambda x: f'<a href="{carbon_intensity_link}" target="_blank" rel="noopener noreferrer">{x}</a>')
+    ].apply(
+        lambda x: (
+            f'<a href="{carbon_intensity_link}" target="_blank"'
+            f' rel="noopener noreferrer">{x}</a>'
+        )
+    )
 
     # Define colors indeces
     input_df["Status_col"] = np.where(
@@ -248,10 +275,10 @@ def create_elements_popups(input_df, french=False):
 
 def define_fields(french=False):
     """Returns the fields and aliases to display in pop-ups
-       Parameters:
-            french (boolean): Decide if aliases are in french. Default is False.
-        Returns:
-            (fields, aliases) (tuple): two lists with the name of fields and aliases
+    Parameters:
+         french (boolean): Decide if aliases are in french. Default is False.
+     Returns:
+         (fields, aliases) (tuple): two lists with the name of fields and aliases
     """
     # Choose fields to display in pop-up
     fields = [
@@ -281,7 +308,7 @@ def define_fields(french=False):
             "Intensité carbone de l'électricité:",
             "Empreinte carbone (annuelle):",
         ]
-    else :
+    else:
         aliases = [
             "Company:",
             "Technology:",
@@ -317,7 +344,9 @@ def make_title_html(map_title):
     """Returns a html title for the map"""
     title_html = """
              <h3 align="center" style="font-size:16px"><b>{}</b></h3>
-             """.format(map_title)
+             """.format(
+        map_title
+    )
     return title_html
 
 
@@ -366,7 +395,7 @@ def make_legend_for_map(french=False):
      border-radius:6px; padding: 10px; font-size:14px; left: 20px; bottom: 20px;'>
     """
 
-    if french : 
+    if french:
         template_lang = """
 
         <div class='legend-subtitle'>Fermes-usines par état d'avancement</div>
@@ -472,14 +501,14 @@ def make_legend_for_map(french=False):
 
 
 def make_ras_bubble_map(
-        input_df, 
-        title_layer1,
-        title_layer2,
-        legend_title,
-        title,
-        add_title_legend=False, 
-        french=False
-        ):
+    input_df,
+    title_layer1,
+    title_layer2,
+    legend_title,
+    title,
+    add_title_legend=False,
+    french=False,
+):
     """Returns a folium map object with the RAS farms as bubble and pop-ups
     Parameters:
             input_df (DataFrame): Dataframe containing data to display
@@ -494,17 +523,25 @@ def make_ras_bubble_map(
     """
 
     # Remove the 4 ambitions lines and convert to Geopandas
-    input_df = input_df.loc[~input_df["Lat"].isna(),]
+    input_df = input_df.loc[
+        ~input_df["Lat"].isna(),
+    ]
     input_gdf = gpd.GeoDataFrame(
-        input_df, geometry=gpd.points_from_xy(input_df["Long"], input_df["Lat"]), crs="EPSG:4326"
+        input_df,
+        geometry=gpd.points_from_xy(input_df["Long"], input_df["Lat"]),
+        crs="EPSG:4326",
     )
 
     # Create pop-ups
     input_gdf = create_elements_popups(input_gdf, french=french)
 
     # Determine transformation for display on the map - ELEC, CARBON
-    (a_carbon, b_carbon) = get_transfo_param(input_gdf, "carbon_kt_mid", min_rad=3, max_rad=50)
-    (a_elec, b_elec) = get_transfo_param(input_gdf, "elec_conso_GWh_mid", min_rad=3, max_rad=40)
+    (a_carbon, b_carbon) = get_transfo_param(
+        input_gdf, "carbon_kt_mid", min_rad=3, max_rad=50
+    )
+    (a_elec, b_elec) = get_transfo_param(
+        input_gdf, "elec_conso_GWh_mid", min_rad=3, max_rad=40
+    )
 
     # Define fields, aliases and colors
     (fields, aliases) = define_fields(french=french)
@@ -516,8 +553,12 @@ def make_ras_bubble_map(
 
     # Map centered on World - limit max zoom to avoid too much scrutiny
     map = folium.Map(
-        location=(0, 0), maxZoom=12, minZoom=2,
-        zoom_start=2, zoom_control=True, tiles="cartodb positron"
+        location=(0, 0),
+        maxZoom=12,
+        minZoom=2,
+        zoom_start=2,
+        zoom_control=True,
+        tiles="cartodb positron",
     )
 
     ## Apply to the 2 modalities - Electricity / Carbon
@@ -529,13 +570,25 @@ def make_ras_bubble_map(
 
         # Elec
         temp_geojson_layer = make_geojson_layer(
-            temp_geojson, fields, aliases, shades_salmon, "elec_conso_GWh_mid", a_elec, b_elec
+            temp_geojson,
+            fields,
+            aliases,
+            shades_salmon,
+            "elec_conso_GWh_mid",
+            a_elec,
+            b_elec,
         )
         temp_geojson_layer.add_to(hg1)
 
         # Carbon
         temp_geojson_layer = make_geojson_layer(
-            temp_geojson, fields, aliases, shades_brown, "carbon_kt_mid", a_carbon, b_carbon
+            temp_geojson,
+            fields,
+            aliases,
+            shades_brown,
+            "carbon_kt_mid",
+            a_carbon,
+            b_carbon,
         )
         temp_geojson_layer.add_to(hg2)
 
