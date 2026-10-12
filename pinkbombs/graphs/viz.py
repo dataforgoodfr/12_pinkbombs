@@ -90,7 +90,7 @@ def make_area_order_chart_grouped(
             input_y (str): name of the field for the y axis
             input_col (str): name of the field for the colors
             title (str): chart title
-            reorder (boolean): if true, dataframe is reodered by the input_col field, 
+            reorder (boolean): if true, dataframe is reodered by the input_col field,
                 default is False
             palette (px.object): plotly discrete palette, default is Dark24
             theme (str): plotly chart theme, default is 'simple_white'
@@ -101,7 +101,7 @@ def make_area_order_chart_grouped(
     try:
         input_df[input_y] = input_df[input_y].str.replace(",", ".")
         input_df[input_y] = input_df[input_y].astype(float)
-    except Exception as e:
+    except Exception:
         print("Input is not in string format")
 
     input_df = input_df.groupby(input_x)[input_y].sum().reset_index()
@@ -117,7 +117,9 @@ def make_area_order_chart_grouped(
             mode="lines",
         )
     )
-    area.update_layout(template=theme, title=title, xaxis_title=input_x, yaxis_title=input_y)
+    area.update_layout(
+        template=theme, title=title, xaxis_title=input_x, yaxis_title=input_y
+    )
     area.update_yaxes(exponentformat="none", showgrid=True)
 
     return area
@@ -145,7 +147,7 @@ def make_area_order_chart(
             title (str): chart title
             y_title (str): y axis title
             min_date (int): minimum year to be shown on plot initially
-            reorder (boolean): if true, dataframe is reodered by the input_col field, 
+            reorder (boolean): if true, dataframe is reodered by the input_col field,
                 default is False
             hide_zoom (boolean): to hide the zoom in top right corner
             palette (px.object): plotly discrete palette, default is Dark24
@@ -158,7 +160,9 @@ def make_area_order_chart(
     input_df[input_y] = input_df[input_y].astype(float)
 
     if reorder:
-        input_df_agg = input_df.groupby(input_col)[input_y].sum().sort_values(ascending=False)
+        input_df_agg = (
+            input_df.groupby(input_col)[input_y].sum().sort_values(ascending=False)
+        )
         myorder = input_df_agg.reset_index()[input_col].tolist()
         input_df_u = input_df.set_index(input_col)
         input_df = input_df_u.loc[myorder].reset_index()
@@ -188,7 +192,11 @@ def make_area_order_chart(
                                 label="Deselect All",
                                 method="restyle",
                             ),
-                            dict(args=["visible", True], label="Select All", method="restyle"),
+                            dict(
+                                args=["visible", True],
+                                label="Select All",
+                                method="restyle",
+                            ),
                         ]
                     ),
                     pad={"r": 10, "t": 10},
@@ -227,7 +235,7 @@ def make_area_chart_options(
             title (str): chart title
             legend_title (str): legend title
             color_area (str): color for the single area
-            color_axis (str): color of the axis, lines and font over transparent background, 
+            color_axis (str): color of the axis, lines and font over transparent background,
                 default is white
             theme (str): plotly chart theme, default is 'simple_white'
     Returns:
@@ -237,7 +245,7 @@ def make_area_chart_options(
     try:
         input_df[input_y] = input_df[input_y].str.replace(",", ".")
         input_df[input_y] = input_df[input_y].astype(float)
-    except Exception as e:
+    except Exception:
         print("Input is not in string format")
 
     fig = px.area(
@@ -322,7 +330,7 @@ def make_color_bar_chart(
     try:
         input_df[input_x] = input_df[input_x].str.replace(",", ".")
         input_df[input_x] = input_df[input_x].astype(float)
-    except Exception as e:
+    except Exception:
         print("Input is not in string format")
 
     # Recalculate %
@@ -333,7 +341,9 @@ def make_color_bar_chart(
     input_df[input_y] = input_df[input_y1] + " " + input_df[input_y2]
 
     # Make figures in tonnes priettier
-    input_df['Production'] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(" tonnes")
+    input_df["Production"] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(
+        " tonnes"
+    )
 
     bar = px.bar(
         input_df,
@@ -346,7 +356,12 @@ def make_color_bar_chart(
         title=title,
         color_continuous_scale=palette,
         hover_name=input_y,
-        hover_data={input_x: False, input_y: False, 'Production': True, input_col: ":.1%"},
+        hover_data={
+            input_x: False,
+            input_y: False,
+            "Production": True,
+            input_col: ":.1%",
+        },
     )
 
     bar.update_traces(
@@ -414,7 +429,11 @@ def make_color_bar_chart2(
         title=title,
         color_continuous_scale=palette,
         hover_name=input_x,
-        hover_data={col_rename[input_y]: ":,.0f", input_x: False, col_rename[input_col]: ":,.0f"},
+        hover_data={
+            col_rename[input_y]: ":,.0f",
+            input_x: False,
+            col_rename[input_col]: ":,.0f",
+        },
     )
     bar.update_traces(
         textfont_size=12,
@@ -487,7 +506,9 @@ def make_simple_bar_chart(
     )
 
     # Format the values in input_n2 with commas for thousand separators
-    input_df[input_n2] = input_df[input_n2].apply(lambda x: f"{x:,.0f}") + str(" (2022)")
+    input_df[input_n2] = input_df[input_n2].apply(lambda x: f"{x:,.0f}") + str(
+        " (2022)"
+    )
 
     # Loop through the DataFrame and update values for the company "Cooke"
     for index, row in input_df.iterrows():
@@ -499,13 +520,17 @@ def make_simple_bar_chart(
     input_df = input_df.fillna("")
 
     # Make figures in tonnes priettier
-    input_df['Production'] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(" tonnes")
+    input_df["Production"] = input_df[input_x].apply(lambda x: f"{x:,.0f}") + str(
+        " tonnes"
+    )
 
-    # Replace revenues 2022 with revenues 
-    input_df = input_df.rename(columns={input_n1:input_n1[:-5], input_n2: input_n2[:-5]})
+    # Replace revenues 2022 with revenues
+    input_df = input_df.rename(
+        columns={input_n1: input_n1[:-5], input_n2: input_n2[:-5]}
+    )
 
     # Get a list of all columns except input_x, input_y1, and input_y2
-    hover_data = {input_x: False, input_y: False, 'Production':True}
+    hover_data = {input_x: False, input_y: False, "Production": True}
     for column in input_other:
         hover_data[column] = True
 
@@ -523,7 +548,11 @@ def make_simple_bar_chart(
     )
 
     bar.update_traces(
-        textfont_size=12, textangle=0, textposition="inside", cliponaxis=False, marker_color=mycolor
+        textfont_size=12,
+        textangle=0,
+        textposition="inside",
+        cliponaxis=False,
+        marker_color=mycolor,
     )
     bar.update_layout(
         template="simple_white",
@@ -595,7 +624,16 @@ def make_bar_chart(
 
 
 def make_treemap_chart(
-    input_df, input_x1, input_x2, input_x3, input_y, input_n, title, height=400, width=500, top_x=6
+    input_df,
+    input_x1,
+    input_x2,
+    input_x3,
+    input_y,
+    input_n,
+    title,
+    height=400,
+    width=500,
+    top_x=6,
 ) -> Figure:
     """Returns a Plotly Express object as a treemap chart
     Parameters:
@@ -614,7 +652,9 @@ def make_treemap_chart(
     """
     # Aggregate de dataframe, showing only the top x
     input_df_top = input_df.sort_values(input_x1, ascending=False).head(top_x)
-    input_df_bot = input_df.sort_values(input_x1, ascending=False).loc[top_x:,].sum().to_frame().T
+    input_df_bot = (
+        input_df.sort_values(input_x1, ascending=False).loc[top_x:,].sum().to_frame().T
+    )
     input_df_bot[input_n] = "Others"
     input_df_bot[input_x3] = (input_df_bot[input_x1] / input_df_bot[input_x2]).apply(
         lambda x: f"{x:.2%}"
@@ -622,7 +662,9 @@ def make_treemap_chart(
     input_df_new = pd.concat([input_df_top, input_df_bot]).reset_index()
 
     # make Labels
-    input_df_new["labels"] = input_df_new[input_n] + " - Escape rate = " + input_df_new[input_x3]
+    input_df_new["labels"] = (
+        input_df_new[input_n] + " - Escape rate = " + input_df_new[input_x3]
+    )
 
     # Treemap
     fig = px.treemap(
@@ -718,7 +760,9 @@ def make_simple_pie_chart(
         font=dict(size=30),
     )
     # Update trace properties
-    pie.update_traces(marker=dict(line=dict(color="#ffffff", width=2)), textfont_size=textfont_size)
+    pie.update_traces(
+        marker=dict(line=dict(color="#ffffff", width=2)), textfont_size=textfont_size
+    )
 
     return pie
 
@@ -755,7 +799,7 @@ def make_simple_box_chart(
     try:
         input_df[input_y] = input_df[input_y].str.replace(",", ".")
         input_df[input_y] = input_df[input_y].astype(float)
-    except Exception as e:
+    except Exception:
         print("Input is not in string format")
 
     # List of order and color
@@ -781,8 +825,7 @@ def make_simple_box_chart(
     box.update_traces(boxpoints=False)  # remove outliers
 
     if xtitle is not None:
-        box.update_layout(xaxis_title="<i>"+xtitle+"</i>", 
-                          xaxis={'side': 'right'})
+        box.update_layout(xaxis_title="<i>" + xtitle + "</i>", xaxis={"side": "right"})
         box.update_xaxes(title_font_size=10)
 
     else:
@@ -799,8 +842,14 @@ def make_simple_box_chart(
 
 
 def make_matrix_alternatives(
-    input_df, max_len=60, max_len_col=11, width=900, height=500, 
-    legend_green="", legend_red="", hover_disable=False
+    input_df,
+    max_len=60,
+    max_len_col=11,
+    width=900,
+    height=500,
+    legend_green="",
+    legend_red="",
+    hover_disable=False,
 ) -> Figure:
     """Returns a Plotly Express object as a Heatmap for the matrix of altenatives
     Parameters:
@@ -835,16 +884,18 @@ def make_matrix_alternatives(
 
             if j == 0:
                 mat_col[i, j] = 7
-                customdata[i, j] = f"<b>{row[i]}</b><br>" + \
-                textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
+                customdata[i, j] = f"<b>{row[i]}</b><br>" + textwrap.fill(
+                    customdata[i, j], max_len
+                ).replace("\n", "<br>")
             else:
                 mat_col[i, j] = int(customdata[i, j][0])  # Take color code
-                customdata[i, j] = f"<b>{pair}</b><br>" + \
-                textwrap.fill(customdata[i, j], max_len).replace("\n", "<br>")
-    
+                customdata[i, j] = f"<b>{pair}</b><br>" + textwrap.fill(
+                    customdata[i, j], max_len
+                ).replace("\n", "<br>")
+
     # Define colorscale and axes
     mycolorscale = [
-        #"#bfcee1",  # light grey - NEW
+        # "#bfcee1",  # light grey - NEW
         "#6ecb57",  # dark green - Paul
         "#aaed99",  # light green - Paul
         "#ffd336",  # yellow - Paul
@@ -854,21 +905,23 @@ def make_matrix_alternatives(
         "rgba(0,0,0,0)",  # transparent for the first column
     ]
 
-    n=len(mycolorscale)
-    my_colorsc=[[0, mycolorscale[0]],
-            [1/n, mycolorscale[0]],
-            [1/n, mycolorscale[1]],
-            [2/n, mycolorscale[1]],
-            [2/n, mycolorscale[2]],
-            [3/n, mycolorscale[2]],
-            [3/n, mycolorscale[3]],
-            [4/n, mycolorscale[3]],
-            [4/n, mycolorscale[4]],
-            [5/n, mycolorscale[4]],
-            [5/n, mycolorscale[5]],
-            [6/n, mycolorscale[5]],
-            [6/n, mycolorscale[6]],
-            [1, mycolorscale[6]]]
+    n = len(mycolorscale)
+    my_colorsc = [
+        [0, mycolorscale[0]],
+        [1 / n, mycolorscale[0]],
+        [1 / n, mycolorscale[1]],
+        [2 / n, mycolorscale[1]],
+        [2 / n, mycolorscale[2]],
+        [3 / n, mycolorscale[2]],
+        [3 / n, mycolorscale[3]],
+        [4 / n, mycolorscale[3]],
+        [4 / n, mycolorscale[4]],
+        [5 / n, mycolorscale[4]],
+        [5 / n, mycolorscale[5]],
+        [6 / n, mycolorscale[5]],
+        [6 / n, mycolorscale[6]],
+        [1, mycolorscale[6]],
+    ]
 
     # Wrap column names
     if max_len_col is not None:
@@ -910,19 +963,25 @@ def make_matrix_alternatives(
         fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
     tickvals = [1.4, 2.25, 3.1, 3.95, 4.8, 5.7]
-    ticktext = [textwrap.fill(legend_green, 8).replace("\n", "<br>"), 
-                "", "", "", "", 
-                textwrap.fill(legend_red, 8).replace("\n", "<br>")]
+    ticktext = [
+        textwrap.fill(legend_green, 8).replace("\n", "<br>"),
+        "",
+        "",
+        "",
+        "",
+        textwrap.fill(legend_red, 8).replace("\n", "<br>"),
+    ]
 
-    fig.update_traces(showscale=True, 
-                      colorbar = dict(thickness=25, 
-                                      tickvals=tickvals, 
-                                      ticktext=ticktext))
-    
+    fig.update_traces(
+        showscale=True,
+        colorbar=dict(thickness=25, tickvals=tickvals, ticktext=ticktext),
+    )
+
     # Reduce range to see only a small section of the transparent cells (first col)
     fig.update_layout(xaxis_range=[0.3, 8.5])
 
     return fig
+
 
 def make_double_yaxis_bar_chart(
     input_df,
@@ -990,29 +1049,47 @@ def make_double_yaxis_bar_chart(
         input_df,
         x=input_x,
         y=input_y1,
-        orientation='v',
+        orientation="v",
         category_orders={input_y1: input_df[input_y1].to_list()},
-        text_auto=',.0f', # add
+        text_auto=",.0f",  # add
         # comma #'.2s' / '~s'
         title=title,
-        hover_data=hover_data
-        )
+        hover_data=hover_data,
+    )
 
-    bar.update_traces(marker_color=mycolor_bar,textfont_size=12, textangle=0, textposition="outside", cliponaxis=False,
-                         hovertemplate = "<b>" + bar_hover_legend +': %{y} tonnes</b><br>'+
-                                         "<i>- "+input_other[0] + ": %{customdata[1]} tonnes</i><br>"+
-                                         "<i>- "+input_other[1] + ": %{customdata[2]} tonnes</i><br>" +
-                                         "<i>- "+input_other[2] + ": %{customdata[3]} tonnes</i><br>")
+    bar.update_traces(
+        marker_color=mycolor_bar,
+        textfont_size=12,
+        textangle=0,
+        textposition="outside",
+        cliponaxis=False,
+        hovertemplate="<b>"
+        + bar_hover_legend
+        + ": %{y} tonnes</b><br>"
+        + "<i>- "
+        + input_other[0]
+        + ": %{customdata[1]} tonnes</i><br>"
+        + "<i>- "
+        + input_other[1]
+        + ": %{customdata[2]} tonnes</i><br>"
+        + "<i>- "
+        + input_other[2]
+        + ": %{customdata[3]} tonnes</i><br>",
+    )
 
     point = px.scatter(
         input_df,
         x=input_x,
         y=input_y2,
-        hover_data={input_x: False, input_y1: False, input_y2: True}
-        )
+        hover_data={input_x: False, input_y1: False, input_y2: True},
+    )
 
-    point.update_traces(marker_color=mycolor_point, marker=dict(size=10),yaxis="y2",
-                        hovertemplate = "<b>" + point_hover_legend +': %{y} kilos</b>')
+    point.update_traces(
+        marker_color=mycolor_point,
+        marker=dict(size=10),
+        yaxis="y2",
+        hovertemplate="<b>" + point_hover_legend + ": %{y} kilos</b>",
+    )
 
     bar_point.add_traces(bar.data + point.data)
 
@@ -1028,17 +1105,22 @@ def make_double_yaxis_bar_chart(
     y1_relative_zero = (0 - y1_range[0]) / (y1_range[1] - y1_range[0])
 
     y2_min, y2_max = input_df[input_y2].min(), input_df[input_y2].max()
-    y2_padding = (y1_relative_zero * (y2_max - y2_min) + y2_min) / (1 - 2 * y1_relative_zero)
+    y2_padding = (y1_relative_zero * (y2_max - y2_min) + y2_min) / (
+        1 - 2 * y1_relative_zero
+    )
     y2_range = [y2_min - y2_padding, y2_max + y2_padding]
 
     bar_point.update_yaxes(range=y1_range, secondary_y=False)
     bar_point.update_yaxes(range=y2_range, secondary_y=True)
-    bar_point.update_layout(template=theme,title=title,
+    bar_point.update_layout(
+        template=theme,
+        title=title,
         yaxis=dict(tickfont=dict(size=13)),
-        hoverlabel=dict(bgcolor="white"))
+        hoverlabel=dict(bgcolor="white"),
+    )
     bar_point.update_xaxes(exponentformat="none")
-    bar_point.update_coloraxes(colorbar_tickformat='0%')
-    bar_point.update_layout(hovermode="x unified",xaxis_title=None)
+    bar_point.update_coloraxes(colorbar_tickformat="0%")
+    bar_point.update_layout(hovermode="x unified", xaxis_title=None)
     bar_point.update_xaxes(ticks="")
 
     if block_zoom:

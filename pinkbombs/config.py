@@ -1,7 +1,6 @@
 import pandas as pd
 import graphs as pb
 
-
 MAPPING = {
     "salmon-collapse": {
         "filename": "discrease_wild_salmon_1.1.csv",
@@ -11,9 +10,7 @@ MAPPING = {
             "Year",
             "Tons of wild salmon catch in Atlantic waters",
             "Tonnes of wild salmon catch in Atlantic waters",
-            [
-                '#151c97'
-            ],
+            ["#151c97"],
             "simple_white",
             "",
             True,
@@ -57,10 +54,7 @@ MAPPING = {
             "Top 10 salmon producing countries by tonnes (2021)",
             None,
             None,
-            [
-                '#151c97', 
-                '#ff4530'
-            ],
+            ["#151c97", "#ff4530"],
             True,
         ],
     },
@@ -195,7 +189,7 @@ MAPS = {
             50,
             True,
             [
-                '#151c97',
+                "#151c97",
             ],
         ],
     },
@@ -210,9 +204,7 @@ MAPPINGFR = {
             "Année",
             "Saumons pêchés dans l'Atlantique en tonnes",
             "Saumons pêchés dans l'Atlantique en tonnes",
-            [
-                '#151c97'
-            ],
+            ["#151c97"],
             "simple_white",
             "",
             True,
@@ -243,7 +235,7 @@ MAPPINGFR = {
             "Production de saumons d'élevage",
             "Nombre de saumons produits chaque année",
         ],
-    },   
+    },
     "top-10": {
         "filename": "top_10_countries_producing_1.3_fr.csv",
         "function": pb.make_color_bar_chart,
@@ -256,10 +248,7 @@ MAPPINGFR = {
             "Top 10 pays producteurs de saumons par tonnes (2021)",
             None,
             None,
-            [
-                '#151c97', 
-                '#ff4530'
-            ],
+            ["#151c97", "#ff4530"],
             True,
         ],
     },
@@ -377,7 +366,7 @@ MAPSFR = {
             "Fermes-usines représentées par:",
             None,
             True,
-            True
+            True,
         ],
     },
     "evolution-map": {
@@ -394,7 +383,7 @@ MAPSFR = {
             50,
             True,
             [
-                '#151c97',
+                "#151c97",
             ],
         ],
     },

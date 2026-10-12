@@ -1,6 +1,7 @@
 from config import MAPPING, MAPS, MAPPINGFR, MAPSFR
 import json
 
+
 def generate_graph(graph_name, mapping):
     if graph_name not in mapping:
         raise ValueError(f"Graph '{graph_name}' not found")
@@ -45,6 +46,3 @@ if __name__ == "__main__":
         map_json = generate_map(map_name, MAPSFR)
         with open(f"data/maps/fr/{map_name}.html", "w") as f:
             f.write(map_json)
-
-    
-    
