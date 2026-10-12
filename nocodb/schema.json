@@ -1,0 +1,94 @@
+{
+  "base": "pinkbombs",
+  "tables": [
+    {
+      "title": "reponses_pinkometre",
+      "columns": [
+        {"title": "id", "uidt": "ID", "generated": true},
+        {"title": "date_creation_utc", "uidt": "CreatedTime"},
+        {"title": "email", "uidt": "Email"},
+        {"title": "impact_initial", "uidt": "SingleSelect", "options": "impacts"},
+        {"title": "impact_apres_engagement", "uidt": "SingleSelect", "options": "impacts"},
+        {"title": "alternative_choisie", "uidt": "SingleSelect", "options": "alternatives"},
+        {"title": "supplement_choisi", "uidt": "SingleSelect", "options": "supplements"},
+        {"title": "consentement_omega3", "uidt": "Checkbox"},
+        {"title": "empreinte_ip_hmac", "uidt": "SingleLineText"}
+      ],
+      "indexes": [["date_creation_utc"], ["empreinte_ip_hmac"], ["empreinte_ip_hmac", "date_creation_utc"]]
+    },
+    {
+      "title": "consommations",
+      "columns": [
+        {"title": "id", "uidt": "ID", "generated": true},
+        {"title": "reponses_pinkometre_id", "uidt": "Links", "required": true, "references": "reponses_pinkometre"},
+        {"title": "scenario", "uidt": "SingleSelect", "required": true, "options": "scenarios"},
+        {"title": "produit", "uidt": "SingleSelect", "options": "produits"},
+        {"title": "variante", "uidt": "SingleSelect", "options": "variantes"},
+        {"title": "frequence", "uidt": "SingleSelect", "options": "frequences"},
+        {"title": "occurence_par_an", "uidt": "Decimal"},
+        {"title": "quantite_par_occurrence", "uidt": "Decimal"},
+        {"title": "unite_fr", "uidt": "SingleSelect", "options": "unites"},
+        {"title": "poids_annuel_kg", "uidt": "Decimal"}
+      ],
+      "indexes": [["reponses_pinkometre_id"], ["scenario"], ["produit"]]
+    }
+  ],
+  "options": {
+    "scenarios": [
+      {"label": "Initiale", "code": "initial"},
+      {"label": "Après engagement", "code": "afterCommitment"}
+    ],
+    "impacts": [
+      {"label": "Neutre", "code": "neutral"},
+      {"label": "Léger", "code": "low"},
+      {"label": "Moyen", "code": "medium"},
+      {"label": "Fort", "code": "high"},
+      {"label": "Très fort", "code": "veryHigh"}
+    ],
+    "produits": [
+      {"label": "Filet ou pavé", "code": "fillet"},
+      {"label": "Sushis (makis, nigiris, sashimis)", "code": "sushi"},
+      {"label": "Poké bowls", "code": "pokeBowl"},
+      {"label": "Amuse-bouches", "code": "appetizer"},
+      {"label": "Pâtes au saumon", "code": "pasta"},
+      {"label": "Saumon fumé en tranche", "code": "smokedSalmon"},
+      {"label": "Quiche, sandwich, croque-monsieur", "code": "quicheSandwich"}
+    ],
+    "variantes": [
+      {"label": "Tranche", "code": "tranche"},
+      {"label": "Maki", "code": "maki"},
+      {"label": "Nigiri", "code": "nigiri"},
+      {"label": "Sashimi", "code": "sashimi"}
+    ],
+    "frequences": [
+      {"label": "1 fois par semaine", "code": "weekly"},
+      {"label": "2 fois par semaine", "code": "semiWeekly"},
+      {"label": "1 fois par mois", "code": "monthly"},
+      {"label": "2 fois par mois", "code": "semiMonthly"},
+      {"label": "1 fois tous les deux mois", "code": "biMonthly"},
+      {"label": "1 fois par trimestre", "code": "quarterly"},
+      {"label": "2 fois par an", "code": "semiAnnually"},
+      {"label": "Fréquence personnalisée, par semaine", "code": "otherWeekly"},
+      {"label": "Fréquence personnalisée, par an", "code": "otherYearly"}
+    ],
+    "alternatives": [
+      {"label": "Algues", "code": "algae"},
+      {"label": "Simili saumon fumé (bio de préférence)", "code": "plantBasedSmokedSalmon"},
+      {"label": "Coquillages (origine France de préférence)", "code": "shellfish"},
+      {"label": "Protéines végétales (bio de préférence)", "code": "plantBasedProtein"}
+    ],
+    "supplements": [
+      {"label": "Huile de lin", "code": "flaxSeedOil"},
+      {"label": "Graines de chia", "code": "chiaSeeds"},
+      {"label": "Huile de noix", "code": "walnutOil"},
+      {"label": "Huile de colza", "code": "rapeSeedOil"},
+      {"label": "Noix", "code": "nut"},
+      {"label": "Algues", "code": "algae"}
+    ],
+    "unites": [
+      {"label": "Portion", "code": "portion"},
+      {"label": "Pièce", "code": "piece"},
+      {"label": "Tranche", "code": "slice"}
+    ]
+  }
+}
