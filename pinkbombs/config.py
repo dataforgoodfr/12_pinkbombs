@@ -1,7 +1,6 @@
 import pandas as pd
 import graphs as pb
 
-
 MAPPING = {
     "salmon-collapse": {
         "filename": "discrease_wild_salmon_1.1.csv",

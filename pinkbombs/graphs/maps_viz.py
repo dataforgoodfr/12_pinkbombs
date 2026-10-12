@@ -40,9 +40,7 @@ def make_animated_bubble_map(
     # if reverse:
     #    input_df = input_df.sort_values(by=input_time, ascending=False)
     if min_year > 1950:
-        input_df = input_df.loc[
-            input_df[input_time] >= min_year,
-        ]
+        input_df = input_df.loc[input_df[input_time] >= min_year,]
 
     map = px.scatter_geo(
         input_df,
@@ -344,9 +342,7 @@ def make_title_html(map_title):
     """Returns a html title for the map"""
     title_html = """
              <h3 align="center" style="font-size:16px"><b>{}</b></h3>
-             """.format(
-        map_title
-    )
+             """.format(map_title)
     return title_html
 
 
@@ -523,9 +519,7 @@ def make_ras_bubble_map(
     """
 
     # Remove the 4 ambitions lines and convert to Geopandas
-    input_df = input_df.loc[
-        ~input_df["Lat"].isna(),
-    ]
+    input_df = input_df.loc[~input_df["Lat"].isna(),]
     input_gdf = gpd.GeoDataFrame(
         input_df,
         geometry=gpd.points_from_xy(input_df["Long"], input_df["Lat"]),
@@ -536,16 +530,16 @@ def make_ras_bubble_map(
     input_gdf = create_elements_popups(input_gdf, french=french)
 
     # Determine transformation for display on the map - ELEC, CARBON
-    (a_carbon, b_carbon) = get_transfo_param(
+    a_carbon, b_carbon = get_transfo_param(
         input_gdf, "carbon_kt_mid", min_rad=3, max_rad=50
     )
-    (a_elec, b_elec) = get_transfo_param(
+    a_elec, b_elec = get_transfo_param(
         input_gdf, "elec_conso_GWh_mid", min_rad=3, max_rad=40
     )
 
     # Define fields, aliases and colors
-    (fields, aliases) = define_fields(french=french)
-    (shades_salmon, shades_brown) = define_colors()
+    fields, aliases = define_fields(french=french)
+    shades_salmon, shades_brown = define_colors()
 
     # Define the 2 layers for the modalities
     hg1 = folium.FeatureGroup(name=title_layer1)

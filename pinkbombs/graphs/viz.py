@@ -653,13 +653,7 @@ def make_treemap_chart(
     # Aggregate de dataframe, showing only the top x
     input_df_top = input_df.sort_values(input_x1, ascending=False).head(top_x)
     input_df_bot = (
-        input_df.sort_values(input_x1, ascending=False)
-        .loc[
-            top_x:,
-        ]
-        .sum()
-        .to_frame()
-        .T
+        input_df.sort_values(input_x1, ascending=False).loc[top_x:,].sum().to_frame().T
     )
     input_df_bot[input_n] = "Others"
     input_df_bot[input_x3] = (input_df_bot[input_x1] / input_df_bot[input_x2]).apply(

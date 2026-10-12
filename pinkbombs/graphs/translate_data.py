@@ -49,9 +49,9 @@ data1_2_name = "hyper_growth_salmon_farming_1.2"
 data1_2_file = "data/" + data1_2_name + ".csv"
 df_data1_2 = pd.read_csv(data1_2_file)
 
-df_data1_2.loc[
-    df_data1_2.Country == "Korea, Dem. People's Rep", "Country"
-] = "Democratic People's Republic of Korea"
+df_data1_2.loc[df_data1_2.Country == "Korea, Dem. People's Rep", "Country"] = (
+    "Democratic People's Republic of Korea"
+)
 df_data1_2.loc[df_data1_2.Country == "Türkiye", "Country"] = "Turkey"
 df_data1_2 = df_data1_2.merge(
     df_pays, left_on="Country", right_on="name_eng", how="left"
@@ -103,9 +103,9 @@ data1_4_name = "evolution_salmon_farming_country_iso_1.4"
 data1_4_file = "data/" + data1_4_name + ".csv"
 df_data1_4 = pd.read_csv(data1_4_file)
 
-df_data1_4.loc[
-    df_data1_4.Country == "Korea, Dem. People's Rep", "Country"
-] = "Democratic People's Republic of Korea"
+df_data1_4.loc[df_data1_4.Country == "Korea, Dem. People's Rep", "Country"] = (
+    "Democratic People's Republic of Korea"
+)
 df_data1_4.loc[df_data1_4.Country == "Türkiye", "Country"] = "Turkey"
 df_data1_4 = df_data1_4.merge(
     df_pays, left_on="Country", right_on="name_eng", how="left"
