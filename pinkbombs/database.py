@@ -63,7 +63,7 @@ class SubmissionRepository:
         }
         expected_consumption = {
             "id",
-            "reponses_pinkometre_id",
+            "reponses_pinkometre_fk",
             "scenario",
             "produit",
             "variante",
@@ -124,7 +124,7 @@ class SubmissionRepository:
                 connection.execute(
                     insert(self.consumption_table).values(
                         **values,
-                        reponses_pinkometre_id=response_id,
+                        reponses_pinkometre_fk=response_id,
                     )
                 )
             connection.execute(

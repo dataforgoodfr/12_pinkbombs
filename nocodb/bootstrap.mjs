@@ -35,7 +35,7 @@ export function verifyColumn(column, expected) {
     const desired = schema.options[expected.options].map(option => option.label);
     if (JSON.stringify(actual) !== JSON.stringify(desired)) throw new Error(`${expected.title}: incompatible select options`);
   }
-  if (['email', 'empreinte_ip_hmac'].includes(expected.title) && column.unique) {
+  if (expected.title === 'email' && column.unique) {
     throw new Error(`${expected.title}: uniqueness is forbidden`);
   }
 }
@@ -146,16 +146,17 @@ async function ensureTables(api, baseId) {
   }
   child = await api.request('GET', `/api/v2/meta/tables/${child.id}`);
   let link = child.columns.find(column => column.colOptions?.type === 'bt' && column.colOptions.fk_related_model_id === parent.id);
-  const collision = child.columns.find(column => column.title === relation.title && column.id !== link?.id);
-  if (collision) {
-    if (collision.id !== link?.colOptions?.fk_child_column_id) throw new Error('Response relation title conflicts with an unrelated column');
-    await api.request('PATCH', `/api/v2/meta/columns/${collision.id}`, { title: 'reponses_pinkometre_fk' });
-  }
   if (link && link.title !== relation.title) await api.request('PATCH', `/api/v2/meta/columns/${link.id}`, { title: relation.title });
   child = await api.request('GET', `/api/v2/meta/tables/${child.id}`);
-  link = child.columns.find(column => column.title === relation.title);
+  link = child.columns.find(column => column.colOptions?.type === 'bt' && column.colOptions.fk_related_model_id === parent.id);
   verifyColumn(link || {}, relation);
   if (link.colOptions.fk_related_model_id !== parent.id) throw new Error('Response relation targets the wrong table');
+  const foreignKeyColumn = child.columns.find(column => column.id === link.colOptions.fk_child_column_id);
+  if (!foreignKeyColumn) throw new Error('Response relation has no physical foreign-key column');
+  if (foreignKeyColumn.title !== relation.physicalName) {
+    await api.request('PATCH', `/api/v2/meta/columns/${foreignKeyColumn.id}`, { title: relation.physicalName });
+  }
+  child = await api.request('GET', `/api/v2/meta/tables/${child.id}`);
   tables.set('consommations', child);
   tables.set('reponses_pinkometre', await api.request('GET', `/api/v2/meta/tables/${parent.id}`));
   return tables;
@@ -184,8 +185,38 @@ export async function migrateSchema(database, tables) {
       );
       if (result.rows.length !== 1) throw new Error(`${definition.title}: physical table is missing or ambiguous`);
       const qualified = `${result.rows[0].table_schema}.${table.table_name}`;
-      const columns = new Map(definition.columns.map(column => [column.title, physicalColumn(table, column)]));
+      const columns = new Map(definition.columns.map(column => [column.title, column.physicalName || physicalColumn(table, column)]));
       physical.set(definition.title, { qualified, columns });
+      for (const column of definition.columns.filter(candidate => candidate.references && candidate.physicalName)) {
+        const currentName = physicalColumn(table, column);
+        const targetName = column.physicalName;
+        if (currentName === targetName) continue;
+        const existingColumns = await transaction.raw(
+          'SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_name IN (?, ?)',
+          [result.rows[0].table_schema, table.table_name, currentName, targetName],
+        );
+        const names = new Set(existingColumns.rows.map(row => row.column_name));
+        if (names.has(currentName) && names.has(targetName)) throw new Error(`${definition.title}: both legacy and target foreign-key columns exist`);
+        if (names.has(currentName)) {
+          await transaction.raw('ALTER TABLE ?? RENAME COLUMN ?? TO ??', [qualified, currentName, targetName]);
+        } else if (!names.has(targetName)) {
+          throw new Error(`${definition.title}: physical foreign-key column is missing`);
+        }
+      }
+      if (definition.title === 'reponses_pinkometre') {
+        const legacyFingerprint = table.columns.find(column => column.title === 'empreinte_ip_hmac');
+        if (legacyFingerprint?.column_name) {
+          await transaction.raw('ALTER TABLE ?? DROP COLUMN IF EXISTS ??', [qualified, legacyFingerprint.column_name]);
+        }
+        const legacyCreatedTime = table.columns.find(column => column.title === 'date_creation_utc');
+        if (legacyCreatedTime?.column_name) {
+          await transaction.raw('ALTER TABLE ?? DROP COLUMN IF EXISTS ??', [qualified, legacyCreatedTime.column_name]);
+        }
+      }
+      if (definition.title === 'consommations') {
+        const legacyIndex = `pb_${table.id}_reponses_pinkometre_id`.slice(0, 63);
+        await transaction.raw('DROP INDEX IF EXISTS ??.??', [result.rows[0].table_schema, legacyIndex]);
+      }
       for (const column of definition.columns) {
         if (column.generated) continue;
         const name = columns.get(column.title);
@@ -225,7 +256,7 @@ export async function migrateSchema(database, tables) {
           throw new Error(`${definition.title}: incompatible index ${index}`);
         }
       }
-      for (const column of definition.columns.filter(column => ['email', 'empreinte_ip_hmac'].includes(column.title))) {
+      for (const column of definition.columns.filter(column => column.title === 'email')) {
         const unique = await transaction.raw(
           'SELECT 1 FROM pg_index index JOIN pg_attribute attribute ON attribute.attrelid = index.indrelid AND attribute.attnum = ANY(index.indkey) WHERE index.indrelid = ?::regclass AND index.indisunique AND attribute.attname = ?',
           [qualified, columns.get(column.title)],
@@ -235,7 +266,7 @@ export async function migrateSchema(database, tables) {
     }
     const child = physical.get('consommations');
     const parent = physical.get('reponses_pinkometre');
-    const foreignKey = child.columns.get('reponses_pinkometre_id');
+    const foreignKey = child.columns.get('reponse_pinkometre');
     const constraints = await transaction.raw(
       "SELECT 1 FROM pg_constraint constraint_record JOIN pg_attribute attribute ON attribute.attrelid = constraint_record.conrelid AND attribute.attnum = ANY(constraint_record.conkey) WHERE constraint_record.contype = 'f' AND constraint_record.conrelid = ?::regclass AND constraint_record.confrelid = ?::regclass AND attribute.attname = ?",
       [child.qualified, parent.qualified, foreignKey],
@@ -279,8 +310,81 @@ async function restrictAccess(api, baseId, tables, environment) {
 
 export const apiInsertColumns = {
   reponses_pinkometre: ['email', 'impact_initial', 'impact_apres_engagement', 'alternative_choisie', 'supplement_choisi', 'consentement_omega3'],
-  consommations: ['reponses_pinkometre_id', 'scenario', 'produit', 'variante', 'frequence', 'occurence_par_an', 'quantite_par_occurrence', 'unite_fr', 'poids_annuel_kg'],
+  consommations: ['reponse_pinkometre', 'scenario', 'produit', 'variante', 'frequence', 'occurence_par_an', 'quantite_par_occurrence', 'unite_fr', 'poids_annuel_kg'],
 };
+
+async function syncRelationColumnName(api, tables) {
+  const table = tables.get('consommations');
+  const relation = schema.tables.find(definition => definition.title === 'consommations').columns.find(column => column.references);
+  const link = table.columns.find(column => column.title === relation.title);
+  const physicalColumnMetadata = table.columns.find(column => column.id === link?.colOptions?.fk_child_column_id);
+  if (!physicalColumnMetadata) throw new Error('Response relation has no physical foreign-key column');
+  if (physicalColumnMetadata.column_name !== relation.physicalName) {
+    await api.request('PATCH', `/api/v2/meta/columns/${physicalColumnMetadata.id}`, { column_name: relation.physicalName });
+  }
+  const refreshed = await api.request('GET', `/api/v2/meta/tables/${table.id}`);
+  const updated = refreshed.columns.find(column => column.id === physicalColumnMetadata.id);
+  if (updated?.column_name !== relation.physicalName) throw new Error('Physical foreign-key column name did not update');
+  tables.set('consommations', refreshed);
+}
+
+async function setViewColumnVisibility(api, view, viewColumns, column, visible) {
+  let viewColumn = viewColumns.find(candidate => candidate.fk_column_id === column.id);
+  if (viewColumn) {
+    if (viewColumn.show !== visible) {
+      await api.request('PATCH', `/api/v2/meta/views/${view.id}/columns/${viewColumn.id}`, { show: visible });
+    }
+    return;
+  }
+  if (!visible) return;
+  const order = Math.max(0, ...viewColumns.map(candidate => Number(candidate.order) || 0)) + 1;
+  await api.request('POST', `/api/v2/meta/views/${view.id}/columns`, {
+    fk_column_id: column.id,
+    show: true,
+    order,
+  });
+}
+
+export async function configureDefaultViews(api, tables) {
+  for (const tableName of ['reponses_pinkometre', 'consommations']) {
+    const table = tables.get(tableName);
+    const metadata = await api.request('GET', `/api/v2/meta/tables/${table.id}`);
+    const views = await api.list(`/api/v2/meta/tables/${table.id}/views`);
+    const view = views.find(candidate => candidate.type === 3 && candidate.show)
+      || views.find(candidate => candidate.type === 3);
+    if (!view) throw new Error(`${tableName}: default grid view is unavailable`);
+    const viewColumns = await api.list(`/api/v2/meta/views/${view.id}/columns`);
+    if (tableName === 'consommations') {
+      const relation = schema.tables.find(definition => definition.title === tableName).columns.find(column => column.references);
+      const link = metadata.columns.find(column => column.title === relation.title);
+      const foreignKeyColumn = metadata.columns.find(column => column.id === link?.colOptions?.fk_child_column_id);
+      if (!link || !foreignKeyColumn || foreignKeyColumn.column_name !== relation.physicalName) {
+        throw new Error(`${tableName}: renamed response foreign-key metadata is unavailable`);
+      }
+      await setViewColumnVisibility(api, view, viewColumns, link, false);
+      await setViewColumnVisibility(api, view, viewColumns, foreignKeyColumn, true);
+    } else {
+      const createdAt = metadata.columns.find(column => column.uidt === 'CreatedTime' && column.system && column.column_name === 'created_at');
+      if (!createdAt) throw new Error(`${tableName}: system CreatedAt field is unavailable`);
+      await setViewColumnVisibility(api, view, viewColumns, createdAt, true);
+    }
+    const verified = await api.list(`/api/v2/meta/views/${view.id}/columns`);
+    if (tableName === 'consommations') {
+      const relation = schema.tables.find(definition => definition.title === tableName).columns.find(column => column.references);
+      const link = metadata.columns.find(column => column.title === relation.title);
+      const foreignKeyColumn = metadata.columns.find(column => column.id === link.colOptions.fk_child_column_id);
+      if (verified.find(column => column.fk_column_id === link.id)?.show !== false
+        || verified.find(column => column.fk_column_id === foreignKeyColumn.id)?.show !== true) {
+        throw new Error(`${tableName}: grid must show the scalar foreign key instead of the response relation`);
+      }
+    } else {
+      const createdAt = metadata.columns.find(column => column.uidt === 'CreatedTime' && column.system && column.column_name === 'created_at');
+      if (verified.find(column => column.fk_column_id === createdAt.id)?.show !== true) {
+        throw new Error(`${tableName}: system CreatedAt must be visible in the grid`);
+      }
+    }
+  }
+}
 
 export async function provisionApiDatabase(database, tables, environment) {
   const username = requireSetting(environment, 'API_DB_USER');
@@ -347,6 +451,14 @@ export async function bootstrap(environment = process.env) {
   if (bases.length > 1) throw new Error('Multiple pinkbombs bases; resolve the ambiguity before initialization');
   const base = bases[0] || await api.request('POST', '/api/v2/meta/bases/', { title: baseTitle });
   const tables = await ensureTables(api, base.id);
+  const responseTable = tables.get('reponses_pinkometre');
+  const legacyFingerprint = responseTable.columns.find(column => column.title === 'empreinte_ip_hmac');
+  if (legacyFingerprint) {
+    if (!legacyFingerprint.column_name) throw new Error('Legacy IP fingerprint physical column is unavailable');
+    await api.request('DELETE', `/api/v2/meta/columns/${legacyFingerprint.id}`);
+  }
+  const legacyCreatedTime = responseTable.columns.find(column => column.title === 'date_creation_utc');
+  if (legacyCreatedTime) await api.request('DELETE', `/api/v2/meta/columns/${legacyCreatedTime.id}`);
   const runtimeRequire = createRequire('/usr/src/app/package.json');
   const database = runtimeRequire('knex')({
     client: 'pg', connection: { host: 'db', port: 5432, user: 'pinkbombs', database: 'pinkbombs', password: requireSetting(environment, 'POSTGRES_PASSWORD') },
@@ -354,6 +466,8 @@ export async function bootstrap(environment = process.env) {
   });
   try {
     await migrateSchema(database, tables);
+    await syncRelationColumnName(api, tables);
+    await configureDefaultViews(api, tables);
     await provisionApiDatabase(database, tables, environment);
   } finally {
     await database.destroy();

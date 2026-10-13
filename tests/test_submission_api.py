@@ -92,7 +92,9 @@ def test_options_expose_codes_and_french_labels():
 
     assert response.status_code == 200
     assert response.json() == public_options()
-    assert {"code": "null", "label": "Je ne consomme pas de saumon"} in response.json()["produits"]
+    assert {"code": "null", "label": "Je ne consomme pas de saumon"} in response.json()[
+        "produits"
+    ]
     assert response.json()["scenarios"] == [
         {"code": "initial", "label": "Initiale"},
         {"code": "afterCommitment", "label": "Après engagement"},

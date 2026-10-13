@@ -5,22 +5,20 @@
       "title": "reponses_pinkometre",
       "columns": [
         {"title": "id", "uidt": "ID", "generated": true},
-        {"title": "date_creation_utc", "uidt": "CreatedTime"},
         {"title": "email", "uidt": "Email"},
         {"title": "impact_initial", "uidt": "SingleSelect", "options": "impacts"},
         {"title": "impact_apres_engagement", "uidt": "SingleSelect", "options": "impacts"},
         {"title": "alternative_choisie", "uidt": "SingleSelect", "options": "alternatives"},
         {"title": "supplement_choisi", "uidt": "SingleSelect", "options": "supplements"},
-        {"title": "consentement_omega3", "uidt": "Checkbox"},
-        {"title": "empreinte_ip_hmac", "uidt": "SingleLineText"}
+        {"title": "consentement_omega3", "uidt": "Checkbox"}
       ],
-      "indexes": [["date_creation_utc"], ["empreinte_ip_hmac"], ["empreinte_ip_hmac", "date_creation_utc"]]
+      "indexes": []
     },
     {
       "title": "consommations",
       "columns": [
         {"title": "id", "uidt": "ID", "generated": true},
-        {"title": "reponses_pinkometre_id", "uidt": "Links", "required": true, "references": "reponses_pinkometre"},
+        {"title": "reponse_pinkometre", "uidt": "Links", "required": true, "references": "reponses_pinkometre", "physicalName": "reponses_pinkometre_fk"},
         {"title": "scenario", "uidt": "SingleSelect", "required": true, "options": "scenarios"},
         {"title": "produit", "uidt": "SingleSelect", "options": "produits"},
         {"title": "variante", "uidt": "SingleSelect", "options": "variantes"},
@@ -30,7 +28,7 @@
         {"title": "unite_fr", "uidt": "SingleSelect", "options": "unites"},
         {"title": "poids_annuel_kg", "uidt": "Decimal"}
       ],
-      "indexes": [["reponses_pinkometre_id"], ["scenario"], ["produit"]]
+      "indexes": [["reponse_pinkometre"], ["scenario"], ["produit"]]
     }
   ],
   "options": {

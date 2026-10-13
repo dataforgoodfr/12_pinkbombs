@@ -147,10 +147,10 @@ The FastAPI submission service is included in the local Compose stack and starts
 
 [`nocodb/schema.json`](nocodb/schema.json) defines the two tables, exact French select labels, and English application-code mappings:
 
-- `reponses_pinkometre`: generated `id`, UTC creation time (`created_at` in PostgreSQL), optional email and HMAC, impacts, alternative, supplement, and omega-3 consent.
+- `reponses_pinkometre`: generated `id`, UTC creation time (`created_at` in PostgreSQL), optional email, impacts, alternative, supplement, and omega-3 consent.
 - `consommations`: generated `id`, required response relation and `scenario`, product, optional variant, frequency, annual occurrence count, quantity, unit, and annual weight.
 
-Only the response relation and `scenario` are required. The annual frequency is decimal. Email and HMAC are not unique; raw IP addresses must never be stored. The initializer uses NocoDB's API for metadata and schema-only SQL migrations for the foreign key, select checks, and nonunique indexes. It disables public sharing for the base and views.
+Only the response relation and `scenario` are required. The annual frequency is decimal. Email is not unique; the API does not store IP addresses or IP-derived fingerprints. The initializer uses NocoDB's API for metadata and schema-only SQL migrations for the foreign key, select checks, and nonunique indexes. It disables public sharing for the base and views.
 
 The administrator is reserved for maintenance. Bootstrap makes all other direct base members viewers. FastAPI uses a separate PostgreSQL role limited to inserting approved fields and reading generated IDs; it cannot read, update, or delete submission rows. Workspace owners, administrators, and Docker operators can override NocoDB permissions.
 
@@ -198,7 +198,7 @@ Example request:
 }
 ```
 
-`response` is required; its fields are optional. `consommations` must contain 1 to 100 rows. Each row requires `scenario`; other row fields are optional. Decimal values must be finite, nonnegative, and fit `numeric(30,10)`. Option fields use the stable codes from `GET /api/v1/options`, not their French labels. The server creates the parent relationship and database IDs; clients must not send IDs, `empreinte_ip_hmac`, or extra fields. The server does not store raw IP addresses.
+`response` is required; its fields are optional. `consommations` must contain 1 to 100 rows. Each row requires `scenario`; other row fields are optional. Decimal values must be finite, nonnegative, and fit `numeric(30,10)`. Option fields use the stable codes from `GET /api/v1/options`, not their French labels. The server creates the parent relationship and database IDs; clients must not send IDs or extra fields. The API does not retain IP addresses or IP-derived fingerprints.
 
 Success returns `201` with `{ "id": 123 }`; an identical retry returns `200` with the same body. Invalid input returns `422`, idempotency-key conflicts return `409`, rate limits return `429`, and unavailable persistence/rate limiting returns `503`. The default rate limit is 10 submissions per client per 60 seconds; tune `API_RATE_LIMIT` and `API_RATE_WINDOW_SECONDS` in `.env` as needed.
 
@@ -232,3 +232,4 @@ docker compose down
 Named volumes retain database and attachment data after `down`. Never use `down -v` unless you intend to delete that data. Back up PostgreSQL, attachments, and `.env` outside the repository before upgrades or recovery. Change the pinned `NOCODB_IMAGE` only after checking NocoDB's [self-hosting guidance](https://nocodb.com/docs/self-hosting).
 
 Run the schema unit tests with `node --test nocodb/test-bootstrap.mjs`. Do not insert or update submissions directly in PostgreSQL; use the FastAPI submission endpoint.
+

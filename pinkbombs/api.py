@@ -17,7 +17,6 @@ from pinkbombs.database import IdempotencyConflict, SubmissionRepository
 from pinkbombs.submission_schemas import SubmissionRequest, public_options
 from pinkbombs.submission_service import SubmissionService
 
-
 API_VERSION = "1.0.0"
 API_V1_PREFIX = "/api/v1"
 DEFAULT_CORS_ORIGINS = (
@@ -77,9 +76,7 @@ class Settings:
             ),
             rate_limit=int(os.getenv("API_RATE_LIMIT", str(DEFAULT_RATE_LIMIT))),
             rate_window_seconds=int(
-                os.getenv(
-                    "API_RATE_WINDOW_SECONDS", str(DEFAULT_RATE_WINDOW_SECONDS)
-                )
+                os.getenv("API_RATE_WINDOW_SECONDS", str(DEFAULT_RATE_WINDOW_SECONDS))
             ),
             rate_limit_secret=os.getenv("API_RATE_LIMIT_SECRET", ""),
             idempotency_secret=os.getenv("API_IDEMPOTENCY_SECRET", ""),

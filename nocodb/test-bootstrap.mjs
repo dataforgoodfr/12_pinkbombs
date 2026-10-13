@@ -18,12 +18,16 @@ test('API database role only receives approved submission insert columns', () =>
     'email', 'impact_initial', 'impact_apres_engagement', 'alternative_choisie',
     'supplement_choisi', 'consentement_omega3',
   ]);
-  assert.ok(!apiInsertColumns.reponses_pinkometre.includes('empreinte_ip_hmac'));
   assert.ok(!apiInsertColumns.consommations.includes('id'));
+  assert.equal(apiInsertColumns.consommations[0], 'reponse_pinkometre');
+  assert.equal(schema.tables[1].columns.find(column => column.references).physicalName, 'reponses_pinkometre_fk');
+  assert.ok(!schema.tables[0].columns.some(column => column.title === 'empreinte_ip_hmac'));
+  assert.deepEqual(schema.tables[0].indexes, []);
+  assert.deepEqual(schema.tables[1].indexes, [['reponse_pinkometre'], ['scenario'], ['produit']]);
 });
 
 test('only scenario and the response relation are required business fields', () => {
-  assert.deepEqual(schema.tables.flatMap(table => table.columns.filter(column => column.required).map(column => column.title)), ['reponses_pinkometre_id', 'scenario']);
+  assert.deepEqual(schema.tables.flatMap(table => table.columns.filter(column => column.required).map(column => column.title)), ['reponse_pinkometre', 'scenario']);
 });
 
 test('single selects preserve accents, commas, order and French labels', () => {
@@ -76,14 +80,12 @@ test('existing NocoDB select metadata is updated when option labels change', asy
   assert.equal(updated.colOptions.options.at(-1).title, 'Je ne consomme pas de saumon');
 });
 
-test('nullable fields have no required or unique declaration', () => {
-  for (const name of ['email', 'empreinte_ip_hmac']) {
-    const column = schema.tables[0].columns.find(candidate => candidate.title === name);
-    const payload = columnPayload(column);
-    assert.equal(payload.rqd, undefined);
-    assert.equal(payload.unique, undefined);
-    assert.throws(() => verifyColumn({ ...payload, unique: true }, column), /uniqueness is forbidden/);
-  }
+test('email is nullable and non-unique', () => {
+  const column = schema.tables[0].columns.find(candidate => candidate.title === 'email');
+  const payload = columnPayload(column);
+  assert.equal(payload.rqd, undefined);
+  assert.equal(payload.unique, undefined);
+  assert.throws(() => verifyColumn({ ...payload, unique: true }, column), /uniqueness is forbidden/);
 });
 
 test('custom frequency annual counts stay decimal and canonical names stay unchanged', () => {
