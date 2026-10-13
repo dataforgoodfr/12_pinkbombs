@@ -52,7 +52,8 @@
       {"label": "Amuse-bouches", "code": "appetizer"},
       {"label": "Pâtes au saumon", "code": "pasta"},
       {"label": "Saumon fumé en tranche", "code": "smokedSalmon"},
-      {"label": "Quiche, sandwich, croque-monsieur", "code": "quicheSandwich"}
+      {"label": "Quiche, sandwich, croque-monsieur", "code": "quicheSandwich"},
+      {"label": "Je ne consomme pas de saumon", "code": "null"}
     ],
     "variantes": [
       {"label": "Tranche", "code": "tranche"},

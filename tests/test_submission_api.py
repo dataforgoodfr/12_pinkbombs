@@ -92,6 +92,7 @@ def test_options_expose_codes_and_french_labels():
 
     assert response.status_code == 200
     assert response.json() == public_options()
+    assert {"code": "null", "label": "Je ne consomme pas de saumon"} in response.json()["produits"]
     assert response.json()["scenarios"] == [
         {"code": "initial", "label": "Initiale"},
         {"code": "afterCommitment", "label": "Après engagement"},
@@ -123,6 +124,17 @@ def test_submission_maps_codes_and_returns_generated_id():
     ]
     assert limiter.keys[0].startswith("pinkbombs-api:rate:")
     assert "survey@example.org" not in limiter.keys[0]
+
+
+def test_no_salmon_product_code_is_stored_as_its_french_label():
+    client, repository, _ = make_client()
+    payload = valid_payload()
+    payload["consommations"][0]["produit"] = "null"
+
+    response = post(client, payload)
+
+    assert response.status_code == 201
+    assert repository.consumption_values[0]["produit"] == "Je ne consomme pas de saumon"
 
 
 def test_idempotent_retry_returns_same_id_and_conflicting_payload_is_rejected():

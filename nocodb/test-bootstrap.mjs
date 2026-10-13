@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { schema, columnPayload, verifyColumn, NocoApi, bootstrap, apiInsertColumns } from './bootstrap.mjs';
+import { schema, columnPayload, verifyColumn, optionConstraintIsCurrent, syncColumnOptions, NocoApi, bootstrap, apiInsertColumns } from './bootstrap.mjs';
 
 test('all frontend options have stable unique codes and existing French labels', () => {
   for (const options of Object.values(schema.options)) {
@@ -35,6 +35,45 @@ test('single selects preserve accents, commas, order and French labels', () => {
   assert.equal(payload.colOptions.options[0].code, undefined);
   verifyColumn(payload, product);
   assert.throws(() => verifyColumn({ ...payload, colOptions: { options: [] } }, product), /incompatible select options/);
+});
+
+test('no-salmon product uses the literal null code and option constraints refresh when labels change', () => {
+  const noSalmon = schema.options.produits.find(option => option.code === 'null');
+  assert.deepEqual(noSalmon, { label: 'Je ne consomme pas de saumon', code: 'null' });
+
+  const currentLabels = schema.options.produits.map(option => option.label);
+  const oldLabels = currentLabels.slice(0, -1);
+  const currentDefinition = `CHECK (((produit IS NULL) OR (produit = ANY (ARRAY[${currentLabels.map(label => `'${label}'::text`).join(', ')}]))))`;
+  const oldDefinition = `CHECK (((produit IS NULL) OR (produit = ANY (ARRAY[${oldLabels.map(label => `'${label}'::text`).join(', ')}]))))`;
+
+  assert.equal(optionConstraintIsCurrent(currentDefinition, 'produit', currentLabels), true);
+  assert.equal(optionConstraintIsCurrent(oldDefinition, 'produit', currentLabels), false);
+});
+
+test('existing NocoDB select metadata is updated when option labels change', async () => {
+  const expected = schema.tables[1].columns.find(column => column.title === 'produit');
+  const oldLabels = schema.options.produits.slice(0, -1).map(option => option.label);
+  const column = {
+    id: 'product-column',
+    colOptions: { options: oldLabels.map((title, index) => ({ title, order: index + 1 })) },
+  };
+  const calls = [];
+  const api = {
+    request: async (method, path, body) => {
+      calls.push({ method, path, body });
+      return {
+        columns: [{ ...column, colOptions: columnPayload(expected).colOptions }],
+      };
+    },
+  };
+
+  const updated = await syncColumnOptions(api, 'consumption-table', column, expected);
+
+  assert.equal(calls[0].method, 'PATCH');
+  assert.equal(calls[0].path, '/api/v2/meta/columns/product-column');
+  assert.deepEqual(calls[0].body, { colOptions: columnPayload(expected).colOptions });
+  assert.equal(calls[1].method, 'GET');
+  assert.equal(updated.colOptions.options.at(-1).title, 'Je ne consomme pas de saumon');
 });
 
 test('nullable fields have no required or unique declaration', () => {

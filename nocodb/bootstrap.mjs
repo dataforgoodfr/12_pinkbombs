@@ -40,6 +40,27 @@ export function verifyColumn(column, expected) {
   }
 }
 
+export function optionConstraintIsCurrent(definition, columnName, labels) {
+  if (!definition?.includes(`${columnName} IS NULL`)) return false;
+  const existingLabels = [...definition.matchAll(/'((?:''|[^'])*)'/g)]
+    .map(([, label]) => label.replaceAll("''", "'"));
+  return JSON.stringify(existingLabels) === JSON.stringify(labels);
+}
+
+export async function syncColumnOptions(api, tableId, column, expected) {
+  const actual = (column.colOptions?.options || []).map(option => option.title);
+  const desired = schema.options[expected.options].map(option => option.label);
+  if (JSON.stringify(actual) === JSON.stringify(desired)) return column;
+
+  await api.request('PATCH', `/api/v2/meta/columns/${column.id}`, {
+    colOptions: columnPayload(expected).colOptions,
+  });
+  const metadata = await api.request('GET', `/api/v2/meta/tables/${tableId}`);
+  const updated = metadata.columns.find(candidate => candidate.id === column.id);
+  if (!updated) throw new Error(`${expected.title}: column missing after option update`);
+  return updated;
+}
+
 export class NocoApi {
   constructor(url, fetcher = fetch) {
     this.url = url.replace(/\/$/, '');
@@ -106,6 +127,7 @@ async function ensureTables(api, baseId) {
         column = metadata.columns.find(candidate => candidate.title === expected.title);
       }
       if (!column) throw new Error(`${definition.title}.${expected.title}: column not returned by API`);
+      if (expected.options) column = await syncColumnOptions(api, table.id, column, expected);
       verifyColumn(column, expected);
       if (expected.generated && column.column_name !== 'id') throw new Error(`${definition.title}: physical primary key must be named id`);
     }
@@ -176,7 +198,16 @@ export async function migrateSchema(database, tables) {
           const constraint = `pb_${table.id}_${column.title}_options`;
           const allowed = schema.options[column.options].map(option => option.label);
           const existing = await transaction.raw('SELECT 1 FROM pg_constraint WHERE conrelid = ?::regclass AND conname = ?', [qualified, constraint]);
-          if (!existing.rows.length) {
+          const currentDefinition = existing.rows.length
+            ? await transaction.raw('SELECT pg_get_constraintdef(oid) AS definition FROM pg_constraint WHERE conrelid = ?::regclass AND conname = ?', [qualified, constraint])
+            : null;
+          const isCurrent = currentDefinition?.rows[0]
+            ? optionConstraintIsCurrent(currentDefinition.rows[0].definition, name, allowed)
+            : false;
+          if (!isCurrent && existing.rows.length) {
+            await transaction.raw('ALTER TABLE ?? DROP CONSTRAINT ??', [qualified, constraint]);
+          }
+          if (!isCurrent) {
             const literals = allowed.map(label => `'${label.replaceAll("'", "''")}'`).join(', ');
             await transaction.raw(`ALTER TABLE ?? ADD CONSTRAINT ?? CHECK (?? IS NULL OR ?? IN (${literals}))`, [qualified, constraint, name, name]);
           }
