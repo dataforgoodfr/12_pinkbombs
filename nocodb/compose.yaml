@@ -1,0 +1,124 @@
+name: pinkbombs
+
+services:
+  nocodb:
+    image: ${NOCODB_IMAGE:?Run bash setup.sh first}
+    environment: &nocodb-environment
+      NC_DB: "pg://db:5432?u=pinkbombs&p=${POSTGRES_PASSWORD:?Run bash setup.sh first}&d=pinkbombs"
+      NC_REDIS_URL: redis://redis:6379
+      NC_SITE_URL: "http://localhost:${NOCODB_PORT:-8080}"
+      NC_AUTH_JWT_SECRET: ${NC_AUTH_JWT_SECRET:?Run bash setup.sh first}
+      NC_DISABLE_MUX: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - nocodb_data:/usr/app/data
+    ports:
+      - "127.0.0.1:${NOCODB_PORT:-8080}:8080"
+    healthcheck:
+      test: [CMD-SHELL, "wget -q --tries=1 --spider http://localhost:8080/api/v1/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+  worker:
+    image: ${NOCODB_IMAGE:?Run bash setup.sh first}
+    environment:
+      <<: *nocodb-environment
+      NC_WORKER_CONTAINER: "true"
+    depends_on:
+      nocodb:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      # - nocodb_data:/usr/app/data
+      - nocodb_data:/opt/pinkbombs/nocodb
+
+  schema-init:
+    image: ${NOCODB_IMAGE:?Run bash setup.sh first}
+    entrypoint: [node, /bootstrap/bootstrap.mjs]
+    environment:
+      NOCODB_API_URL: http://nocodb:8080
+      NOCODB_BOOTSTRAP_EMAIL: ${NOCODB_BOOTSTRAP_EMAIL:-}
+      NOCODB_BOOTSTRAP_PASSWORD: ${NOCODB_BOOTSTRAP_PASSWORD:-}
+      API_DB_USER: ${API_DB_USER:-pinkbombs_api}
+      API_DB_PASSWORD: ${API_DB_PASSWORD:?Run bash setup.sh first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run bash setup.sh first}
+    depends_on:
+      nocodb:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    volumes:
+      - ./:/bootstrap:ro
+    restart: "no"
+
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      API_DB_USER: ${API_DB_USER:-pinkbombs_api}
+      API_DB_PASSWORD: ${API_DB_PASSWORD:?Run bash setup.sh first}
+      API_DB_HOST: db
+      API_DB_PORT: 5432
+      API_DB_NAME: pinkbombs
+      API_IDEMPOTENCY_SECRET: ${API_IDEMPOTENCY_SECRET:?Run bash setup.sh first}
+      API_RATE_LIMIT_SECRET: ${API_RATE_LIMIT_SECRET:?Run bash setup.sh first}
+      API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      API_RATE_LIMIT: ${API_RATE_LIMIT:-10}
+      API_RATE_WINDOW_SECONDS: ${API_RATE_WINDOW_SECONDS:-60}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+  db:
+    image: postgres:17.10
+    environment:
+      POSTGRES_USER: pinkbombs
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run bash setup.sh first}
+      POSTGRES_DB: pinkbombs
+    restart: unless-stopped
+    volumes:
+        # - postgres_data:/var/lib/postgresql/data
+        - postgres_data:/opt/pinkbombs/postgresql
+    healthcheck:
+      test: [CMD, pg_isready, -U, pinkbombs, -d, pinkbombs]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7
+    command: [redis-server, --appendonly, "yes"]
+    restart: unless-stopped
+    volumes:
+      # - redis_data:/data
+      - redis_data:/opt/pinkbombs/redis
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  nocodb_data:
+  postgres_data:
+  redis_data:
