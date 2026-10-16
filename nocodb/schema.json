@@ -18,7 +18,7 @@
       "title": "consommations",
       "columns": [
         {"title": "id", "uidt": "ID", "generated": true},
-        {"title": "reponse_pinkometre", "uidt": "Links", "required": true, "references": "reponses_pinkometre", "physicalName": "reponses_pinkometre_fk"},
+        {"title": "reponse_pinkometre", "uidt": "Links", "required": true, "references": "reponses_pinkometre"},
         {"title": "scenario", "uidt": "SingleSelect", "required": true, "options": "scenarios"},
         {"title": "produit", "uidt": "SingleSelect", "options": "produits"},
         {"title": "variante", "uidt": "SingleSelect", "options": "variantes"},

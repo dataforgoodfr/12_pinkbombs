@@ -13,9 +13,9 @@ from fastapi.exceptions import RequestValidationError
 from redis.exceptions import RedisError
 from sqlalchemy.exc import SQLAlchemyError
 
-from pinkbombs.database import IdempotencyConflict, SubmissionRepository
-from pinkbombs.submission_schemas import SubmissionRequest, public_options
-from pinkbombs.submission_service import SubmissionService
+from pinkbombs_api.database import IdempotencyConflict, SubmissionRepository
+from pinkbombs_api.submission_schemas import SubmissionRequest, public_options
+from pinkbombs_api.submission_service import SubmissionService
 
 API_VERSION = "1.0.0"
 API_V1_PREFIX = "/api/v1"

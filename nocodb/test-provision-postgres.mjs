@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { schema, provisionApiDatabase } from './bootstrap.mjs';
+import { schema } from './noco-api.mjs';
+import { provisionApiDatabase, provisionSchema } from './provision.mjs';
 
 test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env.TEST_DATABASE_URL }, async context => {
   const connection = process.env.TEST_DATABASE_URL;
@@ -39,7 +40,7 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
             column_name: column.uidt === 'CreatedTime' ? 'created_at' : column.title,
             pk: !!column.generated,
             system: column.uidt === 'CreatedTime',
-            ...(column.references ? { colOptions: { fk_child_column_id: 'response_fk' } } : {}),
+            ...(column.references ? { colOptions: { type: 'bt', fk_child_column_id: 'response_fk' } } : {}),
           }));
           if (definition.title === 'consommations') {
             columns.push({ id: 'response_fk', title: 'response_fk', column_name: 'reponses_pinkometre_fk' });
@@ -49,12 +50,14 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
             builder.increments('id');
             for (const column of columns.filter(candidate => !candidate.generated && !candidate.references)) {
               if (column.uidt === 'CreatedTime') builder.timestamp(column.column_name).defaultTo(transaction.fn.now());
+              else if (column.uidt === 'Decimal') builder.decimal(column.column_name, 30, 10);
+              else if (column.id === 'response_fk') builder.integer(column.column_name);
               else builder.text(column.column_name);
             }
             if (definition.title === 'reponses_pinkometre') builder.timestamp('created_at').defaultTo(transaction.fn.now());
             builder.text('unexpected');
           });
-          tables.set(definition.title, { base_id: baseSchema, table_name: tableName, columns });
+          tables.set(definition.title, { id: definition.title, base_id: baseSchema, table_name: tableName, columns });
         }
         const response = [baseSchema, tables.get('reponses_pinkometre').table_name];
         const consumption = [baseSchema, tables.get('consommations').table_name];
@@ -65,7 +68,7 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
           await session.raw('RESET SESSION AUTHORIZATION');
           return result;
         });
-        await callback({ transaction, username, baseSchema, response, consumption, provision, asApi });
+        await callback({ transaction, username, baseSchema, tables, response, consumption, provision, asApi });
         throw rollback;
       });
     } catch (error) {
@@ -74,6 +77,21 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
   }
 
   try {
+    await context.test('schema provisioning enforces French selects, decimals and required relations without renaming columns', () => fixture(async ({ transaction, tables, response, consumption }) => {
+      await provisionSchema(transaction, tables);
+      await provisionSchema(transaction, tables);
+      const parent = await transaction.raw('INSERT INTO ??.?? (email) VALUES (?) RETURNING id', [...response, 'fixture@example.invalid']);
+      const values = [...consumption, parent.rows[0].id, 'Initiale', 'Sushis (makis, nigiris, sashimis)', '17.125'];
+      const insert = 'INSERT INTO ??.?? (reponses_pinkometre_fk, scenario, produit, occurence_par_an) VALUES (?, ?, ?, ?) RETURNING occurence_par_an';
+      const inserted = await transaction.raw(insert, values);
+      assert.equal(inserted.rows[0].occurence_par_an, '17.1250000000');
+      for (const [position, value, code] of [[2, null, '23502'], [3, null, '23502'], [4, 'invalid option', '23514'], [2, 999999, '23503'], [5, '100000000000000000000', '22003']]) {
+        const invalid = [...values];
+        invalid[position] = value;
+        await assert.rejects(transaction.transaction(savepoint => savepoint.raw(insert, invalid)), { code });
+      }
+    }));
+
     await context.test('expiry index is created, reused and restored on an existing idempotency table', () => fixture(async ({ transaction, provision }) => {
       const readExpiryIndex = () => transaction.raw(`
         SELECT index_record.indexrelid::text AS oid, index_record.indisvalid AS valid,

@@ -5,6 +5,8 @@ description = "A dataviz app about the salmon fishing and farming industry"
 authors = ["DataForGood"]
 license = "MIT"
 readme = "README.md"
+packages = [{ include = "pinkbombs" }, { include = "pinkbombs_api" }]
+include = [{ path = "nocodb/schema.json", format = ["sdist", "wheel"] }]
 
 [tool.poetry.dependencies]
 python = "^3.10"

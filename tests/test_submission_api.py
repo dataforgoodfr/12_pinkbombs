@@ -1,11 +1,17 @@
 from decimal import Decimal
 from uuid import uuid4
 
+import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import Column, ForeignKeyConstraint, Integer, MetaData, Table
 
-from pinkbombs.api import Settings, create_app
-from pinkbombs.database import IdempotencyConflict, SubmissionResult
-from pinkbombs.submission_schemas import public_options
+from pinkbombs_api.api import Settings, create_app
+from pinkbombs_api.database import (
+    IdempotencyConflict,
+    SubmissionResult,
+    response_foreign_key,
+)
+from pinkbombs_api.submission_schemas import public_options
 
 
 class FakeRepository:
@@ -221,3 +227,48 @@ def test_cors_allows_only_configured_origin():
 
     assert allowed.headers["access-control-allow-origin"] == "https://frontend.example"
     assert "access-control-allow-origin" not in denied.headers
+
+
+@pytest.mark.parametrize("foreign_key_count", [0, 2])
+def test_repository_rejects_missing_or_ambiguous_response_relations(foreign_key_count):
+    metadata = MetaData()
+    response = Table(
+        "reponses_pinkometre",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        schema="base",
+    )
+    consumption = Table(
+        "consommations",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        schema="base",
+    )
+    for position in range(foreign_key_count):
+        name = f"response_{position}"
+        consumption.append_column(Column(name, Integer))
+        consumption.append_constraint(ForeignKeyConstraint([name], [response.c.id]))
+    with pytest.raises(RuntimeError, match="exactly one consumption foreign key"):
+        response_foreign_key(consumption, response)
+
+
+def test_repository_does_not_accept_a_relation_to_another_schema():
+    metadata = MetaData()
+    response = Table(
+        "reponses_pinkometre",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        schema="base",
+    )
+    other = Table(
+        "reponses_pinkometre",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        schema="other",
+    )
+    consumption = Table(
+        "consommations", metadata, Column("wrong_fk", Integer), schema="base"
+    )
+    consumption.append_constraint(ForeignKeyConstraint(["wrong_fk"], [other.c.id]))
+    with pytest.raises(RuntimeError, match="exactly one consumption foreign key"):
+        response_foreign_key(consumption, response)
