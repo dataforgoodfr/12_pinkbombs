@@ -6,7 +6,7 @@ services:
     environment: &nocodb-environment
       NC_DB: "pg://db:5432?u=pinkbombs&p=${POSTGRES_PASSWORD:?Run bash setup.sh first}&d=pinkbombs"
       NC_REDIS_URL: redis://redis:6379
-      NC_SITE_URL: "http://localhost:${NOCODB_PORT:-8080}"
+      NC_SITE_URL: ${NC_SITE_URL:-http://localhost:${NOCODB_PORT:-8080}}
       NC_AUTH_JWT_SECRET: ${NC_AUTH_JWT_SECRET:?Run bash setup.sh first}
       NC_DISABLE_MUX: "true"
     depends_on:
@@ -36,14 +36,15 @@ services:
         condition: service_healthy
     restart: unless-stopped
     volumes:
-      # - nocodb_data:/usr/app/data
-      - nocodb_data:/opt/pinkbombs/nocodb
+      - nocodb_data:/usr/app/data
 
   schema-init:
+    profiles: [maintenance]
     image: ${NOCODB_IMAGE:?Run bash setup.sh first}
     entrypoint: [node, /bootstrap/bootstrap.mjs]
     environment:
       NOCODB_API_URL: http://nocodb:8080
+      NOCODB_BASE_NAME: ${NOCODB_BASE_NAME:-pinkbombs}
       NOCODB_BOOTSTRAP_EMAIL: ${NOCODB_BOOTSTRAP_EMAIL:-}
       NOCODB_BOOTSTRAP_PASSWORD: ${NOCODB_BOOTSTRAP_PASSWORD:-}
       API_DB_USER: ${API_DB_USER:-pinkbombs_api}
@@ -73,6 +74,7 @@ services:
       API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:3000,http://localhost:5173}
       API_RATE_LIMIT: ${API_RATE_LIMIT:-10}
       API_RATE_WINDOW_SECONDS: ${API_RATE_WINDOW_SECONDS:-60}
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS:-127.0.0.1}
       REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
@@ -97,8 +99,7 @@ services:
       POSTGRES_DB: pinkbombs
     restart: unless-stopped
     volumes:
-        # - postgres_data:/var/lib/postgresql/data
-        - postgres_data:/opt/pinkbombs/postgresql
+        - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [CMD, pg_isready, -U, pinkbombs, -d, pinkbombs]
       interval: 5s
@@ -110,8 +111,7 @@ services:
     command: [redis-server, --appendonly, "yes"]
     restart: unless-stopped
     volumes:
-      # - redis_data:/data
-      - redis_data:/opt/pinkbombs/redis
+      - redis_data:/data
     healthcheck:
       test: [CMD, redis-cli, ping]
       interval: 5s

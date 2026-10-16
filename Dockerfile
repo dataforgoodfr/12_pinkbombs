@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir \
     "email-validator>=2.3,<3"
 
 COPY nocodb/schema.json /app/nocodb/schema.json
-COPY pinkbombs /app/pinkbombs
+COPY pinkbombs_api /app/pinkbombs_api
 
 EXPOSE 8000
 
-CMD ["uvicorn", "pinkbombs.api:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
+CMD ["uvicorn", "pinkbombs_api.api:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

@@ -15,6 +15,42 @@ repos:
     hooks:
     - id: check-merge-conflict
     - id: mixed-line-ending
+    - id: check-json
+      files: ^nocodb/schema\.json$
+    - id: check-yaml
+      files: ^nocodb/compose\.yaml$
+  - repo: local
+    hooks:
+    - id: nocodb-javascript-syntax
+      name: NocoDB JavaScript syntax
+      language: system
+      entry: bash -c 'for file in "$@"; do node --check "$file" || exit; done' --
+      files: ^nocodb/.*\.mjs$
+    - id: nocodb-shell-syntax
+      name: NocoDB shell syntax
+      language: system
+      entry: bash -c 'for file in "$@"; do bash -n "$file" || exit; done' --
+      files: ^nocodb/.*\.sh$
+    - id: nocodb-unit-tests
+      name: NocoDB initializer unit tests
+      language: system
+      entry: node --test nocodb/test-bootstrap.mjs
+      files: ^(nocodb/|\.pre-commit-config\.yaml$)
+      pass_filenames: false
+    - id: pinkbombs-api-unit-tests
+      name: Pinkbombs API unit tests
+      language: python
+      entry: python -m pytest tests/test_submission_api.py -q -p no:cacheprovider
+      files: ^(pinkbombs_api/.*\.py$|tests/test_submission_.*\.py$|nocodb/schema\.json$|pyproject\.toml$|\.pre-commit-config\.yaml$)
+      pass_filenames: false
+      additional_dependencies:
+        - fastapi>=0.143,<0.144
+        - SQLAlchemy>=2.0.28,<3
+        - psycopg2-binary>=2.9.9,<3
+        - redis>=6.4,<7
+        - email-validator>=2.3,<3
+        - pytest>=9,<10
+        - httpx>=0.28,<0.29
   #- repo: https://github.com/pycqa/bandit
   #  rev: 1.7.4
   #  hooks:
