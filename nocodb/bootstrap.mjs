@@ -386,6 +386,63 @@ export async function configureDefaultViews(api, tables) {
   }
 }
 
+class ApiRoleAccessError extends Error {}
+
+async function checkApiRole(transaction, username) {
+  const result = await transaction.raw(`
+    SELECT role.rolsuper, role.rolcreatedb, role.rolcreaterole, role.rolreplication,
+      role.rolbypassrls,
+      EXISTS (SELECT 1 FROM pg_auth_members WHERE member = role.oid) AS memberships,
+      EXISTS (SELECT 1 FROM pg_shdepend WHERE refclassid = 'pg_authid'::regclass
+        AND refobjid = role.oid AND deptype = 'o'
+        AND (dbid = 0 OR dbid = (SELECT oid FROM pg_database WHERE datname = current_database()))) AS ownership
+    FROM pg_roles role WHERE rolname = ?`, [username]);
+  const role = result.rows[0];
+  if (role && Object.values(role).some(Boolean)) {
+    throw new ApiRoleAccessError('API_DB_USER has administrative attributes, role memberships, or ownership; use a dedicated unprivileged role');
+  }
+  return role;
+}
+
+async function verifyApiPrivileges(transaction, username, kind, object, allowed, column) {
+  const privileges = {
+    table: ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN'],
+    column: ['SELECT', 'INSERT', 'UPDATE', 'REFERENCES'],
+    schema: ['USAGE', 'CREATE'],
+    sequence: ['USAGE', 'SELECT', 'UPDATE'],
+  }[kind];
+  const argumentsSql = kind === 'column' ? '?::name, ?::oid, ?::text, privilege' : '?::name, ?::oid, privilege';
+  const bindings = kind === 'column' ? [username, object, column, username, object, column] : [username, object, username, object];
+  const result = await transaction.raw(`
+    SELECT privilege, has_${kind}_privilege(${argumentsSql}) AS access,
+      has_${kind}_privilege(${argumentsSql} || ' WITH GRANT OPTION') AS grantable
+    FROM unnest(?::text[]) AS privileges(privilege)`, [...bindings, privileges]);
+  for (const permission of result.rows) {
+    if (permission.access !== allowed.includes(permission.privilege) || permission.grantable) {
+      throw new ApiRoleAccessError(`API_DB_USER has incompatible effective ${kind} privileges (${permission.privilege}); check PUBLIC grants or use a dedicated role`);
+    }
+  }
+}
+
+async function resetApiTablePrivileges(transaction, username, schemaName, tableName) {
+  const result = await transaction.raw(`
+    SELECT relation.oid, attribute.attname
+    FROM pg_class relation JOIN pg_namespace namespace ON namespace.oid = relation.relnamespace
+    JOIN pg_attribute attribute ON attribute.attrelid = relation.oid
+    WHERE namespace.nspname = ? AND relation.relname = ?
+      AND attribute.attnum > 0 AND NOT attribute.attisdropped
+    ORDER BY attribute.attnum`, [schemaName, tableName]);
+  if (!result.rows.length) throw new ApiRoleAccessError('API database table is unavailable');
+  await transaction.raw('REVOKE ALL PRIVILEGES ON TABLE ??.?? FROM ?? RESTRICT', [schemaName, tableName, username]);
+  const columns = result.rows.map(row => row.attname);
+  const placeholders = columns.map(() => '??').join(', ');
+  await transaction.raw(
+    `REVOKE SELECT (${placeholders}), INSERT (${placeholders}), UPDATE (${placeholders}), REFERENCES (${placeholders}) ON TABLE ??.?? FROM ?? RESTRICT`,
+    [...columns, ...columns, ...columns, ...columns, schemaName, tableName, username],
+  );
+  return { oid: result.rows[0].oid, columns };
+}
+
 export async function provisionApiDatabase(database, tables, environment) {
   const username = requireSetting(environment, 'API_DB_USER');
   const password = requireSetting(environment, 'API_DB_PASSWORD');
@@ -399,22 +456,33 @@ export async function provisionApiDatabase(database, tables, environment) {
   const consumptionTable = tables.get('consommations');
   if (!responseTable || !consumptionTable) throw new Error('Pinkometre tables are unavailable');
 
-  const role = await database.raw('SELECT 1 FROM pg_roles WHERE rolname = ?', [username]);
-  const roleAction = role.rows.length ? 'ALTER' : 'CREATE';
-  const roleStatement = await database.raw(
-    'SELECT format(?::text, ?::text, ?::text) AS statement',
-    [`${roleAction} ROLE %I WITH LOGIN PASSWORD %L NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT`, username, password],
-  );
-  await database.raw(roleStatement.rows[0].statement);
-
   await database.transaction(async transaction => {
+    await transaction.raw('SELECT pg_advisory_xact_lock(hashtext(?))', [`pinkbombs-api-role:${username}`]);
+    const role = await checkApiRole(transaction, username);
+    const roleStatement = await transaction.raw(
+      'SELECT format(?::text, ?::text, ?::text) AS statement',
+      [`${role ? 'ALTER' : 'CREATE'} ROLE %I WITH LOGIN PASSWORD %L NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS`, username, password],
+    );
+    await transaction.raw(roleStatement.rows[0].statement);
     await transaction.raw('CREATE SCHEMA IF NOT EXISTS ?? AUTHORIZATION pinkbombs', ['pinkbombs_api']);
     await transaction.raw('CREATE TABLE IF NOT EXISTS ??.?? (key_hash varchar(64) PRIMARY KEY, request_hash varchar(64) NOT NULL, response_id integer NOT NULL, created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP)', ['pinkbombs_api', 'idempotency_keys']);
-    await transaction.raw('GRANT USAGE ON SCHEMA ??, ?? TO ??', [baseSchema, 'pinkbombs_api', username]);
+    for (const schemaName of [baseSchema, 'pinkbombs_api']) {
+      const namespace = await transaction.raw('SELECT oid FROM pg_namespace WHERE nspname = ?', [schemaName]);
+      if (!namespace.rows[0]) throw new ApiRoleAccessError('API database schema is unavailable');
+      await transaction.raw('REVOKE ALL PRIVILEGES ON SCHEMA ?? FROM ?? RESTRICT', [schemaName, username]);
+      await transaction.raw('GRANT USAGE ON SCHEMA ?? TO ??', [schemaName, username]);
+      await verifyApiPrivileges(transaction, username, 'schema', namespace.rows[0].oid, ['USAGE']);
+    }
+    const idempotency = await resetApiTablePrivileges(transaction, username, 'pinkbombs_api', 'idempotency_keys');
     await transaction.raw('GRANT SELECT, INSERT, DELETE ON TABLE ??.?? TO ??', ['pinkbombs_api', 'idempotency_keys', username]);
+    await verifyApiPrivileges(transaction, username, 'table', idempotency.oid, ['SELECT', 'INSERT', 'DELETE']);
+    for (const column of idempotency.columns) {
+      await verifyApiPrivileges(transaction, username, 'column', idempotency.oid, ['SELECT', 'INSERT'], column);
+    }
 
     for (const [title, fieldNames] of Object.entries(apiInsertColumns)) {
       const table = tables.get(title);
+      const physical = await resetApiTablePrivileges(transaction, username, baseSchema, table.table_name);
       const columns = fieldNames.map(name => {
         const expected = schema.tables.find(definition => definition.title === title).columns.find(column => column.title === name);
         if (!expected) throw new Error(`${title}.${name}: API column is not declared in schema`);
@@ -429,13 +497,30 @@ export async function provisionApiDatabase(database, tables, environment) {
         schema.tables.find(definition => definition.title === title).columns.find(column => column.title === 'id'),
       );
       await transaction.raw('GRANT SELECT (??) ON TABLE ??.?? TO ??', [idColumn, baseSchema, table.table_name, username]);
-      const sequence = await transaction.raw('SELECT pg_get_serial_sequence(?, ?) AS name', [`${baseSchema}.${table.table_name}`, idColumn]);
-      if (!sequence.rows[0]?.name) throw new Error(`${title}: generated ID sequence is unavailable`);
-      const [sequenceSchema, sequenceName] = sequence.rows[0].name.split('.');
+      const sequence = await transaction.raw(`
+        SELECT sequence.oid, namespace.nspname AS schema, sequence.relname AS name
+        FROM pg_class sequence JOIN pg_namespace namespace ON namespace.oid = sequence.relnamespace
+        WHERE sequence.oid = pg_get_serial_sequence(format('%I.%I', ?::text, ?::text), ?)::regclass`,
+      [baseSchema, table.table_name, idColumn]);
+      if (!sequence.rows[0]) throw new ApiRoleAccessError(`${title}: generated ID sequence is unavailable`);
+      const { schema: sequenceSchema, name: sequenceName, oid: sequenceOid } = sequence.rows[0];
+      await transaction.raw('REVOKE ALL PRIVILEGES ON SEQUENCE ??.?? FROM ?? RESTRICT', [sequenceSchema, sequenceName, username]);
       await transaction.raw('GRANT USAGE ON SEQUENCE ??.?? TO ??', [sequenceSchema, sequenceName, username]);
+      await verifyApiPrivileges(transaction, username, 'sequence', sequenceOid, ['USAGE']);
+      await verifyApiPrivileges(transaction, username, 'table', physical.oid, []);
+      for (const column of physical.columns) {
+        const allowed = [];
+        if (columns.includes(column)) allowed.push('INSERT');
+        if (column === idColumn) allowed.push('SELECT');
+        await verifyApiPrivileges(transaction, username, 'column', physical.oid, allowed, column);
+      }
     }
+    await checkApiRole(transaction, username);
+    await transaction.raw('ALTER ROLE ?? SET search_path TO ??, ??', [username, baseSchema, 'pinkbombs_api']);
+  }).catch(error => {
+    if (error instanceof ApiRoleAccessError) throw error;
+    throw new Error('API database role provisioning failed and was rolled back; check dependent grants and use a dedicated unprivileged API_DB_USER');
   });
-  await database.raw('ALTER ROLE ?? SET search_path TO ??, ??', [username, baseSchema, 'pinkbombs_api']);
 }
 
 export async function bootstrap(environment = process.env) {

@@ -154,6 +154,10 @@ Only the response relation and `scenario` are required. The annual frequency is 
 
 The administrator is reserved for maintenance. Bootstrap makes all other direct base members viewers. FastAPI uses a separate PostgreSQL role limited to inserting approved fields and reading generated IDs; it cannot read, update, or delete submission rows. Workspace owners, administrators, and Docker operators can override NocoDB permissions.
 
+On every initialization, bootstrap replaces the API role's direct table and column grants on the submission tables and `pinkbombs_api.idempotency_keys`, and its grants on the two managed schemas and generated-ID sequences. Submission access is column-level `INSERT` on approved fields and `SELECT(id)` only. The idempotency table separately permits `SELECT`, `INSERT`, and `DELETE`; schemas and ID sequences permit `USAGE` only. Grant options are forbidden. Unrelated object grants are left untouched.
+
+Bootstrap verifies effective privileges, including `PUBLIC` access. It rejects existing roles with administrative attributes, any role membership (even without inheritance), or ownership of any object in the current database or any shared cluster object. It also rejects excess effective privileges or dependent grants that prevent non-cascading revocation. Role/password changes, managed grants, and verification are transactional; rejection rolls back this provisioning step, not earlier NocoDB metadata or schema migrations. Shared grants, memberships, and ownership are never changed automatically. Use a fresh dedicated `API_DB_USER` and restart initialization, or have an administrator resolve the reported access before retrying. `search_path` is not a security boundary, and subsequent administrative grants require reinitialization to be checked.
+
 ### Submission API
 
 The local API base URL is `http://localhost:8000`. The API binds to loopback by default; set `API_PORT` to change the host port. Configure `API_CORS_ORIGINS` in the private `nocodb/.env` with the exact frontend origins, then restart the stack. CORS is not authentication. The local Compose setup is not a public deployment: production use requires an HTTPS reverse proxy and a production API URL/origin.
@@ -211,7 +215,18 @@ poetry run pytest tests/test_submission_api.py tests/test_submission_postgres.py
 node --test nocodb/test-bootstrap.mjs
 ```
 
-The PostgreSQL integration tests skip unless `TEST_DATABASE_URL` points to a disposable PostgreSQL database named `test_*`; they create and remove temporary schemas and a temporary restricted role. The NocoDB integration check is read-only:
+The Python PostgreSQL integration tests skip unless `TEST_DATABASE_URL` points to a disposable PostgreSQL database named `test_*`; they create and remove temporary schemas and a temporary restricted role.
+
+The JavaScript privilege regression suite exercises the actual bootstrap provisioner on PostgreSQL 17 or later. Set `TEST_DATABASE_URL` to a **separate disposable `test_*` database**, not the deployment database, with a superuser connection for role, ownership, and session-authorization tests. It refuses an existing `pinkbombs_api` schema and rolls back all fixtures. In the NocoDB container runtime, run:
+
+```bash
+cd nocodb
+docker compose run --rm --no-deps -e TEST_DATABASE_URL --entrypoint node schema-init --test /bootstrap/test-provision-postgres.mjs
+```
+
+The test database must be reachable from that container. Alternatively, with `knex` and `pg` available to Node locally, run `node --test nocodb/test-provision-postgres.mjs` from the repository root. Without `TEST_DATABASE_URL`, this suite skips; a skip does not validate PostgreSQL privilege behavior.
+
+The NocoDB integration check reruns bootstrap before checking reads and permissions, so it can update schema metadata and managed grants:
 
 ```bash
 cd nocodb

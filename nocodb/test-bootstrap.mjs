@@ -1,6 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { schema, columnPayload, verifyColumn, optionConstraintIsCurrent, syncColumnOptions, NocoApi, bootstrap, apiInsertColumns } from './bootstrap.mjs';
+import { schema, columnPayload, verifyColumn, optionConstraintIsCurrent, syncColumnOptions, NocoApi, bootstrap, apiInsertColumns, provisionApiDatabase } from './bootstrap.mjs';
+
+test('unsafe existing API roles are rejected before password or ACL mutations', async () => {
+  for (const property of ['rolsuper', 'rolcreatedb', 'rolcreaterole', 'rolreplication', 'rolbypassrls', 'memberships', 'ownership']) {
+    const statements = [];
+    const transaction = {
+      raw: async statement => {
+        statements.push(statement);
+        return { rows: statement.includes('FROM pg_roles role') ? [{ [property]: true }] : [] };
+      },
+    };
+    const database = { transaction: callback => callback(transaction) };
+    const tables = new Map([
+      ['reponses_pinkometre', { base_id: 'base' }], ['consommations', {}],
+    ]);
+    await assert.rejects(provisionApiDatabase(database, tables, {
+      API_DB_USER: 'api_test', API_DB_PASSWORD: 'private-password',
+    }), /administrative attributes, role memberships, or ownership/);
+    assert.equal(statements.length, 2);
+    assert.ok(statements.every(statement => !statement.includes('private-password')));
+  }
+});
 
 test('all frontend options have stable unique codes and existing French labels', () => {
   for (const options of Object.values(schema.options)) {
