@@ -47,9 +47,14 @@ class RedisRateLimiter:
         )
 
     def hit(self, key: str, limit: int, window_seconds: int) -> bool:
-        count = self.client.incr(key)
-        if count == 1:
-            self.client.expire(key, window_seconds)
+        count = self.client.eval(
+            "local count = redis.call('INCR', KEYS[1]); "
+            "if count == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end; "
+            "return count",
+            1,
+            key,
+            window_seconds,
+        )
         return count <= limit
 
     def ready(self) -> None:
