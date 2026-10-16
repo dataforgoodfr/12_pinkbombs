@@ -466,6 +466,7 @@ export async function provisionApiDatabase(database, tables, environment) {
     await transaction.raw(roleStatement.rows[0].statement);
     await transaction.raw('CREATE SCHEMA IF NOT EXISTS ?? AUTHORIZATION pinkbombs', ['pinkbombs_api']);
     await transaction.raw('CREATE TABLE IF NOT EXISTS ??.?? (key_hash varchar(64) PRIMARY KEY, request_hash varchar(64) NOT NULL, response_id integer NOT NULL, created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP)', ['pinkbombs_api', 'idempotency_keys']);
+    await transaction.raw('CREATE INDEX IF NOT EXISTS ?? ON ??.?? (??)', ['pb_idempotency_created_at_idx', 'pinkbombs_api', 'idempotency_keys', 'created_at']);
     for (const schemaName of [baseSchema, 'pinkbombs_api']) {
       const namespace = await transaction.raw('SELECT oid FROM pg_namespace WHERE nspname = ?', [schemaName]);
       if (!namespace.rows[0]) throw new ApiRoleAccessError('API database schema is unavailable');

@@ -74,6 +74,38 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
   }
 
   try {
+    await context.test('expiry index is created, reused and restored on an existing idempotency table', () => fixture(async ({ transaction, provision }) => {
+      const readExpiryIndex = () => transaction.raw(`
+        SELECT index_record.indexrelid::text AS oid, index_record.indisvalid AS valid,
+          index_record.indisready AS ready, index_record.indisunique AS unique,
+          index_record.indnatts AS columns, attribute.attname AS column,
+          access_method.amname AS method, index_record.indpred AS predicate,
+          index_record.indexprs AS expressions
+        FROM pg_index index_record
+        JOIN pg_class index_relation ON index_relation.oid = index_record.indexrelid
+        JOIN pg_am access_method ON access_method.oid = index_relation.relam
+        JOIN pg_attribute attribute ON attribute.attrelid = index_record.indrelid
+          AND attribute.attnum = index_record.indkey[0]
+        WHERE index_record.indrelid = 'pinkbombs_api.idempotency_keys'::regclass
+          AND index_relation.relname = 'pb_idempotency_created_at_idx'`);
+      await provision();
+      const created = await readExpiryIndex();
+      assert.equal(created.rows.length, 1);
+      const { oid, ...definition } = created.rows[0];
+      assert.deepEqual(definition, {
+        valid: true, ready: true, unique: false, columns: 1, column: 'created_at',
+        method: 'btree', predicate: null, expressions: null,
+      });
+      await provision();
+      assert.deepEqual((await readExpiryIndex()).rows, created.rows);
+      await transaction.raw('DROP INDEX pinkbombs_api.pb_idempotency_created_at_idx');
+      await provision();
+      const restored = await readExpiryIndex();
+      assert.equal(restored.rows.length, 1);
+      assert.notEqual(restored.rows[0].oid, oid);
+      assert.deepEqual({ ...restored.rows[0], oid }, created.rows[0]);
+    }));
+
     await context.test('fresh creation, reuse and password rotation preserve permitted operations', () => fixture(async ({ transaction, username, response, consumption, provision, asApi }) => {
       await provision();
       const original = await transaction.raw('SELECT rolpassword FROM pg_authid WHERE rolname = ?', [username]);
