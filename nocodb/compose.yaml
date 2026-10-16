@@ -36,8 +36,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     volumes:
-      # - nocodb_data:/usr/app/data
-      - nocodb_data:/opt/pinkbombs/nocodb
+      - nocodb_data:/usr/app/data
 
   schema-init:
     image: ${NOCODB_IMAGE:?Run bash setup.sh first}
@@ -97,8 +96,7 @@ services:
       POSTGRES_DB: pinkbombs
     restart: unless-stopped
     volumes:
-        # - postgres_data:/var/lib/postgresql/data
-        - postgres_data:/opt/pinkbombs/postgresql
+        - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [CMD, pg_isready, -U, pinkbombs, -d, pinkbombs]
       interval: 5s
@@ -110,8 +108,7 @@ services:
     command: [redis-server, --appendonly, "yes"]
     restart: unless-stopped
     volumes:
-      # - redis_data:/data
-      - redis_data:/opt/pinkbombs/redis
+      - redis_data:/data
     healthcheck:
       test: [CMD, redis-cli, ping]
       interval: 5s
