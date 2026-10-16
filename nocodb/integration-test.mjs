@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict';
-import { bootstrap, NocoApi } from './bootstrap.mjs';
 
 const environment = process.env;
 const baseTitle = environment.NOCODB_BASE_NAME || 'pinkbombs';
 const admin = new NocoApi(environment.NOCODB_API_URL || 'http://nocodb:8080');
 
-await bootstrap(environment);
 await admin.login(environment.NOCODB_BOOTSTRAP_EMAIL, environment.NOCODB_BOOTSTRAP_PASSWORD);
 const base = (await admin.list('/api/v2/meta/bases/')).find(candidate => candidate.title === baseTitle);
 assert.ok(base, `Base ${baseTitle} is unavailable`);
