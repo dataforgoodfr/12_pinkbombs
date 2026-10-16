@@ -171,3 +171,6 @@ cython_debug/
 pinkbombs/graphs/test_html/
 
 data/data_ras/
+
+# In stating and production only 
+compose.traefik.yaml
