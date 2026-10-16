@@ -203,10 +203,14 @@ def test_conflicting_idempotency_key_does_not_duplicate_rows(postgres_repository
 
 def test_child_constraint_failure_rolls_back_parent(postgres_repository):
     values = {"consentement_omega3": False}
-    children = [{"scenario": "invalid", "reponses_pinkometre_fk": 0}]
+    children = [{"scenario": "invalid"}]
 
-    with pytest.raises(Exception):
+    with pytest.raises(DBAPIError):
         postgres_repository.submit(values, children, "c" * 64, "d" * 64)
+    assert (
+        getattr(error.value.orig, "sqlstate", None)
+        or getattr(error.value.orig, "pgcode", None)
+    ) == "23514"
     schema = postgres_repository.test_schema
     with postgres_repository.test_owner_engine.connect() as connection:
         assert (
@@ -220,8 +224,14 @@ def test_child_constraint_failure_rolls_back_parent(postgres_repository):
                 text(f'SELECT count(*) FROM "{schema}".consommations')
             ).scalar_one()
             == 0
-        )
-
+    )
+    with postgres_repository.engine.begin() as connection:
+        with pytest.raises(DBAPIError):
+            connection.execute(text("SELECT email FROM reponses_pinkometre"))
+        with pytest.raises(DBAPIError):
+            connection.execute(text("UPDATE reponses_pinkometre SET email = 'changed'"))
+        with pytest.raises(DBAPIError):
+            connection.execute(text("DELETE FROM consommations"))
 
 def test_api_role_cannot_read_or_modify_submission_rows(postgres_repository):
     with postgres_repository.engine.begin() as connection:
