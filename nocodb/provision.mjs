@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { schema, physicalColumn, setting } from './noco-api.mjs';
 
 export const apiInsertColumns = Object.fromEntries(schema.tables.map(table => [
@@ -7,6 +8,7 @@ export const apiInsertColumns = Object.fromEntries(schema.tables.map(table => [
 /**
  * Apply SQL constraints, decimal precision, and indexes to NocoDB-created tables.
  * Use the caller's transaction and metadata-derived names; never rename or drop columns.
+ * Normalize expected CHECKs on empty temporary copies; reject incompatible existing checks.
  */
 export async function provisionSchema(database, tables) {
   for (const definition of schema.tables) {
@@ -16,16 +18,31 @@ export async function provisionSchema(database, tables) {
     const relation = await database.raw('SELECT to_regclass(format(\'%I.%I\', ?::text, ?::text))::oid AS oid', [namespace, table.table_name]);
     const oid = relation.rows[0]?.oid;
     if (!oid) throw new Error(`${definition.title}: physical table is missing`);
+    let referenceTable;
     for (const column of definition.columns) {
       const name = names.get(column.title);
       if (column.required) await database.raw('ALTER TABLE ??.?? ALTER COLUMN ?? SET NOT NULL', [namespace, table.table_name, name]);
       if (column.uidt === 'Decimal') await database.raw('ALTER TABLE ??.?? ALTER COLUMN ?? TYPE numeric(30,10)', [namespace, table.table_name, name]);
       if (column.options) {
         const constraint = `pb_${table.id}_${column.title}_options`;
-        const found = await database.raw('SELECT 1 FROM pg_constraint WHERE conrelid = ? AND conname = ?', [oid, constraint]);
-        if (!found.rows.length) {
-          const labels = schema.options[column.options].map(option => option.label);
-          const quoted = await database.raw("SELECT string_agg(quote_literal(label), ', ' ORDER BY position) AS labels FROM unnest(?::text[]) WITH ORDINALITY AS options(label, position)", [labels]);
+        const found = await database.raw(`SELECT contype, convalidated, pg_get_constraintdef(oid) AS definition
+          FROM pg_constraint WHERE conrelid = ? AND conname = ?`, [oid, constraint]);
+        const labels = schema.options[column.options].map(option => option.label);
+        const quoted = await database.raw("SELECT string_agg(quote_literal(label), ', ' ORDER BY position) AS labels FROM unnest(?::text[]) WITH ORDINALITY AS options(label, position)", [labels]);
+        if (found.rows.length) {
+          if (!referenceTable) {
+            referenceTable = `pb_options_${randomUUID().replaceAll('-', '')}`;
+            await database.raw('CREATE TEMP TABLE ?? (LIKE ??.??) ON COMMIT DROP', [referenceTable, namespace, table.table_name]);
+          }
+          await database.raw(`ALTER TABLE pg_temp.?? ADD CONSTRAINT ?? CHECK (?? IN (${quoted.rows[0].labels}))`,
+            [referenceTable, constraint, name]);
+          const expected = await database.raw(`SELECT pg_get_constraintdef(oid) AS definition FROM pg_constraint
+            WHERE conrelid = ?::regclass AND conname = ?`, [`pg_temp.${referenceTable}`, constraint]);
+          const actual = found.rows[0];
+          if (actual.contype !== 'c' || !actual.convalidated || actual.definition !== expected.rows[0].definition) {
+            throw new Error(`${definition.title}.${column.title}: incompatible option constraint ${constraint}; expected a validated CHECK matching schema.json. Review and migrate it explicitly before retrying`);
+          }
+        } else {
           await database.raw(`ALTER TABLE ??.?? ADD CONSTRAINT ?? CHECK (?? IN (${quoted.rows[0].labels}))`,
             [namespace, table.table_name, constraint, name]);
         }
@@ -40,6 +57,7 @@ export async function provisionSchema(database, tables) {
           [namespace, table.table_name, `pb_${table.id}_response_fk`, name, parent.base_id, parent.table_name]);
       }
     }
+    if (referenceTable) await database.raw('DROP TABLE pg_temp.??', [referenceTable]);
     for (const fields of definition.indexes) {
       const indexName = `pb_${table.id}_${fields.join('_')}`.slice(0, 63);
       await database.raw(`CREATE INDEX IF NOT EXISTS ?? ON ??.?? (${fields.map(() => '??').join(', ')})`,

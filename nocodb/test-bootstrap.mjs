@@ -6,7 +6,30 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { schema, columnPayload, physicalColumn, verifyTables, checkRecords, NocoApi } from './noco-api.mjs';
 import { bootstrap, findBase } from './bootstrap.mjs';
-import { apiInsertColumns, provisionApiDatabase } from './provision.mjs';
+import { apiInsertColumns, provisionApiDatabase, provisionSchema } from './provision.mjs';
+
+test('option constraint checks fail closed on definition, validation state, and kind', async () => {
+  const expected = 'CHECK (impact_initial = ANY (ARRAY[expected labels]))';
+  for (const actual of [
+    { contype: 'c', convalidated: true, definition: 'CHECK (true)' },
+    { contype: 'c', convalidated: false, definition: expected },
+    { contype: 'u', convalidated: true, definition: expected },
+  ]) {
+    const statements = [];
+    const database = { raw: async statement => {
+      statements.push(statement);
+      if (statement.includes('SELECT to_regclass')) return { rows: [{ oid: 1 }] };
+      if (statement.includes('SELECT contype')) return { rows: [actual] };
+      if (statement.includes('string_agg')) return { rows: [{ labels: "'expected labels'" }] };
+      if (statement.includes('SELECT pg_get_constraintdef')) return { rows: [{ definition: expected }] };
+      return { rows: [] };
+    } };
+    const definition = schema.tables[0];
+    const table = { id: 'responses', title: definition.title, table_name: definition.title, base_id: 'base', columns: definition.columns.map(columnPayload) };
+    await assert.rejects(provisionSchema(database, new Map([[definition.title, table]])), /incompatible option constraint.*validated CHECK/);
+    assert.ok(!statements.some(statement => /DROP CONSTRAINT/.test(statement)));
+  }
+});
 
 test('unsafe existing API roles are rejected before password or ACL mutations', async () => {
   for (const property of ['rolsuper', 'rolcreatedb', 'rolcreaterole', 'rolreplication', 'rolbypassrls', 'memberships', 'ownership']) {

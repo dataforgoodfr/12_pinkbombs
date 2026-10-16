@@ -77,6 +77,60 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
   }
 
   try {
+    for (const [description, expression] of [
+      ['missing options', "CHECK (scenario IN ('Initiale'))"],
+      ['extra options', "CHECK (scenario IN ('Initiale', 'Après engagement', 'Obsolete'))"],
+      ['wrong column', "CHECK (produit IN ('Initiale', 'Après engagement'))"],
+      ['wrong operator', "CHECK (scenario NOT IN ('Initiale', 'Après engagement'))"],
+      ['additional restriction', "CHECK (scenario IN ('Initiale', 'Après engagement') AND id > 100)"],
+      ['unvalidated CHECK', "CHECK (scenario IN ('Initiale', 'Après engagement')) NOT VALID"],
+      ['wrong constraint kind', 'UNIQUE (scenario)'],
+    ]) {
+      await context.test(`schema provisioning rejects ${description} without replacing the constraint`, () => fixture(async ({ transaction, tables, consumption }) => {
+        const constraint = `pb_${tables.get('consommations').id}_scenario_options`;
+        await transaction.raw(`ALTER TABLE ??.?? ADD CONSTRAINT ?? ${expression}`, [...consumption, constraint]);
+        const readConstraint = () => transaction.raw(`SELECT oid, convalidated, pg_get_constraintdef(oid) AS definition
+          FROM pg_constraint WHERE conrelid = format('%I.%I', ?::text, ?::text)::regclass AND conname = ?`, [...consumption, constraint]);
+        const readSchemaConstraints = () => transaction.raw(`SELECT oid, conname, convalidated, pg_get_constraintdef(oid) AS definition
+          FROM pg_constraint WHERE connamespace = ?::regnamespace ORDER BY oid`, [consumption[0]]);
+        const original = await readConstraint();
+        const before = await readSchemaConstraints();
+        await assert.rejects(transaction.transaction(savepoint => provisionSchema(savepoint, tables)), error => {
+          assert.match(error.message, /consommations.scenario: incompatible option constraint/);
+          assert.ok(error.message.includes(constraint));
+          return true;
+        });
+        assert.deepEqual((await readConstraint()).rows, original.rows);
+        assert.deepEqual((await readSchemaConstraints()).rows, before.rows);
+      }));
+    }
+
+    await context.test('PostgreSQL-normalized compatible expressions are reused without replacing their OID', () => fixture(async ({ transaction, tables, consumption }) => {
+      const constraint = `pb_${tables.get('consommations').id}_scenario_options`;
+      await transaction.raw(`ALTER TABLE ??.?? ADD CONSTRAINT ?? CHECK ((("scenario" = ANY (ARRAY['Initiale'::text, 'Après engagement'::text]))))`, [...consumption, constraint]);
+      const readConstraint = () => transaction.raw(`SELECT oid, convalidated, pg_get_constraintdef(oid) AS definition
+        FROM pg_constraint WHERE conrelid = format('%I.%I', ?::text, ?::text)::regclass AND conname = ?`, [...consumption, constraint]);
+      const original = await readConstraint();
+      await provisionSchema(transaction, tables);
+      await provisionSchema(transaction, tables);
+      assert.deepEqual((await readConstraint()).rows, original.rows);
+      const parent = await transaction.raw('INSERT INTO ??.?? DEFAULT VALUES RETURNING id', [consumption[0], tables.get('reponses_pinkometre').table_name]);
+      for (const option of schema.options.scenarios) {
+        await transaction.raw('INSERT INTO ??.?? (reponses_pinkometre_fk, scenario) VALUES (?, ?)', [...consumption, parent.rows[0].id, option.label]);
+      }
+      const temporary = await transaction.raw("SELECT 1 FROM pg_class WHERE relnamespace = pg_my_temp_schema() AND relname LIKE 'pb_options_%'");
+      assert.equal(temporary.rows.length, 0);
+    }));
+
+    await context.test('NOT VALID checks and their pre-existing invalid rows remain untouched on rejection', () => fixture(async ({ transaction, tables, response, consumption }) => {
+      const parent = await transaction.raw('INSERT INTO ??.?? DEFAULT VALUES RETURNING id', response);
+      await transaction.raw("INSERT INTO ??.?? (reponses_pinkometre_fk, scenario) VALUES (?, 'Obsolete')", [...consumption, parent.rows[0].id]);
+      const constraint = `pb_${tables.get('consommations').id}_scenario_options`;
+      await transaction.raw("ALTER TABLE ??.?? ADD CONSTRAINT ?? CHECK (scenario IN ('Initiale', 'Après engagement')) NOT VALID", [...consumption, constraint]);
+      await assert.rejects(transaction.transaction(savepoint => provisionSchema(savepoint, tables)), /incompatible option constraint/);
+      assert.deepEqual((await transaction.raw('SELECT scenario FROM ??.??', consumption)).rows, [{ scenario: 'Obsolete' }]);
+    }));
+
     await context.test('schema provisioning enforces French selects, decimals and required relations without renaming columns', () => fixture(async ({ transaction, tables, response, consumption }) => {
       await provisionSchema(transaction, tables);
       await provisionSchema(transaction, tables);
