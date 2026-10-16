@@ -84,7 +84,7 @@ def postgres_repository():
         )
         connection.execute(
             text(
-                "GRANT SELECT, INSERT, DELETE ON TABLE "
+                f"GRANT SELECT, INSERT, DELETE ON TABLE "
                 '"{schema_name}_api".idempotency_keys TO "{api_role}"'
             )
         )
