@@ -362,77 +362,352 @@ On the empty storage, startup creates a new administrator from `NOCODB_BOOTSTRAP
 
 ### Staging and Production
 
-Traefik terminates HTTPS and routes requests to NocoDB and FastAPI. The example below assumes an existing Traefik instance with its Docker provider enabled, a `websecure` entrypoint, a certificate resolver named `letsencrypt`, and an external Docker network shared with the application. Adapt those names to your Traefik configuration; this repository does not deploy Traefik itself.
+This runbook describes the Debian 13 deployment on the Hostinger VPS `72.61.97.142`. The frontend is hosted separately on Vercel. One Traefik instance terminates HTTPS for both backend environments using its **file provider**, not Docker labels or the Docker socket. Server configuration files below are created manually; the application scripts do not install Traefik.
 
-#### Environment and Routing
+| Setting | Staging | Production |
+| --- | --- | --- |
+| Repository directory | `/opt/pinkbombs/12_pinkbombs` | `/opt/pinkbombs/production` |
+| Git branch | `dev` | `main` |
+| Compose project | `pinkbombs` | `pinkbombs-production` |
+| Frontend origin | `https://dev.pinkbombs.org` | `https://pinkbombs.org` |
+| API URL | `https://dev-api.pinkbombs.org` | `https://api.pinkbombs.org` |
+| NocoDB URL | `https://dev-nocodb.pinkbombs.org` | `https://nocodb.pinkbombs.org` |
+| Loopback API / NocoDB ports | `8000` / `8080` | `8001` / `8081` |
+| NocoDB access | Traefik BasicAuth, then NocoDB login | NocoDB login only |
 
-1. Run `bash nocodb/setup.sh` on the server. Give staging and production separate Compose projects, volumes, secrets, hostnames, and Traefik router names. Use separate deployment directories and set a unique `COMPOSE_PROJECT_NAME` in each private `nocodb/.env`; never copy local database volumes or commit credentials.
-2. Set strong bootstrap credentials, `NC_SITE_URL=https://nocodb.example.org`, and `API_CORS_ORIGINS=https://your-frontend.example.org`. Configure the frontend to submit to the HTTPS API hostname, not NocoDB. Set `NOCODB_BASE_NAME` if needed.
-3. Attach **only `nocodb` and `api`** to Traefik's existing external network, keeping them on the application's default network too. PostgreSQL, Redis, the worker, and the initializer stay on the default network. Do not expose PostgreSQL or Redis through Traefik.
-4. Configure two HTTPS routers:
+Each application project has its own database, Redis, attachments, secrets, default network, and API image. Only API and NocoDB join the shared proxy network. A shared host/proxy is not strong isolation against a compromised host. **Never rename an initialized Compose project or copy staging secrets/volumes into production.**
 
-| Router | Host Rule | Container Port | Access |
-| --- | --- | --- | --- |
-| NocoDB | ``Host(`nocodb.example.org`)`` | `8080` | Team-only, protected by your Traefik authentication or IP-allowlist middleware. |
-| Submission API | ``Host(`api.example.org`)`` | `8000` | Frontend submissions; apply appropriate request limits. CORS is not authentication. |
+#### 1. Server, DNS, and Firewall Prerequisites
 
-Traefik must route to the **container ports**, not the published localhost ports. A Traefik container's `127.0.0.1` refers to Traefik itself. Set `traefik.docker.network` to the actual external network name so the Docker provider selects the correct network. Traefik forwards Host/scheme headers and supports NocoDB WebSocket upgrades without a separate WebSocket router.
+Run commands individually on the server and stop at the first failure. Docker Engine and the Compose plugin must be installed before proceeding; the deployed VPS came with Docker preinstalled. Check `docker --version`, `docker compose version`, `ss -ltnp`, `ip -4 route`, `docker network ls`, `free -h`, and `df -h /`. Install supporting tools:
 
-#### Compose Override
+```bash
+apt-get update
+apt-get install -y dnsutils curl ca-certificates openssl apache2-utils git
+```
 
-Keep local development unchanged by placing the server-specific configuration in `nocodb/compose.traefik.yaml`. This example uses the external network `traefik_proxy`; Traefik must already be attached to it. Replace the hostnames, network, resolver, and team-access middleware with your deployment values:
+Determine the active DNS provider before editing records:
+
+```bash
+dig +trace pinkbombs.org NS
+```
+
+The domain delegates to `dns105.ovh.net` and `ns105.ovh.net`: **edit the OVH zone**, not Hostinger's inactive DNS editor. Add these A records pointing to `72.61.97.142`: `dev-api`, `dev-nocodb`, `api`, and `nocodb`. DNS names contain neither `https://` nor a trailing slash. Preserve the existing frontend and email records. Do not add AAAA records unless IPv6 is configured. Do not change nameservers or create child nameservers to add application subdomains.
+
+Verify each hostname, first against the authority and then a public resolver; substitute the other three names:
+
+```bash
+dig @dns105.ovh.net dev-api.pinkbombs.org A
+dig @1.1.1.1 dev-api.pinkbombs.org A
+dig @1.1.1.1 dev-api.pinkbombs.org AAAA
+```
+
+In the Hostinger VPS firewall, allow inbound TCP 80/443 publicly and the actual SSH port, currently 22; restrict SSH sources where practical. Deny other unsolicited inbound traffic while permitting required outbound traffic. Do not publicly open 8000/8001, 8080/8081, 5432, or 6379. Preserve Docker-managed firewall rules. Keep the current SSH session open and verify a **second SSH connection** after firewall activation.
+
+#### 2. Prepare the Shared Proxy Once
+
+Skip creation if this infrastructure already exists; inspect it rather than overwriting it. Check routes and existing Docker subnets before choosing this network range. Reserve `172.30.50.2` for Traefik outside Docker's automatic allocation range:
+
+```bash
+docker network create --driver bridge --subnet 172.30.50.0/24 --ip-range 172.30.50.128/25 --gateway 172.30.50.1 traefik_proxy
+install -d -m 700 /opt/traefik /opt/traefik/dynamic /opt/traefik/secrets /opt/traefik/letsencrypt
+htpasswd -cB /opt/traefik/secrets/nocodb.htpasswd staging-admin
+chmod 600 /opt/traefik/secrets/nocodb.htpasswd
+touch /opt/traefik/letsencrypt/acme.json
+chmod 600 /opt/traefik/letsencrypt/acme.json
+```
+
+Enter a unique staging gateway password at the prompt, not in shell history. `htpasswd -c` is for a **new file only**; omit `-c` to update an existing file. `touch` preserves existing ACME state: never truncate/delete it as a renewal strategy.
+
+Create `/opt/traefik/compose.yaml`:
 
 ```yaml
+name: pinkbombs-edge
 services:
-    nocodb:
-        networks: [default, proxy]
-        labels:
-            - traefik.enable=true
-            - traefik.docker.network=traefik_proxy
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-nocodb.rule=Host(`nocodb.example.org`)
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-nocodb.entrypoints=websecure
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-nocodb.tls.certresolver=letsencrypt
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-nocodb.middlewares=team-access@file
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-nocodb.service=${COMPOSE_PROJECT_NAME}-nocodb
-            - traefik.http.services.${COMPOSE_PROJECT_NAME}-nocodb.loadbalancer.server.port=8080
-    api:
-        networks: [default, proxy]
-        labels:
-            - traefik.enable=true
-            - traefik.docker.network=traefik_proxy
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-api.rule=Host(`api.example.org`)
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-api.entrypoints=websecure
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-api.tls.certresolver=letsencrypt
-            - traefik.http.routers.${COMPOSE_PROJECT_NAME}-api.service=${COMPOSE_PROJECT_NAME}-api
-            - traefik.http.services.${COMPOSE_PROJECT_NAME}-api.loadbalancer.server.port=8000
+    traefik:
+        image: traefik:v3.7.15
+        restart: unless-stopped
+        command:
+            - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
+            - --entrypoints.web.http.redirections.entrypoint.to=websecure
+            - --entrypoints.web.http.redirections.entrypoint.scheme=https
+            - --entrypoints.web.http.aliasheadersstrategy=reject
+            - --entrypoints.websecure.http.aliasheadersstrategy=reject
+            - --providers.file.directory=/etc/traefik/dynamic
+            - --providers.file.watch=true
+            - --certificatesresolvers.letsencrypt.acme.email=info@seastemik.org
+            - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+            - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+            - --log.level=INFO
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./dynamic:/etc/traefik/dynamic:ro
+            - ./secrets:/secrets:ro
+            - ./letsencrypt:/letsencrypt
+        networks:
+            proxy:
+                ipv4_address: 172.30.50.2
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
 networks:
-    default: {}
     proxy:
         external: true
         name: traefik_proxy
 ```
 
-`team-access@file` is a placeholder for a middleware you define in Traefik's file provider; it is not created by this application. Use your existing team-access middleware, including its provider suffix. Set Traefik's Docker provider to `exposedByDefault=false` so unlabeled services stay private.
+This pins the version used for deployment; review supported security updates before a new rollout. HTTP-01 requires public port 80 and works with HTTPS redirection. Standard Let's Encrypt issuance requires no mailbox verification. Use a team-approved contact address; keep certificate monitoring separate from email reminders. The configuration exposes no dashboard and mounts no Docker socket.
 
-The original host-port bindings remain loopback-only and are not used by Traefik. If both environments share a server, assign different `NOCODB_PORT` and `API_PORT` values to avoid host-port collisions, even though their container ports stay the same.
+#### 3. Clone and Initialize Each Environment Privately
 
-#### Proxy Trust and Startup
+Before production initialization, verify that reviewed fixes tested on `dev` have been released to `main` using [Release Dev to Main](#release-dev-to-main). File presence alone does not prove that `main` contains the current initializer.
 
-Set `FORWARDED_ALLOW_IPS` in the private environment file to Traefik's IP address on the shared network. For stable trust, reserve that address in your Traefik/network configuration; use comma-separated addresses for multiple trusted proxies. Do not use `*` or trust arbitrary clients. Without this setting, FastAPI sees the proxy as the client, so submissions share its rate-limit bucket instead of being limited per client.
-
-From the repository root, select both Compose files before invoking the scripts:
+For a new server checkout, use the appropriate command below. Do not clone over an existing directory or move a running staging checkout:
 
 ```bash
-export COMPOSE_FILE=compose.yaml:compose.traefik.yaml
-bash nocodb/start.sh
-bash nocodb/check.sh
+git clone --branch dev --single-branch https://github.com/dataforgoodfr/12_pinkbombs.git /opt/pinkbombs/12_pinkbombs
+git clone --branch main --single-branch https://github.com/dataforgoodfr/12_pinkbombs.git /opt/pinkbombs/production
 ```
 
-These scripts change into `nocodb/`, so the exported file paths are relative to that directory. Keep the same `COMPOSE_FILE` selection for subsequent starts and maintenance. For direct Compose commands, first `cd nocodb` and use that environment; passing only `-f compose.yaml` omits the Traefik override.
+Deploy **one environment at a time**. Enter its `nocodb` directory, clear shell-level overrides from the other environment, then generate its private configuration:
 
-Point both hostnames' DNS records at Traefik, verify TLS issuance and HTTP-to-HTTPS redirection in your Traefik configuration, then check the API's HTTPS `/ready` endpoint and open both NocoDB tables through the protected hostname. Verify that forwarded client addresses produce the expected API rate limiting. The local check verifies application health, not Traefik routing, certificates, or access controls.
+```bash
+cd /opt/pinkbombs/12_pinkbombs/nocodb
+unset COMPOSE_FILE COMPOSE_PROJECT_NAME
+bash setup.sh
+```
 
-Back up PostgreSQL, NocoDB attachments and `.env` before deployment changes. Test restores in an isolated environment. Keep the pinned `NOCODB_IMAGE` digest; test upgrades and schema changes on a restored staging database first. Existing-base startup intentionally does not apply schema upgrades. Never run `docker compose down -v` against staging/production.
+For production, use `cd /opt/pinkbombs/production/nocodb` instead. Edit that directory's `.env`; set `NOCODB_BOOTSTRAP_EMAIL` and a new strong `NOCODB_BOOTSTRAP_PASSWORD`. Preserve setup-generated secrets and the pinned `NOCODB_IMAGE`. Do not source the environment file, commit it, or paste it into logs/chat. Use these environment-specific settings:
+
+| Variable | Staging | Production |
+| --- | --- | --- |
+| `COMPOSE_PROJECT_NAME` | `pinkbombs` | `pinkbombs-production` |
+| `COMPOSE_FILE` during private initialization | `compose.yaml` | `compose.yaml` |
+| `API_PORT` | `8000` | `8001` |
+| `NOCODB_PORT` | `8080` | `8081` |
+| `NC_SITE_URL` | `https://dev-nocodb.pinkbombs.org` | `https://nocodb.pinkbombs.org` |
+| `API_CORS_ORIGINS` | `https://dev.pinkbombs.org` | `https://pinkbombs.org` |
+| `FORWARDED_ALLOW_IPS` | `172.30.50.2` | `172.30.50.2` |
+
+Origins have no trailing slash. Include `https://www.pinkbombs.org` only if that is an actual frontend browser origin; it differs from the apex origin. The same internal `NOCODB_BASE_NAME=pinkbombs` and database role names are safe because storage is separate. `FORWARDED_ALLOW_IPS` trusts only the reserved proxy, never `*` or the server's public IP.
+
+From the selected `nocodb` directory, validate and initialize before publishing any route:
+
+```bash
+docker compose config --quiet
+docker compose config --format json | grep '"name":'
+bash start.sh
+bash check.sh
+docker compose ps
+```
+
+Confirm the top-level project name and container prefixes match the selected environment. The check must report `PASS`. Verify localhost readiness at `http://127.0.0.1:8000/ready` for staging or `http://127.0.0.1:8001/ready` for production. Do not continue on failure. Setup already runs inside `start.sh`; from `nocodb/`, the command is `bash setup.sh`, not `bash nocodb/setup.sh`.
+
+#### 4. Attach the Application to Traefik
+
+Create `compose.traefik.yaml` inside each environment's `nocodb` directory. For staging:
+
+```yaml
+services:
+    api:
+        networks:
+            default: {}
+            proxy:
+                aliases: [pinkbombs-staging-api]
+    nocodb:
+        networks:
+            default: {}
+            proxy:
+                aliases: [pinkbombs-staging-nocodb]
+networks:
+    proxy:
+        external: true
+        name: traefik_proxy
+```
+
+For production, use the same content but replace the two aliases with `pinkbombs-production-api` and `pinkbombs-production-nocodb`. Aliases are internal Docker DNS names, not public DNS records. Only API/NocoDB join `proxy`; both retain `default` for database/Redis access. Host ports stay loopback-only. Container ports remain 8000/8080 in both environments.
+
+In **each private `.env`**, change `COMPOSE_FILE` to `compose.yaml:compose.traefik.yaml` for persistent selection. Keep the project name unchanged. Then, from that environment's `nocodb` directory:
+
+```bash
+unset COMPOSE_FILE COMPOSE_PROJECT_NAME
+docker compose config --quiet
+bash start.sh
+bash check.sh
+docker network inspect traefik_proxy --format '{{range .Containers}}{{println .Name}}{{end}}'
+```
+
+Only Traefik and the two environments' API/NocoDB containers should appear on the proxy network. These starts briefly recreate changed containers but preserve data. For maintenance, always enter the intended `nocodb` directory: scripts resolve `COMPOSE_FILE` there. Passing only `-f compose.yaml` overrides that selection and omits the proxy override. Keep `.env` and server-specific overrides out of commits.
+
+#### 5. Publish HTTPS Routes
+
+Create `/opt/traefik/dynamic/pinkbombs.yaml` for staging and the shared minimum TLS policy:
+
+```yaml
+http:
+    routers:
+        pinkbombs-staging-api:
+            rule: "Host(`dev-api.pinkbombs.org`)"
+            entryPoints: [websecure]
+            service: pinkbombs-staging-api
+            tls: {certResolver: letsencrypt}
+        pinkbombs-staging-nocodb:
+            rule: "Host(`dev-nocodb.pinkbombs.org`)"
+            entryPoints: [websecure]
+            service: pinkbombs-staging-nocodb
+            middlewares: [team-access]
+            tls: {certResolver: letsencrypt}
+    services:
+        pinkbombs-staging-api:
+            loadBalancer:
+                servers: [{url: "http://pinkbombs-staging-api:8000"}]
+        pinkbombs-staging-nocodb:
+            loadBalancer:
+                servers: [{url: "http://pinkbombs-staging-nocodb:8080"}]
+    middlewares:
+        team-access:
+            basicAuth:
+                usersFile: /secrets/nocodb.htpasswd
+                removeHeader: true
+tls:
+    options:
+        default:
+            minVersion: VersionTLS12
+```
+
+Only publish an environment after its private initialization passes. For production, create a **separate** `/opt/traefik/dynamic/pinkbombs-production.yaml`:
+
+```yaml
+http:
+    routers:
+        pinkbombs-production-api:
+            rule: "Host(`api.pinkbombs.org`)"
+            entryPoints: [websecure]
+            service: pinkbombs-production-api
+            tls: {certResolver: letsencrypt}
+        pinkbombs-production-nocodb:
+            rule: "Host(`nocodb.pinkbombs.org`)"
+            entryPoints: [websecure]
+            service: pinkbombs-production-nocodb
+            tls: {certResolver: letsencrypt}
+    services:
+        pinkbombs-production-api:
+            loadBalancer:
+                servers: [{url: "http://pinkbombs-production-api:8000"}]
+        pinkbombs-production-nocodb:
+            loadBalancer:
+                servers: [{url: "http://pinkbombs-production-nocodb:8080"}]
+```
+
+Production intentionally has **no BasicAuth middleware**, but still requires NocoDB account authentication. Do not remove staging's middleware or duplicate the shared default TLS policy. Disable public base/view sharing and review account/signup permissions before admitting real data; use least-privilege collaborator accounts rather than sharing the bootstrap administrator.
+
+For the first proxy startup, validate and start explicitly:
+
+```bash
+docker compose -p pinkbombs-edge -f /opt/traefik/compose.yaml config --quiet
+docker compose -p pinkbombs-edge -f /opt/traefik/compose.yaml up -d
+docker compose -p pinkbombs-edge -f /opt/traefik/compose.yaml logs --tail=100 traefik
+```
+
+For an existing proxy, new dynamic files reload automatically; no restart is needed. Changes to the proxy's Compose/static configuration require validation and `up -d` again. Compose validation does not validate routing files: inspect provider/ACME logs and actual endpoints. Never paste ACME state or password hashes into diagnostics.
+
+#### 6. Verify Each Deployment
+
+Run these from a separate machine, not only from the server:
+
+```bash
+curl -fsS https://dev-api.pinkbombs.org/ready
+curl -fsS https://api.pinkbombs.org/ready
+curl -I http://api.pinkbombs.org/ready
+curl -I https://dev-nocodb.pinkbombs.org/
+curl -I https://nocodb.pinkbombs.org/
+```
+
+Both APIs must return `{"status":"ready"}` with valid trusted certificates; HTTP must redirect to HTTPS. Staging NocoDB returns `401` and a BasicAuth challenge. Production NocoDB must have no `WWW-Authenticate: Basic` challenge; a native login page/redirect is expected. Confirm both environments' table grids in the browser. Do not use `curl -k` to bypass certificate failures.
+
+Verify production CORS without writing a submission; repeat with staging's API/frontend origins:
+
+```bash
+curl -i -X OPTIONS https://api.pinkbombs.org/api/v1/submissions \
+    -H 'Origin: https://pinkbombs.org' \
+    -H 'Access-Control-Request-Method: POST' \
+    -H 'Access-Control-Request-Headers: content-type,idempotency-key'
+```
+
+Expect HTTP 200 and the exact allowed origin, method, and headers. Other origins must not receive permission. CORS is not authentication. Configure each frontend to use its matching API URL, never NocoDB or database credentials; redeploy the frontend if environment values are build-time. Test one synthetic browser submission (`201`, or `200` for an identical retry), confirm it appears only in the intended database, and check independent client-IP rate limiting. Keep staging free of production personal data.
+
+#### Release Dev to Main
+
+Test and validate changes in staging first. Prefer a reviewed GitHub pull request with **base `main`, compare `dev`**, and passing CI. This promotes code only, not staging data or private configuration.
+
+If direct merges are permitted, run locally on your development machine, **not the production server**. Start with a clean worktree and stop on errors:
+
+```bash
+git status --short
+git fetch origin
+git switch main
+git pull --ff-only origin main
+git log --oneline main..origin/dev
+git merge origin/dev
+poetry run pre-commit run --all-files
+```
+
+Resolve conflicts and complete the merge before checks. Review/commit any formatter changes and rerun required checks and affected integration tests until they pass. Then run `git push origin main` and confirm CI passes before production rollout. If `main` is protected, use the pull request workflow instead. Do not rebase or force-push a deployed branch. Production's `git pull` cannot promote changes that have not been published to `main`.
+
+#### Update an Existing Deployment
+
+Run commands individually and stop at the first failure. Updating changed containers can briefly interrupt service. For staging, select `/opt/pinkbombs/12_pinkbombs/nocodb` and branch `dev`; for production, release to `main` first and select `/opt/pinkbombs/production/nocodb`.
+
+1. Enter the intended directory. Clear stale shell overrides with `unset COMPOSE_FILE COMPOSE_PROJECT_NAME`; the private `.env` must retain its correct project and both Compose files. Run `git status --short`, `git branch --show-current`, and `git rev-parse HEAD`. Preserve local configuration and record the previous revision.
+2. Back up PostgreSQL, NocoDB attachments, private `.env`/override files, and shared Traefik configuration, authentication, and certificate storage. Coordinate database/attachment backups by quiescing writes where necessary. Store encrypted copies off-server and test restores separately. Review schema/image changes before proceeding. A production **database-only** snapshot is:
+
+     ```bash
+     umask 077
+     install -d -m 700 /var/backups/pinkbombs-production
+     backup_dir=$(mktemp -d /var/backups/pinkbombs-production/predeploy.XXXXXXXX)
+     docker compose exec -T db pg_dump -U pinkbombs -d pinkbombs -Fc > "$backup_dir/database.dump"
+     ```
+
+     Stop if the dump fails. Use a distinct staging backup destination when working on staging. This snapshot alone does not back up attachments/configuration and is not an off-server backup.
+3. For production, run the following from its `nocodb` directory. For staging, substitute `git pull --ff-only origin dev` and its public readiness URL:
+
+     ```bash
+     git pull --ff-only origin main
+     docker compose config --quiet
+     bash start.sh
+     bash check.sh
+     curl -fsS https://api.pinkbombs.org/ready
+     ```
+
+4. Verify affected browser/submission workflows and the other environment's readiness. Application pulls do not update the separate Traefik configuration or guarantee a Vercel frontend redeployment. Keep server-specific files private and preserve the pinned NocoDB image until a separately tested upgrade is approved.
+5. Existing-base startup does **not** apply schema migrations or refresh grants/passwords. Use reviewed, backed-up explicit maintenance for those changes. If rollout fails, stop and inspect logs; reverting code may not reverse database changes. Plan rollback against the recorded revision and tested backup, without blind hard resets.
+
+**Never use `docker compose down --volumes` or `down -v` for deployment updates.** They delete accounts, submissions, attachments, and Redis state for the selected project. A disposable first-install reset is a separate destructive recovery decision, never a routine fix. Do not regenerate existing secrets or change project names to resolve startup failures. Before admitting real traffic, establish automated off-server backups/restore tests, certificate/uptime alerts, and disk/log monitoring.
+
+#### Deployment Troubleshooting
+
+| Symptom | Check and Action |
+| --- | --- |
+| DNS edits have no effect | Check `dig +trace pinkbombs.org NS`. Edit the authoritative OVH zone, not the hosting provider's inactive zone. Do not migrate nameservers without preserving all website/email records. |
+| `dig +short` returns nothing | Run the full query to distinguish NXDOMAIN, no A record, and SERVFAIL. Query the authoritative server and a public resolver. Check exact names, conflicting A/CNAME/AAAA records, publication and negative caching. |
+| Hostinger firewall activation is unauthorized | Reauthenticate or ask the VPS owner/support to check permissions. SSH root access does not grant hosting-panel privileges. Do not flush Docker firewall tables. |
+| Compose cannot find configuration or targets another stack | Enter the correct `nocodb` directory and inspect project/container names. Clear inherited Compose variables and verify the private `.env`. An explicit `-f compose.yaml` omits the proxy override. |
+| Containers/networks appear missing | Check `docker context show`, `docker ps -a`, and `docker network ls` before recreating anything. Confirm the intended Docker daemon, project, and existing volumes. |
+| Pull says up to date but production lacks a fix | `main` may not contain tested `dev` changes. Review/release `dev` to `main`, then fast-forward production. Do not copy individual files from staging. |
+| Pull refuses to fast-forward | Inspect branch history and local modifications; rewritten history needs explicit reconciliation. Do not force-pull, hard-reset, or delete server configuration. |
+| Database authentication fails | Environment changes do not update initialized PostgreSQL role passwords. Restore matching credentials or perform a controlled rotation. Database container health does not verify the API role. |
+| Bootstrap signin returns HTTP 400 | Use the credentials of the existing NocoDB account. Bootstrap environment variables do not reset its password; test via the UI/private SSH tunnel. |
+| API `/ready` returns 503 | Run `bash check.sh` and `docker compose logs --tail=100 api db nocodb`. A missing `pinkbombs_api` role indicates incomplete provisioning, not merely a wrong password. Diagnose before creating roles or running maintenance. |
+| Initializer reports a physical foreign-key rename failure, or table reads return 500 | Verify the released initializer version and compare NocoDB metadata with physical columns. The old initializer could leave a partial/inconsistent base. Updated startup skips existing bases; neither `resume` nor `provision` repairs corrupt metadata. Back up and review recovery; never blindly rename generated columns or reset live data. |
+| HTTPS fails or Traefik returns 502 | Inspect edge logs, A/AAAA and CAA records, port 80/443 ingress, ACME permissions, proxy membership, and exact aliases/container ports. Traefik's localhost is not the application's localhost. Preserve certificate state and do not bypass TLS verification. |
+| NocoDB returns 401 before its login page | Expected only for staging's BasicAuth gateway. Use `staging-admin` first, then the separate staging NocoDB account. Production should require only its native account login; check router middleware if it shows the extra prompt. |
+| Browser fails while curl succeeds | Check the actual browser origin, frontend API URL, and POST preflight for Content-Type/Idempotency-Key. Apex and `www` origins differ. Frontend configuration changes may require redeployment. |
+| All clients share one rate-limit bucket | Verify the API trusts only Traefik's reserved address via `FORWARDED_ALLOW_IPS` and that requests traverse that proxy. Never set unrestricted forwarded-header trust to bypass the symptom. |
 
 ### Tests
 
@@ -469,7 +744,7 @@ Use these commands for everyday management. From the repository root, first ente
 cd nocodb
 ```
 
-For staging/production, keep `COMPOSE_FILE=compose.yaml:compose.traefik.yaml` exported as described above so every command uses the Traefik configuration too. Use the same Compose project and environment that you used to start the application.
+For staging/production, persist `COMPOSE_FILE=compose.yaml:compose.traefik.yaml` in the selected server's private `nocodb/.env` as described above. Enter that environment's `nocodb` directory and clear stale shell-level Compose overrides when switching environments. Use the same Compose project and configuration that you used to start the application.
 
 | Task | Command | What It Does |
 | --- | --- | --- |
