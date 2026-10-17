@@ -3,8 +3,8 @@ import hmac
 import json
 from uuid import UUID
 
-from pinkbombs.database import SubmissionRepository, SubmissionResult
-from pinkbombs.submission_schemas import OPTIONS, SubmissionRequest
+from pinkbombs_api.database import SubmissionRepository, SubmissionResult
+from pinkbombs_api.submission_schemas import OPTIONS, SubmissionRequest
 
 
 class SubmissionService:

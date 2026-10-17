@@ -2,7 +2,16 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from sqlalchemy import MetaData, Table, create_engine, delete, insert, select, text
+from sqlalchemy import (
+    MetaData,
+    Table,
+    create_engine,
+    delete,
+    insert,
+    inspect,
+    select,
+    text,
+)
 from sqlalchemy.engine import Engine, URL
 
 
@@ -20,10 +29,13 @@ class SubmissionRepository:
     def __init__(self, engine: Engine, idempotency_schema: str = "pinkbombs_api"):
         self.engine = engine
         metadata = MetaData()
+        base_schema = inspect(engine).default_schema_name
         self.response_table = Table(
-            "reponses_pinkometre", metadata, autoload_with=engine
+            "reponses_pinkometre", metadata, schema=base_schema, autoload_with=engine
         )
-        self.consumption_table = Table("consommations", metadata, autoload_with=engine)
+        self.consumption_table = Table(
+            "consommations", metadata, schema=base_schema, autoload_with=engine
+        )
         self.idempotency_table = Table(
             "idempotency_keys",
             metadata,
@@ -31,6 +43,9 @@ class SubmissionRepository:
             autoload_with=engine,
         )
         self._validate_schema()
+        self.response_fk = response_foreign_key(
+            self.consumption_table, self.response_table
+        )
 
     @classmethod
     def from_environment(cls) -> "SubmissionRepository":
@@ -63,7 +78,6 @@ class SubmissionRepository:
         }
         expected_consumption = {
             "id",
-            "reponses_pinkometre_fk",
             "scenario",
             "produit",
             "variante",
@@ -123,8 +137,7 @@ class SubmissionRepository:
             for values in consumption_values:
                 connection.execute(
                     insert(self.consumption_table).values(
-                        **values,
-                        reponses_pinkometre_fk=response_id,
+                        **{**values, self.response_fk: response_id},
                     )
                 )
             connection.execute(
@@ -138,3 +151,24 @@ class SubmissionRepository:
 
     def close(self) -> None:
         self.engine.dispose()
+
+
+def response_foreign_key(consumption: Table, response: Table) -> str:
+    matches = []
+    for constraint in consumption.foreign_key_constraints:
+        if len(constraint.elements) != 1:
+            continue
+        foreign_key = constraint.elements[0]
+        target = foreign_key.column
+        target_schema = target.table.schema or consumption.schema
+        if (
+            target.table.name == response.name
+            and target_schema == response.schema
+            and target.name == "id"
+        ):
+            matches.append(foreign_key.parent.name)
+    if len(matches) != 1:
+        raise RuntimeError(
+            "Expected exactly one consumption foreign key to the response id"
+        )
+    return matches[0]

@@ -13,9 +13,9 @@ from fastapi.exceptions import RequestValidationError
 from redis.exceptions import RedisError
 from sqlalchemy.exc import SQLAlchemyError
 
-from pinkbombs.database import IdempotencyConflict, SubmissionRepository
-from pinkbombs.submission_schemas import SubmissionRequest, public_options
-from pinkbombs.submission_service import SubmissionService
+from pinkbombs_api.database import IdempotencyConflict, SubmissionRepository
+from pinkbombs_api.submission_schemas import SubmissionRequest, public_options
+from pinkbombs_api.submission_service import SubmissionService
 
 API_VERSION = "1.0.0"
 API_V1_PREFIX = "/api/v1"
@@ -47,9 +47,14 @@ class RedisRateLimiter:
         )
 
     def hit(self, key: str, limit: int, window_seconds: int) -> bool:
-        count = self.client.incr(key)
-        if count == 1:
-            self.client.expire(key, window_seconds)
+        count = self.client.eval(
+            "local count = redis.call('INCR', KEYS[1]); "
+            "if count == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end; "
+            "return count",
+            1,
+            key,
+            window_seconds,
+        )
         return count <= limit
 
     def ready(self) -> None:
