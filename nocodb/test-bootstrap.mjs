@@ -8,6 +8,52 @@ import { schema, columnPayload, physicalColumn, verifyTables, checkRecords, Noco
 import { bootstrap, findBase } from './bootstrap.mjs';
 import { apiInsertColumns, provisionApiDatabase, provisionSchema } from './provision.mjs';
 
+test('creation defaults use the physical system column and preserve UTC for both timestamp types', async () => {
+  for (const [typname, expression] of [['timestamp', "timezone('UTC', CURRENT_TIMESTAMP)"], ['timestamptz', 'CURRENT_TIMESTAMP']]) {
+    const definition = schema.tables[0];
+    const table = {
+      id: 'responses', title: definition.title, table_name: 'responses_Mixed', base_id: 'base',
+      columns: [...definition.columns.map(columnPayload),
+        { title: 'date_creation_utc', uidt: 'CreatedTime', column_name: 'date_creation_utc' },
+        { title: 'createdAt', uidt: 'CreatedTime', system: true, column_name: 'Created_Physical' }],
+    };
+    const reachedDefault = new Error('default reached');
+    const database = { raw: async (statement, bindings) => {
+      if (statement.includes('SELECT to_regclass')) return { rows: [{ oid: 1 }] };
+      if (statement.includes('SELECT type.typname')) {
+        assert.deepEqual(bindings, [1, 'Created_Physical']);
+        return { rows: [{ typname }] };
+      }
+      assert.equal(statement, `ALTER TABLE ??.?? ALTER COLUMN ?? SET DEFAULT ${expression}`);
+      assert.deepEqual(bindings, ['base', 'responses_Mixed', 'Created_Physical']);
+      throw reachedDefault;
+    } };
+    await assert.rejects(provisionSchema(database, new Map([[definition.title, table]])), error => error === reachedDefault);
+  }
+});
+
+test('creation defaults reject missing, ambiguous or incompatible system columns', async () => {
+  const definition = schema.tables[0];
+  const created = { title: 'createdAt', uidt: 'CreatedTime', system: true, column_name: 'created_at' };
+  for (const [columns, typname, expected] of [
+    [[], 'timestamp', /exactly one physical CreatedTime/],
+    [[{ ...created, system: false }], 'timestamp', /exactly one physical CreatedTime/],
+    [[created, { ...created, column_name: 'other' }], 'timestamp', /exactly one physical CreatedTime/],
+    [[{ ...created, column_name: undefined }], 'timestamp', /exactly one physical CreatedTime/],
+    [[created], 'text', /expected a PostgreSQL timestamp/],
+    [[created], undefined, /expected a PostgreSQL timestamp/],
+  ]) {
+    const table = { ...definition, id: 'responses', table_name: definition.title, base_id: 'base',
+      columns: [...definition.columns.map(columnPayload), ...columns] };
+    const database = { raw: async statement => {
+      if (statement.includes('SELECT to_regclass')) return { rows: [{ oid: 1 }] };
+      assert.ok(statement.includes('SELECT type.typname'));
+      return { rows: typname ? [{ typname }] : [] };
+    } };
+    await assert.rejects(provisionSchema(database, new Map([[definition.title, table]])), expected);
+  }
+});
+
 test('option constraint checks fail closed on definition, validation state, and kind', async () => {
   const expected = 'CHECK (impact_initial = ANY (ARRAY[expected labels]))';
   for (const actual of [
@@ -19,13 +65,15 @@ test('option constraint checks fail closed on definition, validation state, and 
     const database = { raw: async statement => {
       statements.push(statement);
       if (statement.includes('SELECT to_regclass')) return { rows: [{ oid: 1 }] };
+      if (statement.includes('SELECT type.typname')) return { rows: [{ typname: 'timestamp' }] };
       if (statement.includes('SELECT contype')) return { rows: [actual] };
       if (statement.includes('string_agg')) return { rows: [{ labels: "'expected labels'" }] };
       if (statement.includes('SELECT pg_get_constraintdef')) return { rows: [{ definition: expected }] };
       return { rows: [] };
     } };
     const definition = schema.tables[0];
-    const table = { id: 'responses', title: definition.title, table_name: definition.title, base_id: 'base', columns: definition.columns.map(columnPayload) };
+    const table = { id: 'responses', title: definition.title, table_name: definition.title, base_id: 'base',
+      columns: [...definition.columns.map(columnPayload), { title: 'createdAt', uidt: 'CreatedTime', system: true, column_name: 'created_at' }] };
     await assert.rejects(provisionSchema(database, new Map([[definition.title, table]])), /incompatible option constraint.*validated CHECK/);
     assert.ok(!statements.some(statement => /DROP CONSTRAINT/.test(statement)));
   }

@@ -45,16 +45,16 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
           if (definition.title === 'consommations') {
             columns.push({ id: 'response_fk', title: 'response_fk', column_name: 'reponses_pinkometre_fk' });
           }
+          columns.push({ id: 'created', title: 'createdAt', uidt: 'CreatedTime', system: true, column_name: 'created_at' });
           const tableName = `${definition.title}_Mixed`;
           await transaction.schema.withSchema(baseSchema).createTable(tableName, builder => {
             builder.increments('id');
             for (const column of columns.filter(candidate => !candidate.generated && !candidate.references)) {
-              if (column.uidt === 'CreatedTime') builder.timestamp(column.column_name).defaultTo(transaction.fn.now());
+              if (column.uidt === 'CreatedTime') builder.timestamp(column.column_name, { useTz: false });
               else if (column.uidt === 'Decimal') builder.decimal(column.column_name, 30, 10);
               else if (column.id === 'response_fk') builder.integer(column.column_name);
               else builder.text(column.column_name);
             }
-            if (definition.title === 'reponses_pinkometre') builder.timestamp('created_at').defaultTo(transaction.fn.now());
             builder.text('unexpected');
           });
           tables.set(definition.title, { id: definition.title, base_id: baseSchema, table_name: tableName, columns });
@@ -77,6 +77,29 @@ test('provisioned API role enforces PostgreSQL privileges', { skip: !process.env
   }
 
   try {
+    for (const timestampType of ['timestamp', 'timestamptz']) {
+      await context.test(`creation defaults populate both ${timestampType} system columns without backfilling or expanding privileges`, () => fixture(async ({ transaction, tables, response, consumption, provision, asApi }) => {
+        for (const table of [response, consumption]) {
+          await transaction.raw(`ALTER TABLE ??.?? ALTER COLUMN created_at TYPE ${timestampType}`, table);
+        }
+        const oldParent = await transaction.raw('INSERT INTO ??.?? DEFAULT VALUES RETURNING id', response);
+        await transaction.raw("INSERT INTO ??.?? (reponses_pinkometre_fk, scenario) VALUES (?, 'Initiale')", [...consumption, oldParent.rows[0].id]);
+        await transaction.raw("SET LOCAL TIME ZONE 'Asia/Tokyo'");
+        await provisionSchema(transaction, tables);
+        await provisionSchema(transaction, tables);
+        await provision();
+        const newParent = await asApi('INSERT INTO ??.?? (email) VALUES (?) RETURNING id', [...response, 'timestamp@example.invalid']);
+        await asApi("INSERT INTO ??.?? (reponses_pinkometre_fk, scenario) VALUES (?, 'Initiale')", [...consumption, newParent.rows[0].id]);
+        const expected = timestampType === 'timestamp' ? "timezone('UTC', CURRENT_TIMESTAMP)" : 'CURRENT_TIMESTAMP';
+        for (const table of [response, consumption]) {
+          const rows = await transaction.raw(`SELECT created_at IS NULL AS missing, created_at = ${expected} AS current FROM ??.?? ORDER BY id`, table);
+          assert.deepEqual(rows.rows, [{ missing: true, current: null }, { missing: false, current: true }]);
+          await assert.rejects(asApi('INSERT INTO ??.?? (created_at) VALUES (now())', table), { code: '42501' });
+          await assert.rejects(asApi('UPDATE ??.?? SET created_at = now()', table), { code: '42501' });
+        }
+      }));
+    }
+
     for (const [description, expression] of [
       ['missing options', "CHECK (scenario IN ('Initiale'))"],
       ['extra options', "CHECK (scenario IN ('Initiale', 'Après engagement', 'Obsolete'))"],

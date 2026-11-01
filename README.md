@@ -203,6 +203,8 @@ The initializer serializes setup with a PostgreSQL advisory lock. A new base is 
 
 Each table has a generated `id`; NocoDB also supplies system timestamps such as UTC `created_at`. Only the response relation and `scenario` are required business fields. Email is optional and not unique. Decimal columns use `numeric(30,10)`, allowing up to 20 digits before and 10 after the decimal point.
 
+SQL provisioning sets a current-time default on the existing NocoDB `CreatedTime` system column in both tables (shown as `createdAt` in NocoDB). This also timestamps FastAPI's direct PostgreSQL inserts without granting the API permission to override system fields. Parent and consumption rows share the transaction's creation time; identical retries preserve it. Timestamp columns without a time zone store UTC regardless of the session time zone. Existing rows with empty timestamps are left unchanged because their actual creation times are unknown.
+
 Clients send English option codes, such as `initial`; FastAPI stores their French labels, such as `Initiale`. These are NocoDB SingleSelect fields backed by text and PostgreSQL CHECK constraints, not native PostgreSQL enum types. Neither IP addresses nor IP-derived fingerprints are stored in submissions.
 
 #### Connection Identities
@@ -308,6 +310,8 @@ docker compose run --rm --no-deps schema-init resume
 docker compose run --rm --no-deps schema-init provision
 docker compose up -d --force-recreate api
 ```
+
+Existing installations also need the explicit `schema-init provision` command above to apply creation-time defaults. Restarting alone does not apply them. Provisioning resolves the physical timestamp column through NocoDB system metadata and rejects missing, ambiguous, or incompatible timestamp columns rather than creating duplicates or renaming them. Back up and review the base before provisioning; the command also verifies schema constraints and refreshes API grants. No timestamp backfill is performed.
 
 Neither command renames/drops columns, rewrites options, or fixes corrupt NocoDB metadata. Incompatible existing definitions fail instead of being overwritten. Metadata changes persist if a later SQL step fails; the SQL provisioning transaction rolls back. To discard a disposable local installation instead, follow the reset instructions below.
 

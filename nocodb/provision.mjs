@@ -18,6 +18,20 @@ export async function provisionSchema(database, tables) {
     const relation = await database.raw('SELECT to_regclass(format(\'%I.%I\', ?::text, ?::text))::oid AS oid', [namespace, table.table_name]);
     const oid = relation.rows[0]?.oid;
     if (!oid) throw new Error(`${definition.title}: physical table is missing`);
+    const createdColumns = table.columns.filter(column => column.uidt === 'CreatedTime' && column.system);
+    if (createdColumns.length !== 1 || !createdColumns[0].column_name) {
+      throw new Error(`${definition.title}: expected exactly one physical CreatedTime system column; review NocoDB metadata before provisioning`);
+    }
+    const createdColumn = createdColumns[0].column_name;
+    const createdType = await database.raw(`SELECT type.typname FROM pg_attribute attribute
+      JOIN pg_type type ON type.oid = attribute.atttypid
+      WHERE attribute.attrelid = ? AND attribute.attname = ? AND attribute.attnum > 0 AND NOT attribute.attisdropped`, [oid, createdColumn]);
+    const timestampType = createdType.rows[0]?.typname;
+    if (!['timestamp', 'timestamptz'].includes(timestampType)) {
+      throw new Error(`${definition.title}.${createdColumn}: expected a PostgreSQL timestamp system column; review its type before provisioning`);
+    }
+    const timestampDefault = timestampType === 'timestamp' ? "timezone('UTC', CURRENT_TIMESTAMP)" : 'CURRENT_TIMESTAMP';
+    await database.raw(`ALTER TABLE ??.?? ALTER COLUMN ?? SET DEFAULT ${timestampDefault}`, [namespace, table.table_name, createdColumn]);
     let referenceTable;
     for (const column of definition.columns) {
       const name = names.get(column.title);
